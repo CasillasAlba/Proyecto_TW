@@ -1,0 +1,39 @@
+{% extends 'index_view.twig' %}
+
+{% block content %}
+{% endblock %}
+
+{% block login %}
+    <div class="bar bg-success .bg-gradient">
+        <h2 class="w-hdos">LOGIN / REGISTRO</h2>
+    </div>
+    
+
+    <form action="{{funciones('login.php')}}" method="POST">
+        <table>
+            <tr>
+                <td>Usuario</td>
+                <td><input type="text" name="usr" placeholder="...DNI"></td>
+            </tr>
+
+            <tr>
+                <td>Clave</td>
+                <td><input type="password" name="psw"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type="hidden" name="logueado" value="True"/>
+                    <button class="form-button" type="submit">Iniciar Sesión</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <h3>¿No estás registrado?</h3>
+    <form action='index.php' method="POST">
+        <button class="form-button" name="registar-visitante" type="submit">Registrarse</button>
+    </form>
+    
+{% endblock %}

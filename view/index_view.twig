@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alba Casillas Rodríguez & Víctor Cabrita Gómez" />
+    <meta name="viewport" content="width=device-width" /> <!-- Diseño adaptable -->
+    <link rel="stylesheet" type="text/css" href="{{asset('css/styles.css')}}" />
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+
+    <title>VACUNACIÓN ANDALUCÍA</title>
+</head>
+
+<body>
+    <header>
+        <img src="{{ asset('img/logo.jpeg')}}">
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success .bg-gradient">
+
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Link 1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Link 2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Link 3</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="content">
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <aside>
+            <section class="widget">
+                    {% block login %}
+                    {% endblock %}
+            </section>
+
+            <section class="widget">
+                <div class="bar bg-success .bg-gradient">
+                    <span>Estadísticas de uso</span>
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            Vacunas administradas en los últimos 30 días: X
+                        </li>
+                        <li>
+                            Usuarios del sistema: Y
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </aside>
+
+    </div>
+    <footer class="text-center text-muted p-4">
+        <span>© 2021 Copyright: Alba Casillas Rodríguez & Víctor Cabrita Gómez</span>
+        <a class="text-reset fw-bold" href="#">Documentación del proyecto</a>
+    </footer>
+</body>
+
+</html>
