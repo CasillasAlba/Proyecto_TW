@@ -352,3 +352,6 @@ MigrationBackup/
 # PHP vendor
 vendor/
 composer.phar
+composer.lock
+
+.DS_Store
