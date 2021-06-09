@@ -10,7 +10,7 @@
         </div>
     
         <div>
-            <form action="{{funciones('login.php')}}" method="POST">
+            <form action="index.php" method="POST">
                 <div class="mb-2">
                     <label for="loginUserInput" class="form-label">Usuario</label>
                     <input type="text" name="usr" class="form-control" placeholder="Usuario" id="loginUserInput"/>
@@ -21,8 +21,8 @@
                 </div>
                     <input type="hidden" name="logueado" value="True"/>
                     <div class="hor-buttons">
-                        <button class="btn btn-success" type="submit">Iniciar Sesión</button>
-                        <button class="btn btn-success" name="registar-visitante" type="submit">Regístrate</button>
+                        <button class="btn btn-success" name="boton-login-visitante" type="submit">Iniciar Sesión</button>
+                        <button class="btn btn-success" name="registrar-visitante" type="submit">Regístrate</button>
                     </div>
             </form>
         </div>
@@ -34,7 +34,7 @@
         <div>
             <form action='index.php' method="POST">
                 <p>¿Aún no tienes cuenta?</p>
-                <button class="btn btn-success" name="registar-visitante" type="submit">Regístrate</button>
+                <button class="btn btn-success" name="registrar-visitante" type="submit">Regístrate</button>
             </form>
         </div>
     </section>

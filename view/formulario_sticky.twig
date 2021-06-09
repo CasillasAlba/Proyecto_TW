@@ -34,7 +34,7 @@
 
         <!-- Apellidos -->
         <div class="mb-3">
-            <label for="registerApellidoInput" class="form-label">Apellido</label>
+            <label for="registerApellidoInput" class="form-label">Apellidos</label>
             {% if accion == "registrar" %}
                 <input class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}" required>
             {% elseif accion == "editar" %}
@@ -46,7 +46,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}">
             {% endif %}
-            <span>{{ errores['apellidoError']}}</span>
+            <span>{{errores['apellidosError']}}</span>
         </div>
 
         <!-- DNI -->
@@ -110,101 +110,75 @@
             <label class="form-label">Sexo</label>
             {% if accion == "registrar" %}
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="genero" id="masc" checked="true">
-                    <label class="form-check-label" for="masc">
-                        Masculino
-                    </label>
+                    <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc" checked="true">
+                    <label class="form-check-label" for="masc">Masculino</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="genero" id="fem">
-                    <label class="form-check-label" for="fem">
-                        Femenino
-                    </label>
+                    <input class="form-check-input" type="radio" name="genero" value="Femenino" id="fem">
+                    <label class="form-check-label" for="fem">Femenino</label>
                 </div>
             {% elseif accion == "editar" %}
                 {% if rol_user == "Admin" %}
-                    {% if row['Sexo']   == "Masculino" %}    
+                    {% if row['Sexo']  == "Masculino" %}    
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="masc" checked="true">
-                            <label class="form-check-label" for="masc">
-                                Masculino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc" checked="true">
+                            <label class="form-check-label" for="masc">Masculino</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="fem">
-                            <label class="form-check-label" for="fem">
-                                Femenino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" value="Femenino" id="fem">
+                            <label class="form-check-label" for="fem">Femenino</label>
                         </div>
 
                     {% else %}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="masc">
-                            <label class="form-check-label" for="masc">
-                                Masculino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc">
+                            <label class="form-check-label" for="masc">Masculino</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="fem" checked="true">
-                            <label class="form-check-label" for="fem">
-                                Femenino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" id="fem" value="Femenino" checked="true">
+                            <label class="form-check-label" for="fem">Femenino</label>
                         </div>
                     {% endif %} 
                 {% else %}
                     {% if row['Sexo']   == "Masculino" %}    
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="masc" checked="true" disabled>
-                            <label class="form-check-label" for="masc">
-                                Masculino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" id="masc" value="Masculino" checked="true" disabled>
+                            <label class="form-check-label" for="masc">Masculino</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="fem" disabled>
-                            <label class="form-check-label" for="fem">
-                                Femenino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" value="Femenino" id="fem" disabled>
+                            <label class="form-check-label" for="fem">Femenino</label>
                         </div>
 
                     {% else %}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="masc" disabled>
-                            <label class="form-check-label" for="masc">
-                                Masculino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc" disabled>
+                            <label class="form-check-label" for="masc">Masculino</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="fem" checked="true" disabled>
-                            <label class="form-check-label" for="fem">
-                                Femenino
-                            </label>
+                            <input class="form-check-input" type="radio" name="genero" id="fem" cvalue="Femenino" hecked="true" disabled>
+                            <label class="form-check-label" for="fem">Femenino</label>
                         </div>
                     {% endif %}
                 {% endif %}
             {% else %}
                 {% if row['Sexo']   == "Masculino" %}    
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" id="masc" checked="true" disabled>
-                        <label class="form-check-label" for="masc">
-                            Masculino
-                        </label>
+                        <input class="form-check-input" type="radio" name="genero" id="masc" value="Masculino" checked="true" disabled>
+                        <label class="form-check-label" for="masc">Masculino</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" id="fem" disabled>
-                        <label class="form-check-label" for="fem">
-                            Femenino
-                        </label>
+                        <input class="form-check-input" type="radio" name="genero" value="Femenino" id="fem" disabled>
+                        <label class="form-check-label" for="fem">Femenino</label>
                     </div>
 
                 {% else %}
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" id="masc" disabled>
-                        <label class="form-check-label" for="masc">
-                            Masculino
-                        </label>
+                        <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc" disabled>
+                        <label class="form-check-label" for="masc">Masculino</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" id="fem" checked="true" disabled>
+                        <input class="form-check-input" type="radio" name="genero" id="fem" value="Femenino" checked="true" disabled>
                         <label class="form-check-label" for="fem">
                             Femenino
                         </label>
