@@ -19,7 +19,7 @@
                 Email VARCHAR(30) NOT NULL,
                 FechaNac DATE NOT NULL,
                 Sexo VARCHAR(10) NOT NULL,
-                Fotografia LONGBLOB NOT NULL,
+                Fotografia BLOB NOT NULL,
                 Clave VARCHAR(65) NOT NULL,
                 Estado VARCHAR(10) NOT NULL, 
                 Rol VARCHAR(20) NOT NULL
@@ -93,11 +93,12 @@
         $ema = $datos['Email'];
         $nac = $datos['FechaNac'];
         $sex = $datos['Sexo'];
-        $foto = $datos['Foto'];
+        $foto = 'data:image/'.$imageFileType.';base64,'.$datos['Foto']; 
         $clv = $datos['Clave'];
         $estado = $datos['Estado'];
         $rol = $datos['Rol'];
 
+        //$prep->send_long_data(7, $foto); 
         $prep->execute();
 
         // Cerramos la consulta preparada
@@ -204,6 +205,8 @@
         $prep->bind_param('s', $dni);
 
         if($prep->execute()){
+            $prep->store_result(); // Recuperar la fotografía
+
             //Vinculamos variables a consultas
             $prep->bind_result($dni, $nom, $apell, $tel, $ema, $nac, $sex, $foto, $clv, $estado, $rol);
 
@@ -359,6 +362,7 @@ function eliminar_usuario($dni){
 //                                           FUNCIONES AUXILIARES                                             //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Funcion que cifra una clave
     function cifrar_claves($clave){
         $opciones = [
             'cost'=> 12,
@@ -369,7 +373,16 @@ function eliminar_usuario($dni){
         return $hash_clv;
     }
 
-    
+    // Funcion que comprueba si una clave ha sido cambiada por otra
+    function comparar_claves($clave_formulario, $clave_antigua){
+        if($clave_formulario != substr($clave_antigua,0,6)){
+            $hash_clv = cifrar_claves($clave_formulario);
+        }else{
+            $hash_clv = $clave_antigua;
+        }
+
+        return $hash_clv;     
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           'MAIN' DEL CODIGO                                                //
@@ -396,13 +409,13 @@ function eliminar_usuario($dni){
         'Estado' => 'Activo',
         'Rol' => 'Admin',
     ];
-    */
-
+    
+    $c = $datos_admin['Clave'];
     // Las claves deben almacenarse cifradas en la base de datos
-    #$datos_admin['Clave'] = cifrar_claves($datos_admin['Clave']);
+    $datos_admin['Clave'] = cifrar_claves($c);
 
-    //insertar_usuario($db, $datos_admin);
-
+    insertar_usuario($datos_admin);
+    */
     //$datos_user = devolver_usuario($db, $datos_admin['DNI'] );
     //foreach($datos_user as &$valor){
         //echo $valor;

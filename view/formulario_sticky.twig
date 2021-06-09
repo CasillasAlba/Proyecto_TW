@@ -6,8 +6,14 @@
 
             <div id="profile-photo">
                 <p>Foto de perfil</p>
-                    <img id="ver_user_img" src=""/>
-                    <input type="file" id="file" name="file">
+                    {% if accion == "registrar" %}
+                        <img id="ver_user_img" height="80px" width="80px" src="{{ asset('img/NotPhoto.png')}}"/>
+                    {% else %}
+                        <img id="ver_user_img" height="80px" width="80px" src="data:image;base64,{{ row['Foto'] }}"/>
+                    {% endif %}
+                    {% if accion == "registrar" or accion == "editar"%}
+                        <input type="file" id="file" name="file">
+                    {% endif %}
             </div>
 
             <div id="tabla">
@@ -156,8 +162,11 @@
                     <tr>
                         <td>Clave</td>
                         <td>
-                            {% if accion == "registrar" or accion == "editar" %}
+                            {% if accion == "registrar" %}
                                 <input type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}" required><input type="password" name="clv_rep" required>
+                                <span>{{ errores['claveError']}}</span>
+                            {% elseif accion == "editar" %}
+                                <input type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}" required>
                                 <span>{{ errores['claveError']}}</span>
                             {% else %}
                                 <input readonly type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}">
@@ -182,7 +191,7 @@
                                             <option value="Paciente" >Paciente</option>
                                             <option value="Sanitario" selected>Sanitario</option>
                                         </select>
-                                    {%else %}
+                                    {% else %}
                                         <select name="rol">
                                             <option value="Paciente" selected>Paciente</option>
                                             <option value="Sanitario">Sanitario</option>
@@ -196,7 +205,7 @@
                             <td>Estado</td>
                             <td>
                                 {% if accion == "confirmar" or accion == "activar" %}
-                                    {% if row['Estado']  == "Activo" %}
+                                    {% if row['Estado']  == "Activo" %} 
                                         <label><input readonly type="text" id="act" name="estado" value="Activo"></label>
                                     {% else %}
                                         <label><input readonly type="text" id="inact" name="estado" value="Inactivo"></label>
@@ -207,7 +216,7 @@
                                             <option value="Activo" selected>Activo</option>
                                             <option value="Inactivo">Inactivo</option>
                                         </select>
-                                    {%else %}
+                                    {% else %}
                                         <select name="estado">
                                             <option value="Activo">Activo</option>
                                             <option value="Inactivo" selected>Inactivo</option>
@@ -259,7 +268,7 @@
                                 <button class="form-button" name="boton-informar-error-user" type="submit">Informar de error</button>
                                 <button class="form-button" name="boton-borrar-user" type="submit">Borrar usuario</button>
                             {% endif %}
-                            <input hidden name="accion" value="{{ accion }}">
+                            <input hidden name="accion" value="{{ accion }}"> 
                         </td>
                     </tr>
                 </table>

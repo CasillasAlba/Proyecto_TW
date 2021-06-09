@@ -9,7 +9,7 @@
     </div>
     
 
-    <form action="{{funciones('login.php')}}" method="POST">
+    <form action="index.php" method="POST">
         <table>
             <tr>
                 <td>Usuario</td>
@@ -24,7 +24,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="hidden" name="logueado" value="True"/>
+                    <input type="hidden" name="boton-login-visitante" value="True"/>
                     <button class="form-button" type="submit">Iniciar Sesión</button>
                 </td>
             </tr>
@@ -33,7 +33,7 @@
 
     <h3>¿No estás registrado?</h3>
     <form action='index.php' method="POST">
-        <button class="form-button" name="registar-visitante" type="submit">Registrarse</button>
+        <button class="form-button" name="registrar-visitante" type="submit">Registrarse</button>
     </form>
     
 {% endblock %}

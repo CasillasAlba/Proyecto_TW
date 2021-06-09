@@ -1,0 +1,21 @@
+{% extends 'index_view.twig' %}
+
+{% block content %}
+    <h1>Hola</h1>
+{% endblock %}
+
+{% block login %}
+    <h2 class="w-hdos">¡BIENVENIDO/A {{nombre_user}}! </h2>
+    <img height="150px" width="150px" src="data:image;base64,{{ image_user }}" />
+    <div class="w-button-register">
+        <form action="index.php" method="POST">
+            <button name="log-out" class="form-button">Cerrar Sesión</button>
+        </form>
+        {% if rol_user == "Admin" %}
+            <form action="index.php" method="POST">
+                <button name="regist" class="form-button">Registrar Usuario</button>
+                <button name="editar-me" class="form-button">Editar Perfil</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

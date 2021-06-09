@@ -31,15 +31,33 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Link 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Link 2</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Link 3</a>
-                    </li>
+                    {% if rol_user == "Admin" %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Listado de Usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Calendario de vacunación</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Editar lista de vacunas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Visualizar Log</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Copias de Seguridad</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Link 1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Link 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Link 3</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
