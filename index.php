@@ -113,8 +113,16 @@
             $accion = "editar";
             // Cargamos los valores del propio usuario para cargar SUS datos
             $row = $_SESSION['row_datos'];
+            // Editando debemos de controlar el DNI antinguo, para en validación
+            // poder comparar si es un usuario ya existente en la BBDD o no.
             $_SESSION['dni_antiguo'] = $_SESSION['row_datos']['DNI'];
             $_SESSION['clave_antigua'] = $row['Clave'];
+
+            // Necesitamos este if para que si el admin se edita a si mismo, que su rol no se vea afectado
+            // ya que Admin no es un rol que se pueda elegir ni cambiar en la plataforma
+            if(isset($_POST['editar-me']) and $_SESSION['row_datos']['Rol'] == "Admin"){
+                $_SESSION['rol_admin'] = "Admin";
+            }
 
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
             if(isset($_SESSION['row_errores_temp'])){

@@ -144,7 +144,6 @@ require_once('../core/db.php');
             }
         }
 
-
         if($_SESSION["accionPulsada"] == "editar"){
             if($_SESSION['file_name_temp'] != ''){
                 $array = array(

@@ -90,9 +90,15 @@
                     $clave_formulario = $_SESSION['row_datos_temp']['Clave'];
                     $hash_clv = comparar_claves($clave_formulario, $_SESSION['clave_antigua']);
                     $_SESSION['row_datos_temp']['Clave'] = $hash_clv;
+
+                    if(isset($_SESSION['rol_admin'])){
+                        $_SESSION['row_datos_temp']['Rol'] = $_SESSION['rol_admin'];
+                        unset($_SESSION['rol_admin']);
+                    }
+
                     modificar_usuario($_SESSION['row_datos_temp']);
                     unset($_SESSION['clave_antigua']);
-
+                    
                 }
 
             }
@@ -112,9 +118,11 @@
             unset($_SESSION['estado_temp']);
             unset($_SESSION['row_errores_temp']);
             unset($_SESSION['row_datos_temp']);
-            unset($_SESSION['dni_antiguo']);
             unset($_SESSION['accionPulsada']);
             unset($_SESSION['accionBD']);
+            if(isset($_SESSION['dni_antiguo'])){
+                unset($_SESSION['dni_antiguo']);
+            }
 
            header("Location: ../index.php");
 

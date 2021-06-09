@@ -16,6 +16,11 @@ aside {
   flex-basis: 25%;
 }
 
+.titulo-asides{
+  font-size: x-large;
+  font-weight: bold;
+}
+
 footer {
   background-color: #1987546f;
   display: flex;
