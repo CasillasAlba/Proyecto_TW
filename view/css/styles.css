@@ -1,5 +1,5 @@
-header{
-  background-color: #F7F7F7;
+header {
+  background-color: #f7f7f7;
 }
 
 .content {
@@ -20,9 +20,13 @@ footer {
   background-color: #1987546f;
   display: flex;
   justify-content: space-evenly;
-  position: absolute;
+  position: relative;
   width: 100%;
   bottom: 0px;
+}
+
+.widget {
+  padding: 0.5em;
 }
 
 .widget > div {
@@ -31,7 +35,28 @@ footer {
   border-width: thin;
 }
 
+.widget > div:first-of-type {
+  height: 5%;
+  display: flex;
+  align-items: center;
+}
+
 .bar {
   color: aliceblue;
   padding: 1em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form > input {
+  width: 90%;
+  margin: 0.5em;
+}
+
+form > button,
+p {
+  align-self: center;
 }
