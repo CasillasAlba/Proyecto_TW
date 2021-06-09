@@ -2,269 +2,312 @@
 
 {% block content %}
     <form action="{{funciones('procesarUsuario.php')}}" method="POST" enctype="multipart/form-data">
-        <div class="informacion-tabla">
-
-            <div id="profile-photo">
-                <p>Foto de perfil</p>
-                    <img id="ver_user_img" src=""/>
-                    <input type="file" id="file" name="file">
-            </div>
-
-            <div id="tabla">
-                <table class="tabla_registro">
-                    <!-- Nombre -->
-                    <tr>
-                        <td>Nombre</td>
-                        <!-- Recogida la variable se puede usar en value para rellenar el input -->
-                        <td>
-                            {% if accion == "registrar" %}
-                                <input type="text" name="nom" value="{{ row['Nombre'] }}" required>
-                                <span>{{ errores['nombreError']}}</span>
-                            {% elseif accion == "editar" %}
-                                {% if rol_user == "Admin" %}
-                                    <input type="text" name="nom" value="{{ row['Nombre'] }}" required>
-                                {% else %}
-                                    <input readonly type="text" name="nom" value="{{ row['Nombre'] }}">
-                                {% endif %}
-                            {% else %}
-                                <input readonly type="text" name="nom" value="{{ row['Nombre'] }}">
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    <!-- Apellidos -->
-                    <tr>
-                        <td>Apellidos</td>
-                        <td>
-                            {% if accion == "registrar" %}
-                                <input type="text" name="apell" value="{{ row['Apellidos'] }}" required>
-                                <span>{{ errores['apellidosError']}}</span>
-                            {% elseif accion == "editar" %}
-                                {% if rol_user == "Admin" %}
-                                    <input type="text" name="apell" value="{{ row['Apellidos'] }}" required>
-                                {% else %}
-                                    <input readonly type="text" name="apell" value="{{ row['Apellidos'] }}">
-                                {% endif %}
-                            {% else %}
-                                <input readonly type="text" name="apell" value="{{ row['Apellidos'] }}">
-                            {% endif %}
-                        </td>       
-                    </tr>
-
-                    <!-- DNI -->
-                    <tr>
-                        <td>DNI</td>
-                        <td>
-                            {% if accion == "registrar" %}
-                                <input type="text" name="dn" value="{{ row['DNI'] }}" required>
-                                <span>{{ errores['dniError']}}</span>
-                            {% elseif accion == "editar" %}
-                                {% if rol_user == "Admin" %}
-                                    <input type="text" name="dn" value="{{ row['DNI'] }}" required>
-                                {% else %}
-                                    <input readonly type="text" name="dn" value="{{ row['DNI'] }}">
-                                {% endif %}
-                            {% else %}
-                                <input readonly type="text" name="dn" value="{{ row['DNI'] }}">
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    <!-- Email -->
-                    <tr>
-                        <td>EMAIL</td>
-                        <td>
-                            {% if accion == "registrar" or accion == "editar" %}
-                                <input type="email" name="ema" value="{{ row['Email'] }}" required>
-                                <span>{{ errores['emailError']}}</span>
-                            {% else %}
-                                <input readonly type="email" name="ema" value="{{ row['Email'] }}">
-                                <span>{{ errores['emailError']}}</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    <!-- Telefono -->
-                    <tr>
-                        <td>Telefono</td>
-                        <td>
-                            {% if accion == "registrar" or accion == "editar" %}
-                                <input class="number_input" type="number" name="tel" value="{{ row['Telefono'] }}" required>
-                                <span>{{ errores['telefonoError']}}</span>
-                            {% else %}
-                                <input readonly class="number_input" type="number" name="tel" value="{{ row['Telefono'] }}" required>
-                                <span>{{ errores['telefonoError']}}</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    <!-- Fecha Nacimiento -->
-                    <tr>
-                        <td>Fecha Nacimiento</td>
-                        <td>
-                            {% if accion == "registrar" %}
-                                <input type="date" name="nac" value="{{ row['FechaNac'] }}" required>
-                                <span>{{ errores['fechaNacError']}}</span>
-                            {% elseif accion == "editar" %}
-                                {% if rol_user == "Admin" %}
-                                    <input type="date" name="nac" value="{{ row['FechaNac'] }}" required>
-                                {% else %}
-                                    <input readonly type="date" name="nac" value="{{ row['FechaNac'] }}">
-                                {% endif %}
-                            {% else %}
-                                <input readonly type="date" name="nac" value="{{ row['FechaNac'] }}">
-                            {% endif %}
-                        </td>
-                    </tr>
-                    
-                    <!-- Sexo (Checkbox) -->
-                    <tr>
-                        <td>Sexo</td>
-                        <td>
-                            {% if accion == "registrar" %}
-                                <label><input type="radio" id="masc" name="genero" value="Masculino" checked="true">Masculino</label>
-                                <label><input type="radio" id="fem" name="genero" value="Femenino">Femenino</label>
-                            {% elseif accion == "editar" %}
-                                {% if rol_user == "Admin" %}
-                                    {% if row['Sexo']   == "Masculino" %}    
-                                        <label><input type="radio" id="masc" name="genero" value="Masculino" checked="true">Masculino</label>
-                                        <label><input type="radio" id="fem" name="genero" value="Femenino">Femenino</label>
-                                        <span>{{ errores['sexoError']}}</span>
-                                    {% else %}
-                                        <label><input type="radio" id="masc" name="genero" value="Masculino">Masculino</label>
-                                        <label><input type="radio" id="fem" name="genero" value="Femenino" checked="true">Femenino</label> 
-                                        <span>{{ errores['sexoError']}}</span>
-                                    {% endif %} 
-                                {% else %}
-                                    {% if row['Sexo']   == "Masculino" %}    
-                                        <input readonly type="text" id="masc" name="genero" value="Masculino">
-                                    {% else %}
-                                        <input readonly type="text" id="fem" name="genero" value="Femenino">
-                                    {% endif %}
-                                {% endif %}
-                            {% else %}
-                                {% if row['Sexo']   == "Masculino" %}    
-                                    <input readonly type="text" id="masc" name="genero" value="Masculino">
-                                {% else %}
-                                    <input readonly type="text" id="fem" name="genero" value="Femenino">
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    <!-- Clave (Repeticion) -->
-                    <tr>
-                        <td>Clave</td>
-                        <td>
-                            {% if accion == "registrar" or accion == "editar" %}
-                                <input type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}" required><input type="password" name="clv_rep" required>
-                                <span>{{ errores['claveError']}}</span>
-                            {% else %}
-                                <input readonly type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}">
-                                <span>{{ errores['claveError']}}</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    {% if rol_user == "Admin" %}
-                        <tr>
-                            <td>Rol</td>
-                            <td>
-                                {% if accion == "confirmar" or accion == "activar" %}
-                                    {% if row['Rol']  == "Sanitario" %}
-                                        <label><input readonly type="text" id="sanitario" name="rol" value="Sanitario"></label>
-                                    {% else %}
-                                        <label><input readonly type="text" id="paciente" name="rol" value="Paciente"></label>
-                                    {% endif %}
-                                {% else %}
-                                    {% if row['Rol']  == "Sanitario" %}
-                                        <select name="rol">
-                                            <option value="Paciente" >Paciente</option>
-                                            <option value="Sanitario" selected>Sanitario</option>
-                                        </select>
-                                    {%else %}
-                                        <select name="rol">
-                                            <option value="Paciente" selected>Paciente</option>
-                                            <option value="Sanitario">Sanitario</option>
-                                        </select>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Estado</td>
-                            <td>
-                                {% if accion == "confirmar" or accion == "activar" %}
-                                    {% if row['Estado']  == "Activo" %}
-                                        <label><input readonly type="text" id="act" name="estado" value="Activo"></label>
-                                    {% else %}
-                                        <label><input readonly type="text" id="inact" name="estado" value="Inactivo"></label>
-                                    {% endif %}
-                                {% else %}
-                                    {% if row['Estado']  == "Activo" %}
-                                        <select name="estado">
-                                            <option value="Activo" selected>Activo</option>
-                                            <option value="Inactivo">Inactivo</option>
-                                        </select>
-                                    {%else %}
-                                        <select name="estado">
-                                            <option value="Activo">Activo</option>
-                                            <option value="Inactivo" selected>Inactivo</option>
-                                        </select>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr hidden>
-                            <td>Rol</td>
-                            <td>
-                                {% if rol_user == "Sanitario" %}
-                                    <label><input readonly type="text" id="sanitario" name="rol" value="Sanitario"></label>
-                                {% else %}
-                                    <label><input readonly type="text" id="paciente" name="rol" value="Paciente"></label>
-                                {% endif %}
-                            </td>
-                        </tr>
-
-                        <tr hidden>
-                            <td>Estado</td>
-                            <td>
-                                {% if rol_user == "Sanitario" or rol_user == "Paciente" %}
-                                    <label><input readonly type="text" id="act" name="estado" value="Activo"></label>
-                                {% else %}
-                                    <label><input readonly type="text" id="inact" name="estado" value="Inactivo"></label>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-
-                    <!-- Boton de Confirmacion -->
-                    <tr>
-                        <td></td>
-                        <td>
-                            {% if accion == "registrar" %}
-                                {% if rol_user == "Admin" %}
-                                    <button class="form-button" name="boton-registrar-user" type="submit">Registrar datos</button>
-                                {% else %}
-                                    <button class="form-button" name="boton-enviar-datos-user" type="submit">Enviar datos</button>
-                                {% endif %}
-                            {% elseif accion == "editar" %}
-                                    <button class="form-button" name="boton-editar-user" type="submit">Guardar cambios</button>
-                            {% elseif accion == "confirmar" %}
-                                <button class="form-button" name="boton-confirmar-user" type="submit">Confirmar datos</button>
-                            {% elseif accion == "activar" %}
-                                <button class="form-button" name="boton-activar-user" type="submit">Activar e informar</button>
-                                <button class="form-button" name="boton-informar-error-user" type="submit">Informar de error</button>
-                                <button class="form-button" name="boton-borrar-user" type="submit">Borrar usuario</button>
-                            {% endif %}
-                            <input hidden name="accion" value="{{ accion }}">
-                        </td>
-                    </tr>
-                </table>
-            </div>
+        <div class="mb-3">
+            <label for="file" class="form-label">Foto de perfil</label>
+            <img src=""/>
+            <input class="form-control" type="file" id="file" name="file">
         </div>
+
+        <!-- Nombre -->
+        <div class="mb-3">
+            <label for="registerNombreInput" class="form-label">Nombre</label>
+            <!-- Recogida la variable se puede usar en value para rellenar el input -->
+            {% if accion == "registrar" %}
+                <input class="form-control" id="registerNombreInput" type="text" name="nom" value="{{ row['Nombre'] }}" required>
+            {% elseif accion == "editar" %}
+                {% if rol_user == "Admin" %}
+                    <input class="form-control" id="registerNombreInput" type="text" name="nom" value="{{ row['Nombre'] }}" required>
+                {% else %}
+                    <input readonly class="form-control" id="registerNombreInput" type="text" name="nom" value="{{ row['Nombre'] }}">
+                {% endif %}
+            {% else %}
+                <input readonly class="form-control" id="registerNombreInput" type="text" name="nom" value="{{ row['Nombre'] }}">
+            {% endif %}
+            <span>{{ errores['nombreError']}}</span>
+        </div>
+
+        <!-- Apellidos -->
+        <div class="mb-3">
+            <label for="registerApellidoInput" class="form-label">Apellido</label>
+            {% if accion == "registrar" %}
+                <input class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}" required>
+            {% elseif accion == "editar" %}
+                {% if rol_user == "Admin" %}
+                    <input class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}" required>
+                {% else %}
+                    <input readonly class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}">
+                {% endif %}
+            {% else %}
+                <input readonly class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}">
+            {% endif %}
+            <span>{{ errores['apellidoError']}}</span>
+        </div>
+
+        <!-- DNI -->
+        <div class="mb-3">
+            <label for="registerDniInput" class="form-label">DNI</label>
+            {% if accion == "registrar" %}
+                <input class="form-control" id="registerDniInput" type="text" name="dn" value="{{ row['DNI'] }}" required>
+            {% elseif accion == "editar" %}
+                {% if rol_user == "Admin" %}
+                    <input class="form-control" id="registerDniInput" type="text" name="dn" value="{{ row['DNI'] }}" required>
+                {% else %}
+                    <input readonly class="form-control" id="registerDniInput" type="text" name="dn" value="{{ row['DNI'] }}">
+                {% endif %}
+            {% else %}
+                <input readonly class="form-control" id="registerDniInput" type="text" name="dn" value="{{ row['DNI'] }}">
+            {% endif %}
+            <span>{{ errores['dniError']}}</span>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="registerEmailInput" class="form-label">Email</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerEmailInput" type="email" name="ema" value="{{ row['Email'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerEmailInput" type="email" name="ema" value="{{ row['Email'] }}">
+            {% endif %}
+            <span>{{ errores['emailError']}}</span>
+        </div>
+
+        <!-- Telefono -->
+        <div class="mb-3">
+            <label for="registerTelefonoInput" class="form-label">Teléfono</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerTelefonoInput" type="number" name="tel" value="{{ row['Telefono'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerTelefonoInput" type="number" name="tel" value="{{ row['Telefono'] }}">
+            {% endif %}
+            <span>{{ errores['telefonoError']}}</span>
+        </div>
+
+        <!-- Fecha Nacimiento -->
+        <div class="mb-3">
+            <label for="registerFechaInput" class="form-label">Fecha de Nacimiento</label>
+            {% if accion == "registrar" %}
+                <input class="form-control" id="registerFechaInput" type="date" name="nac" value="{{ row['FechaNac'] }}" required>
+            {% elseif accion == "editar" %}
+                {% if rol_user == "Admin" %}
+                    <input class="form-control" id="registerFechaInput" type="text" type="date" name="nac" value="{{ row['FechaNac'] }}" required>
+                {% else %}
+                    <input readonly class="form-control" id="registerFechaInput" type="date" name="nac" value="{{ row['FechaNac'] }}">
+                {% endif %}
+            {% else %}
+                <input readonly class="form-control" id="registerFechaInput" type="date" name="nac" value="{{ row['FechaNac'] }}">
+            {% endif %}
+            <span>{{ errores['fechaNacError']}}</span>
+        </div>
+                    
+        <!-- Sexo (Checkbox) -->
+        <div class="mb-3">
+            <label class="form-label">Sexo</label>
+            {% if accion == "registrar" %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="genero" id="masc" checked="true">
+                    <label class="form-check-label" for="masc">
+                        Masculino
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="genero" id="fem">
+                    <label class="form-check-label" for="fem">
+                        Femenino
+                    </label>
+                </div>
+            {% elseif accion == "editar" %}
+                {% if rol_user == "Admin" %}
+                    {% if row['Sexo']   == "Masculino" %}    
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="masc" checked="true">
+                            <label class="form-check-label" for="masc">
+                                Masculino
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="fem">
+                            <label class="form-check-label" for="fem">
+                                Femenino
+                            </label>
+                        </div>
+
+                    {% else %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="masc">
+                            <label class="form-check-label" for="masc">
+                                Masculino
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="fem" checked="true">
+                            <label class="form-check-label" for="fem">
+                                Femenino
+                            </label>
+                        </div>
+                    {% endif %} 
+                {% else %}
+                    {% if row['Sexo']   == "Masculino" %}    
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="masc" checked="true" disabled>
+                            <label class="form-check-label" for="masc">
+                                Masculino
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="fem" disabled>
+                            <label class="form-check-label" for="fem">
+                                Femenino
+                            </label>
+                        </div>
+
+                    {% else %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="masc" disabled>
+                            <label class="form-check-label" for="masc">
+                                Masculino
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="fem" checked="true" disabled>
+                            <label class="form-check-label" for="fem">
+                                Femenino
+                            </label>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if row['Sexo']   == "Masculino" %}    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="genero" id="masc" checked="true" disabled>
+                        <label class="form-check-label" for="masc">
+                            Masculino
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="genero" id="fem" disabled>
+                        <label class="form-check-label" for="fem">
+                            Femenino
+                        </label>
+                    </div>
+
+                {% else %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="genero" id="masc" disabled>
+                        <label class="form-check-label" for="masc">
+                            Masculino
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="genero" id="fem" checked="true" disabled>
+                        <label class="form-check-label" for="fem">
+                            Femenino
+                        </label>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <span>{{ errores['sexoError']}}</span>
+        </div>
+
+        <!-- Clave (Repeticion) -->
+        <div class="mb-3">
+            <label for="registerClaveInput" class="form-label">Clave</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}">
+            {% endif %}
+            <span>{{ errores['claveError']}}</span>
+        </div>
+        <div class="mb-3">
+            <label for="registerClaveRepInput" class="form-label">Repita la clave</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerClaveRepInput" type="password" name="clv_rep" required>
+            {% endif %}
+        </div>
+
+        {% if rol_user == "Admin" %}
+            <div class="mb-3">
+                <label for="registerRoleInput" class="form-label">Rol</label>
+                {% if accion == "confirmar" or accion == "activar" %}
+                    {% if row['Rol']  == "Sanitario" %}
+                        <input readonly class="form-control" type="text" id="registerRoleInput" name="rol" value="Sanitario">
+                    {% else %}
+                        <input readonly class="form-control" type="text" id="registerRoleInput" name="rol" value="Paciente">
+                    {% endif %}
+                {% else %}
+                    {% if row['Rol']  == "Sanitario" %}
+                        <select class="form-select" name="rol" id="registerRoleInput">
+                            <option value="Paciente" >Paciente</option>
+                            <option value="Sanitario" selected>Sanitario</option>
+                        </select>
+                    {% else %}
+                        <select class="form-select" name="rol" id="registerRoleInput">
+                            <option value="Paciente" selected>Paciente</option>
+                            <option value="Sanitario">Sanitario</option>
+                        </select>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="registerEstadoInput" class="form-label">Estado</label>
+                {% if accion == "confirmar" or accion == "activar" %}
+                    {% if row['Estado']  == "Activo" %}
+                        <input readonly class="form-control" type="text" id="registerEstadoInput" name="estado" value="Activo">
+                    {% else %}
+                        <input readonly class="form-control" type="text" id="registerEstadoInput" name="estado" value="Inactivo">
+                    {% endif %}
+                {% else %}
+                    {% if row['Estado']  == "Activo" %}
+                        <select class="form-select" name="estado" id="registerEstadoInput">
+                            <option value="Activo" selected>Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    {% else %}
+                        <select class="form-select" name="estado" id="registerEstadoInput">
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo" selected>Inactivo</option>
+                        </select>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% else %}
+            <div hidden>
+                <span>Rol</span>
+                {% if rol_user == "Sanitario" %}
+                    <label><input readonly type="text" id="sanitario" name="rol" value="Sanitario"></label>
+                {% else %}
+                    <label><input readonly type="text" id="paciente" name="rol" value="Paciente"></label>
+                {% endif %}
+
+                <span>Estado</span>
+                {% if rol_user == "Sanitario" or rol_user == "Paciente" %}
+                    <label><input readonly type="text" id="act" name="estado" value="Activo"></label>
+                {% else %}
+                    <label><input readonly type="text" id="inact" name="estado" value="Inactivo"></label>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Boton de Confirmacion -->
+        {% if accion == "registrar" %}
+            {% if rol_user == "Admin" %}
+                <button class="btn btn-success" name="boton-registrar-user" type="submit">Registrar datos</button>
+            {% else %}
+                <button class="btn btn-success" name="boton-enviar-datos-user" type="submit">Enviar datos</button>
+            {% endif %}
+        {% elseif accion == "editar" %}
+                <button class="btn btn-success" name="boton-editar-user" type="submit">Guardar cambios</button>
+        {% elseif accion == "confirmar" %}
+            <button class="btn btn-success" name="boton-confirmar-user" type="submit">Confirmar datos</button>
+        {% elseif accion == "activar" %}
+            <div class="hor-buttons">
+                <button class="btn btn-success" name="boton-activar-user" type="submit">Activar e informar</button>
+                <button class="btn btn-success" name="boton-informar-error-user" type="submit">Informar de error</button>
+                <button class="btn btn-success" name="boton-borrar-user" type="submit">Borrar usuario</button>
+            </div>
+        {% endif %}
+        <input hidden name="accion" value="{{ accion }}">
     </form>
  
 {% endblock %}
