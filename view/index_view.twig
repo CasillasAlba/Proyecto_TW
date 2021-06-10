@@ -30,35 +30,40 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {% if rol_user == "Admin" %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Calendario de vacunación</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Listado de Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Listado de Vacunas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Visualizar Log</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Copias de Seguridad</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Link 1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Link 2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Link 3</a>
-                        </li>
-                    {% endif %}
-                </ul>
+                <form action="index.php" method="POST">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        {% if rol_user == "Admin" %}
+
+                            <li class="nav-item">
+                                <button type="submit" class="nav-link active" aria-current="page" name="inicio">Calendario de vacunación</button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Listado de Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <button type="submit" class="nav-link active" name="listado_vac">Listado de Vacunas</button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Visualizar Log</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Copias de Seguridad</a>
+                            </li>
+
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">Link 1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Link 2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Link 3</a>
+                            </li>
+
+                        {% endif %}
+                    </ul>
+                </form>  
             </div>
         </div>
     </nav>

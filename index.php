@@ -7,6 +7,12 @@
 
     session_start();
 
+    /*
+        if(!$db){
+            //die("No se ha podido establecer una conexión:" .mysqli_connect_error());
+        }
+    */
+
     $loader = new \Twig\Loader\FilesystemLoader('./view');
     $twig = new \Twig\Environment($loader);
 
@@ -22,9 +28,16 @@
         return sprintf('./controller/%s', ltrim($funciones, '/'));
     }));
 
-    //if(!$db){
-        //die("No se ha podido establecer una conexión:" .mysqli_connect_error());
-    //}
+    $twig->addFunction(new \Twig\TwigFunction('lista_vacunas', function () {
+        $lista = devolver_lista_vacunas();
+
+        foreach($lista as $vacuna){
+            echo sprintf('<p>Acrónimo: %s Nombre: %s</p>', $vacuna['Acronimo'], $vacuna['Nombre']);
+            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idEditarVac" value="%s"/><button class="form-button">Editar Vacuna</button></form>', $vacuna['Acronimo']);
+            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idBorrarVac" value="%s"/><button class="form-button">Borrar Vacuna</button></form>', $vacuna['Acronimo']);
+        }
+    }));
+
 
     //////////////////////////////////////////////////////////////////////////////
     // ESTO LO ESTOY USANDO PARA HACER PRUEBAS CON PHP                          //
@@ -96,8 +109,11 @@
         echo $twig->render('inicio.twig');
 
     }else if(isset($_SESSION['login'])){
+        // El usuario tiene la sesión iniciada, si vuelve para atrás, se mantiene.
         $us_user = $_SESSION['row_datos']['DNI'];
         $rol_user = $_SESSION['row_datos']['Rol'];
+        $nombre_user = $_SESSION['row_datos']['Nombre'];
+        $image_user = $_SESSION['row_datos']['Foto'];
 
         // El usuario es ADMIN y puede registrar otros usuarios
         // o eres un visitante que quiere registrarse
@@ -184,11 +200,11 @@
             // Cargamos el formulario de confirmación
             $calend = $_SESSION['row_datos_temp']; 
             echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion'));
-        }else{
-            // El usuario tiene la sesión iniciada, si vuelve para atrás, se mantiene.
-            $nombre_user = $_SESSION['row_datos']['Nombre'];
-            $image_user = $_SESSION['row_datos']['Foto'];
+        }else if(isset($_POST['listado_vac'])){
 
+            echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user'));
+        }else{
+            
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
             echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user'));
         }
