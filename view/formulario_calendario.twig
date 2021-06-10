@@ -1,0 +1,147 @@
+{% extends 'index_view.twig' %}
+
+{% block content %}
+    <form action="{{funciones('procesarCalendario.php')}}" method="POST" enctype="multipart/form-data">
+        <!-- Referencia a un listado de vacunas -->
+        <div class="mb-3">
+            <label for="registerRefVacunaInput" class="form-label">Vacuna</label>
+            {% if accion == "registrar" or accion == "editar" %}
+            <select class="form-select" name="vacunaRef" id="registerRefVacunaInput">
+                <option value="{{ vacunaPorDefecto }}" selected>{{ vacunaPorDefecto}}</option>
+                <!-- 
+                    Antes de renderizar, se debe eliminar la primera posicion de la lista de acronimos de vacunas
+                    ya que esta hará referencia a 'vacunaPorDefecto', la cual se trata de forma diferente
+                    para tener una opción pre-seleccionadas en el select.
+                -->
+                {% for v in vacunas %}
+                    <option value="{{ v }}" >{{ v}}</option>
+                {% endfor %}
+                
+            </select>
+            {% else %}
+                <input readonly class="form-control" id="registerRefVacunaInput" type="text" name="vacunaRef" value="{{ calend['Vacuna'] }}">
+            {% endif %}
+            <span>{{erroresCalend['vacunaRefError']}}</span>
+        </div>
+
+        <!-- Sexo -->
+        <div class="mb-3">
+            <label for="registerSexoCalendInput" class="form-label">Sexo</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                {% if calend['Sexo']  == "Masculino" %}    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Masculino" id="masc" checked="true">
+                        <label class="form-check-label" for="masc">Masculino</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Femenino" id="fem">
+                        <label class="form-check-label" for="fem">Femenino</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Ambos" id="both">
+                        <label class="form-check-label" for="both">Ambos</label>
+                    </div>
+                {% elseif calend['Sexo']  == "Femenino" %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Masculino" id="masc">
+                        <label class="form-check-label" for="masc">Masculino</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Femenino" id="fem" checked="true">
+                        <label class="form-check-label" for="fem">Femenino</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Ambos" id="both">
+                        <label class="form-check-label" for="both">Ambos</label>
+                    </div>
+                {% else %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Masculino" id="masc">
+                        <label class="form-check-label" for="masc">Masculino</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Femenino" id="fem">
+                        <label class="form-check-label" for="fem">Femenino</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="generoCalend" value="Ambos" id="both" checked="true">
+                        <label class="form-check-label" for="both">Ambos</label>
+                    </div>
+                {% endif %} 
+            {% else %}
+                <label><input readonly type="text" id="genCalend" name="generoCalend" value="{{calend['Sexo']}}"></label>
+            {% endif %}
+            <span>{{erroresCalend['sexoCalendError']}}</span>
+        </div>
+
+        <!-- Rango Ini -->
+        <div class="mb-3">
+            <label for="registerMesIniCalendInput" class="form-label">Mes inicio</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ calend['MesIni'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ alend['MesIni'] }}">
+            {% endif %}
+            <span>{{erroresCalend['mesIniError']}}</span>
+        </div>
+
+        <!-- Rango Fin -->
+        <div class="mb-3">
+            <label for="registerMesFinCalendInput" class="form-label">Mes Fin</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerMesFinCalendInput" type="number" name="mesFin" value="{{ calend['MesIni'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerMesIniCalendInput" type="number" name="mesFin" value="{{ calend['MesFin'] }}">
+            {% endif %}
+            <span>{{erroresCalend['mesIniError']}}</span>
+        </div>
+
+        <!-- Tipo -->
+        <div class="mb-3">
+            <label for="registerTipoCalendInput" class="form-label">Tipo</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                {% if calend['Tipo']  == "Sistematica" %}    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoCalend" value="Sistematica" id="sist" checked="true">
+                        <label class="form-check-label" for="sist">Sistemática</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoCalend" value="Recomendada" id="rec">
+                        <label class="form-check-label" for="rec">Recomendada</label>
+                    </div>
+                {% else %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoCalend" value="Sistematica" id="sist">
+                        <label class="form-check-label" for="sist">Sistemática</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoCalend" value="Recomendada" id="rec" checked="true">
+                        <label class="form-check-label" for="rec">Recomendada</label>
+                    </div>
+                {% endif %} 
+            {% else %}
+                <label><input readonly type="text" id="tipCalend" name="tipoCalend" value="{{ calend['Tipo']}}"></label>
+            {% endif %}
+            <span>{{erroresCalend['tipoCalendError']}}</span>
+        </div>
+
+        <!-- Comentario -->
+        <div class="mb-3">
+            <label for="registerDescripCalendInput" class="form-label">Descripción</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerDescripCalendInput" type="text" name="descC" value="{{ calend['DescripCalend'] }}">
+            {% else %}
+                <input readonly class="form-control" id="registerDescripCalendInput" type="text" name="descC" value="{{ calend['DescripCalend'] }}">
+            {% endif %}
+        </div>
+
+        {% if accion == "registrar" %}
+            <button class="btn btn-success" name="boton-registrar-vac" type="submit">Registrar datos</button>
+        {% elseif accion == "editar" %}
+                <button class="btn btn-success" name="boton-editar-vac" type="submit">Guardar cambios</button>
+        {% elseif accion == "confirmar" %}
+            <button class="btn btn-success" name="boton-confirmar-vac" type="submit">Confirmar datos</button>
+        {% endif %}
+        <input hidden name="accion" value="{{ accion }}">
+    </form>
+{% endblock %}

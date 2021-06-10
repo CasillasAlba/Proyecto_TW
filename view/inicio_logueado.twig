@@ -1,7 +1,17 @@
 {% extends 'index_view.twig' %}
 
 {% block content %}
-    <h1>Hola</h1>
+    <div class="calendario">
+        <!-- Aqui dentro va el calendario-->
+        <h1>HOLA</h1>
+    </div>
+    <div>
+        {% if rol_user == "Admin" %}
+        <form action="index.php" method="POST">
+            <button name="aniadir-vac-recomendada" class="form-button">Añadir Vacuna Recomendada</button> 
+        </form>   
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block login %}
@@ -10,13 +20,12 @@
     <div class="w-button-register">
         <form action="index.php" method="POST">
             <button name="log-out" class="form-button">Cerrar Sesión</button>
-        </form>
-        {% if rol_user == "Admin" %}
-            <form action="index.php" method="POST">
-                <button name="regist" class="form-button">Registrar Usuario</button>
-                <button name="regist-vac" class="form-button">Registrar Vacuna</button>
+            {% if rol_user == "Admin" %}
                 <button name="editar-me" class="form-button">Editar Perfil</button>
-            </form>
-        {% endif %}
+                <button name="regist" class="form-button">Registrar Usuario</button>
+                <button name="regist-vac" class="form-button">Registrar Vacuna</button> 
+            {% endif %}
+        </form>
+
     </div>
 {% endblock %}

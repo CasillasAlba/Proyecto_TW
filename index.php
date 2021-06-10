@@ -34,6 +34,8 @@
         $accion = $_SESSION['accionPulsada'];
     }else if(isset($_SESSION['accionPulsadaVac'])){
         $accion = $_SESSION['accionPulsadaVac'];
+    }else if(isset($_SESSION['accionPulsadaCalend'])){
+        $accion = $_SESSION['accionPulsadaCalend'];
     }
 
     if(isset($_POST['boton-login-visitante'])){
@@ -112,6 +114,7 @@
             }
             
         }else if(isset($_POST['editar-me']) or (isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "editar")){
+
             $accion = "editar";
             // Cargamos los valores del propio usuario para cargar SUS datos
             $row = $_SESSION['row_datos'];
@@ -137,11 +140,13 @@
             }
 
         }else if(isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "confirmar"){
+
             // Cargamos el formulario de confirmación
             $row = $_SESSION['row_datos_temp']; 
             echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
         }else if(isset($_POST['regist-vac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "registrar" )){
+
             $accion = "registrar"; // Creamos accion para la 1a vez
     
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
@@ -154,9 +159,22 @@
             }
     
         }else if(isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "confirmar"){
+
             // Cargamos el formulario de confirmación
             $vac = $_SESSION['row_datos_temp']; 
             echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
+            
+        }else if(isset($_POST['aniadir-vac-recomendada']) or (isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "registrar" )){
+            $accion = "registrar"; // Creamos accion para la 1a vez
+
+            // Si al registrar hay errores, se carga formulario sticky con los errores escritos
+            if(isset($_SESSION['row_errores_temp'])){
+                $vac = $_SESSION['row_datos_temp'];
+                $erroresCalend = $_SESSION['row_errores_temp'];
+                echo $twig->render('formulario_calendario.twig', compact('calend', 'erroresCalend', 'us_user', 'accion'));
+            }else{
+                echo $twig->render('formulario_calendario.twig', compact('us_user', 'accion'));
+            }
             
         }else{
             // El usuario tiene la sesión iniciada, si vuelve para atrás, se mantiene.
