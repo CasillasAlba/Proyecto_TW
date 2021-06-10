@@ -267,6 +267,32 @@
 
     }
 
+    // Funcion que devuelve la lista de usuarios inactivos
+    function devolver_lista_peticiones(){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT * FROM usuarios WHERE Estado='Inactivo'");
+
+        if($prep->execute()){
+
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
     function usuario_ya_registrado($dni){
         global $db;
 

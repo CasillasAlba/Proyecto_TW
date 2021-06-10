@@ -41,16 +41,48 @@
 
     // Función que devuelve la lista de usuarios
     $twig->addFunction(new \Twig\TwigFunction('lista_usuarios', function () {
+        global $rol_user;
         $lista = devolver_lista_usuarios();
 
+        echo sprintf('<form action="index.php" method="POST">');
         foreach($lista as $usuario){
             if($usuario["Rol"] != "Admin"){
                 echo sprintf('<img height="130px" width="150px" src="data:image;base64,%s" />', $usuario["Fotografia"]);
                 echo sprintf('<p>Nombre: %s %s</p>', $usuario["Nombre"], $usuario['Apellidos']);
-                echo sprintf('<button class="form-button" name="idEditarUser" value="%s">Editar</button>', $usuario["DNI"]);
-                echo sprintf('<button class="form-button" name="idBorrarUser" value="%s">Borrar</button>', $usuario["DNI"]);
+                if($rol_user == "Admin"){
+                    echo sprintf('<button class="form-button" name="idEditarUser" value="%s">Editar</button>', $usuario["DNI"]);
+                    echo sprintf('<button class="form-button" name="idBorrarUser" value="%s">Borrar</button>', $usuario["DNI"]);
+                }else if($rol_user == "Sanitario"){
+                    echo sprintf('<button class="form-button" name="idVerVacunacion" value="%s">Ver Cartilla</button>', $usuario["DNI"]);
+                    echo sprintf('<button class="form-button" name="idEditarVacunacion" value="%s">Modificar Cartilla</button>', $usuario["DNI"]);
+                    echo sprintf('<button class="form-button" name="idPonerVacuna" value="%s">Añadir Vacuna</button>', $usuario["DNI"]);
+                }
+                
             }
         }
+        echo sprintf('</form>');
+    }));
+
+    // Función que devuelve la lista de usuarios
+    $twig->addFunction(new \Twig\TwigFunction('lista_peticiones', function () {
+        global $rol_user;
+        $lista = devolver_lista_peticiones();
+
+        if($lista != "False"){
+            if(count($lista) > 0){
+                echo sprintf('<form action="index.php" method="POST">');
+                foreach($lista as $usuario){
+                    echo sprintf('<img height="130px" width="150px" src="data:image;base64,%s" />', $usuario["Fotografia"]);
+                    echo sprintf('<p>Nombre: %s %s</p>', $usuario["Nombre"], $usuario['Apellidos']);
+                    echo sprintf('<button class="form-button" name="idProcesarPeticion" value="%s">Procesar</button>', $usuario["DNI"]);        
+                }
+                echo sprintf('</form>');
+            }else{
+                echo sprintf('<h2>No hay peticiones pendientes.</h2>');
+            }
+
+        }
+        
     }));
 
 
@@ -74,10 +106,13 @@
 
         $datos_logueado = procesar_login($dni_login, $clv_login);
 
-        
         // El login no ha sido correcto
         if($datos_logueado == False){
-            echo $twig->render('error_inicio.twig');
+            $motivo = "DNI O CONTRASEÑA INCORRECTA :(";
+            echo $twig->render('error_inicio.twig', compact('motivo'));
+        }else if($datos_logueado == "Inactivo"){
+            $motivo = "NO PUEDE INICIAR SESIÓN HASTA QUE LE DEN DE ALTA EN EL SISTEMA";
+            echo $twig->render('error_inicio.twig', compact('motivo'));
         }else{
             // Se ha iniciado sesión correctamente
             // Esta será la variable con la que se guarde la sesión
@@ -112,9 +147,10 @@
             'Rol' => '',
         ];
 
-        $accion = 'registrar';
         $us_user = '';
+        $accion = 'registrar';
         $rol_user = 'Visitante';
+        $_SESSION['rol_user_visitante'] = $rol_user;
     
         echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
@@ -173,7 +209,7 @@
                     $_SESSION['rol_admin'] = "Admin";
                 }
 
-                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user','rol_user','accion'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
             }
 
@@ -239,7 +275,8 @@
 
         }else if(isset($_POST['listado_user'])){
 
-            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user'));
+            $boton_accion = "listadoUsuarios";
+            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
             
         }else if(isset($_POST['idEditarVac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "editar" )){
             
@@ -258,12 +295,45 @@
                 echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion'));
             }
 
+        }else if(isset($_POST['peticiones'])){
+
+            $boton_accion = "listadoPeticiones";
+            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
+
+        }else if(isset($_POST['idProcesarPeticion'])){
+            $accion = "activar";
+            $dni_visitante = $_POST['idProcesarPeticion'];
+            $row = devolver_usuario($dni_visitante);
+            $_SESSION['datos_visitante'] = $row;
+
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
+
+        }else if(isset($_SESSION["accionPulsada"]) and $_SESSION["accionPulsada"] == "activar"){
+            
+            $boton_accion = "listadoPeticiones";
+            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
+              
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
             echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user'));
         }
 
+    }else if(isset($_SESSION['accionPulsada']) and ($_SESSION['accionPulsada'] == "registrar" or $_SESSION['accionPulsada'] == "confirmar")){
+        // ERES UN VISITANTE INTENTANDO REGISTRARTE 
+        $accion = $_SESSION['accionPulsada'];
+        $rol_user = $_SESSION['rol_user_visitante'];
+
+        // Si al registrar hay errores, se carga formulario sticky con los errores escritos
+        if(isset($_SESSION['row_errores_temp'])){
+            $row = $_SESSION['row_datos_temp'];
+            $errores = $_SESSION['row_errores_temp'];
+            echo $twig->render('formulario_usuario.twig', compact('row', 'errores' , 'rol_user', 'accion'));
+        }else{
+            echo $twig->render('formulario_usuario.twig', compact('rol_user', 'accion'));
+        }
+
+        
     }else{
         echo $twig->render('inicio.twig');
     }

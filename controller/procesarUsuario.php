@@ -34,15 +34,18 @@
             unset($_POST["estado"]);
         }
 
-        $_SESSION['file_name_temp'] = $_FILES['file']['name'];
+        if(isset($_FILES['file']['name'])){
+            $_SESSION['file_name_temp'] = $_FILES['file']['name'];
 
-        if($_SESSION['file_name_temp'] != ''){
-            $_SESSION['tmp_name_temp']  = $_FILES['file']['tmp_name'];
-            $_SESSION['file_size_temp'] = getimagesize($_FILES['file']['tmp_name']);
-            // Esto es lo que se guarda en la base de datos   
-            //Coge el contenido del fichero temporal (bits) y los encodifica 
-            $_SESSION['foto_temp'] = base64_encode(file_get_contents(addslashes($_SESSION['tmp_name_temp'])));
+            if($_SESSION['file_name_temp'] != ''){
+                $_SESSION['tmp_name_temp']  = $_FILES['file']['tmp_name'];
+                $_SESSION['file_size_temp'] = getimagesize($_FILES['file']['tmp_name']);
+                // Esto es lo que se guarda en la base de datos   
+                //Coge el contenido del fichero temporal (bits) y los encodifica 
+                $_SESSION['foto_temp'] = base64_encode(file_get_contents(addslashes($_SESSION['tmp_name_temp'])));
+            }
         }
+        
     }
  
     switch($_SESSION["accionPulsada"]){
@@ -131,12 +134,18 @@
     
         case "activar":
             if(isset($_POST['boton-activar-user'])){
-                echo "Oleeee que ole";
+
+                $_SESSION['datos_visitante']['Estado'] = "Activo";
+                modificar_usuario($_SESSION['datos_visitante']);
+                unset( $_SESSION['datos_visitante']);
+                
             }else if(isset($_POST['boton-informar-error-user'])){
                 echo "Ay mecachis";
             }else if(isset($_POST['boton-borrar-user'])){
                 echo "Ay mecachis";
             }
+
+            header("Location: ../index.php");
 
         break;
 

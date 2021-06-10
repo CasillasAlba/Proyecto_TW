@@ -1,10 +1,12 @@
 {% extends 'index_view.twig' %}
 
 {% block content %}
-    <div class = "listado_usuario">
-        <form action="index.php" method="POST">
-            {{lista_usuarios()}}
-        </form>  
+    <div class = "listado_usuario">    
+            {% if boton_accion == "listadoUsuarios" %}
+                {{lista_usuarios()}}
+            {% else %}
+                {{lista_peticiones()}}
+            {% endif %}
     </div>
 {% endblock %}
 
@@ -13,13 +15,12 @@
     <img height="150px" width="150px" src="data:image;base64,{{ image_user }}" />
     <div class="w-button-register">
         <form action="index.php" method="POST">
-            <button name="log-out" class="form-button">Cerrar Sesión</button>
-            {% if rol_user == "Admin" %}
-                <button name="editar-me" class="form-button">Editar Perfil</button>
+            {% if rol_user == "Admin" %} 
                 <button name="regist" class="form-button">Registrar Usuario</button>
                 <button name="regist-vac" class="form-button">Registrar Vacuna</button> 
             {% endif %}
+            <button name="editar-me" class="form-button">Editar Perfil</button>
+            <button name="log-out" class="form-button">Cerrar Sesión</button>
         </form>
-
     </div>
 {% endblock %}
