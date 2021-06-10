@@ -1,6 +1,10 @@
 <?php
 require_once('../core/db.php');
 
+//////////////////////////////////////////////////////////////////////////////////////////
+//                                  VALIDACIÓN USUARIOS                                 //
+//////////////////////////////////////////////////////////////////////////////////////////
+
     function comprobar_errores_usuario(){
         // Inicializamos el array de errores
         $array_errores = array(
@@ -203,6 +207,11 @@ require_once('../core/db.php');
         return $error;
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+//                                  VALIDACIÓN VACUNAS                                  //
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
     function comprobar_errores_vacunas(){
         // Inicializamos el array de errores
         $array_errores = array(
@@ -221,7 +230,7 @@ require_once('../core/db.php');
                 $existe = vacuna_ya_registrada($acro);
 
                 if($existe == 'true'){
-                    $array_errores['acronimoError'] = 'Esta vacuna ya esta registrada en la base de datos';
+                    $array_errores['acronimoError'] = 'Esta vacuna ya está registrada en la base de datos';
                     $error = True;
                 }else{
                     if(strlen($_SESSION['acronimo_vac_temp']) > 10){
@@ -235,7 +244,7 @@ require_once('../core/db.php');
             $existe = vacuna_ya_registrada($acro);
 
             if($existe == true){
-                $array_errores['acronimoError'] = 'Esta vacuna ya esta registrada en la base de datos';
+                $array_errores['acronimoError'] = 'Esta vacuna ya está registrada en la base de datos';
                 $error = True;
             }else{
                 if(strlen($_SESSION['acronimo_vac_temp']) > 10){
@@ -266,6 +275,71 @@ require_once('../core/db.php');
 
         return $error;
 
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//                               VALIDACIÓN CALENDARIO                                  //
+//////////////////////////////////////////////////////////////////////////////////////////
+
+    function comprobar_errores_calend(){
+        // Inicializamos el array de errores
+        $array_errores = array(
+            "vacunaRefError" => "",
+            "sexoCalendError" => "",
+            "mesIniError" => "",
+            "mesFinError" => "",
+            "tipoCalendError" => ""
+        );
+
+        $error = false;
+
+        ////////////////////////////  Validaciones del Acronimo ////////////////////////////////////////////
+        // Comprobamos que la vacuna elegida sea una de las registradas en la BBDD
+        $existe = vacuna_ya_registrada($_SESSION['acro_ref_calend_temp']);
+
+        if($existe == false){
+            $array_errores['vacunaRefError'] = 'Esta vacuna no está registrada en la base de datos';
+            $error = True;
+        }
+
+
+        ////////////////////////////  Validaciones del Sexo ////////////////////////////////////////////
+        if($_SESSION['sexo_calend_temp'] != "Masculino" && $_SESSION['sexo_calend_temp'] != "Femenino"  && $_SESSION['sexo_calend_temp'] != "Ambos"){
+            $array_errores['sexoError'] = 'El sexo es incorecto';
+            $error = True;
+        }
+        
+
+        ////////////////////////////  Validaciones del Intervalo de Meses ///////////////////////////////////////
+        if($_SESSION['mes_ini_temp'] > 1350){
+            $array_errores['mesIniError'] = 'El mes de inicio no debe ser mayor a 1350';
+            $error = True;
+        }else if($_SESSION['mes_fin_temp'] > 1350){
+            $array_errores['mesFinError'] = 'El mes de fin no debe ser mayor a 1350';
+            $error = True;
+        }else if((($_SESSION['mes_fin_temp'] < $_SESSION['mes_ini_temp'] && $_SESSION['mes_fin_temp'] != 0))){
+            $array_errores['mesFinError'] = 'El mes de fin debe ser mayor o igual al mes de inicio o 0';
+            $error = True;
+        }
+
+        if($_SESSION['tipo_calend_temp']!= "Sistemática" && $_SESSION['tipo_calend_temp'] != "Recomendada"){
+            $array_errores['tipoCalendError'] = 'El tipo no es correcto';
+            $error = True;
+        }
+
+        $array = array(
+            "VacunaRef" => $_SESSION['acro_ref_calend_temp'],
+            "Sexo" => $_SESSION['sexo_calend_temp'],
+            "MesIni" => $_SESSION['mes_ini_temp'],
+            "MesFin" => $_SESSION['mes_fin_temp'],
+            "Tipo" => $_SESSION['tipo_calend_temp'],
+            "DescripCalend" => $_SESSION['descp_calend_temp']
+        );
+
+        $_SESSION['row_datos_temp'] = $array;
+        $_SESSION['row_errores_temp'] = $array_errores;
+
+        return $error;
     }
 
 ?>

@@ -14,12 +14,12 @@
                     para tener una opción pre-seleccionadas en el select.
                 -->
                 {% for v in vacunas %}
-                    <option value="{{ v }}" >{{ v}}</option>
+                    <option value="{{v}}" >{{v}}</option>
                 {% endfor %}
                 
             </select>
             {% else %}
-                <input readonly class="form-control" id="registerRefVacunaInput" type="text" name="vacunaRef" value="{{ calend['Vacuna'] }}">
+                <input readonly class="form-control" id="registerRefVacunaInput" type="text" name="vacunaRef" value="{{ calend['VacunaRef'] }}">
             {% endif %}
             <span>{{erroresCalend['vacunaRefError']}}</span>
         </div>
@@ -80,7 +80,7 @@
             {% if accion == "registrar" or accion == "editar" %}
                 <input class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ calend['MesIni'] }}" required>
             {% else %}
-                <input readonly class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ alend['MesIni'] }}">
+                <input readonly class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ calend['MesIni'] }}">
             {% endif %}
             <span>{{erroresCalend['mesIniError']}}</span>
         </div>
@@ -89,11 +89,11 @@
         <div class="mb-3">
             <label for="registerMesFinCalendInput" class="form-label">Mes Fin</label>
             {% if accion == "registrar" or accion == "editar" %}
-                <input class="form-control" id="registerMesFinCalendInput" type="number" name="mesFin" value="{{ calend['MesIni'] }}" required>
+                <input class="form-control" id="registerMesFinCalendInput" type="number" name="mesFin" value="{{ calend['MesFin'] }}" required>
             {% else %}
-                <input readonly class="form-control" id="registerMesIniCalendInput" type="number" name="mesFin" value="{{ calend['MesFin'] }}">
+                <input readonly class="form-control" id="registerMesFinCalendInput" type="number" name="mesFin" value="{{ calend['MesFin'] }}">
             {% endif %}
-            <span>{{erroresCalend['mesIniError']}}</span>
+            <span>{{erroresCalend['mesFinError']}}</span>
         </div>
 
         <!-- Tipo -->

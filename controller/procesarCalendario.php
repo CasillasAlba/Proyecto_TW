@@ -8,15 +8,18 @@
 
     if($_SESSION["accionPulsadaCalend"] != "confirmar"){
 
-        $_SESSION['acronimo_vac_temp'] = $_POST["acro"];
-        $_SESSION['nombre_vac_temp'] = $_POST["nomV"];
-        $_SESSION['descrip_vac_temp'] = $_POST["descV"];
+        $_SESSION['acro_ref_calend_temp'] = $_POST["vacunaRef"];
+        $_SESSION['sexo_calend_temp'] = $_POST["generoCalend"];
+        $_SESSION['mes_ini_temp'] = $_POST["mesIni"];
+        $_SESSION['mes_fin_temp'] = $_POST["mesFin"];
+        $_SESSION['tipo_calend_temp'] = $_POST["tipoCalend"];
+        $_SESSION['descp_calend_temp'] = $_POST["descC"];
 
     }
 
     switch($_SESSION["accionPulsadaCalend"]){
         case "registrar":
-            $hay_error = comprobar_errores_vacunas();
+            $hay_error = comprobar_errores_calend();
 
             if($hay_error == False){
                 //Se realizara una redireccion a confirmar
@@ -30,7 +33,7 @@
         break;
 
         case "editar":
-            $hay_error = comprobar_errores_vacunas();
+            $hay_error = comprobar_errores_calend();
 
             if($hay_error == False){
                 //Se realizara una redireccion a confirmar
@@ -48,13 +51,16 @@
             if(isset($_SESSION["accionBD"])){
 
                 if($_SESSION["accionBD"] == "registrar"){
-                    insertar_vacuna($_SESSION['row_datos_temp']);
+                    insertar_calendario($_SESSION['row_datos_temp']);
                 }
             }
 
-            unset($_SESSION['acronimo_vac_temp']);
-            unset($_SESSION['nombre_vac_temp']);
-            unset($_SESSION['descrip_vac_temp']);
+            unset($_SESSION['acro_ref_calend_temp']);
+            unset($_SESSION['sexo_calend_temp']);
+            unset($_SESSION['mes_ini_temp']);
+            unset($_SESSION['mes_fin_temp']);
+            unset($_SESSION['tipo_calend_temp']);
+            unset($_SESSION['descp_calend_temp']);
             unset($_SESSION['row_errores_temp']);
             unset($_SESSION['row_datos_temp']);
             unset($_SESSION['accionPulsadaCalend']);

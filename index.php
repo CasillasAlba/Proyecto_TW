@@ -167,15 +167,23 @@
         }else if(isset($_POST['aniadir-vac-recomendada']) or (isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "registrar" )){
             $accion = "registrar"; // Creamos accion para la 1a vez
 
+            // Obtenemos la lista de acronimos de vacunas disponibles a las que podemos hacerle referencia
+            $vacunas = devolver_acronimos_vacunas();
+            $vacunaPorDefecto = $vacunas[0];
+            unset($vacunas[0]);
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
             if(isset($_SESSION['row_errores_temp'])){
-                $vac = $_SESSION['row_datos_temp'];
+                $calend = $_SESSION['row_datos_temp'];
                 $erroresCalend = $_SESSION['row_errores_temp'];
-                echo $twig->render('formulario_calendario.twig', compact('calend', 'erroresCalend', 'us_user', 'accion'));
+                echo $twig->render('formulario_calendario.twig', compact('calend', 'erroresCalend', 'us_user', 'accion', 'vacunaPorDefecto', 'vacunas'));
             }else{
-                echo $twig->render('formulario_calendario.twig', compact('us_user', 'accion'));
+                echo $twig->render('formulario_calendario.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas'));
             }
             
+        }else if(isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "confirmar"){
+            // Cargamos el formulario de confirmación
+            $calend = $_SESSION['row_datos_temp']; 
+            echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion'));
         }else{
             // El usuario tiene la sesión iniciada, si vuelve para atrás, se mantiene.
             $nombre_user = $_SESSION['row_datos']['Nombre'];

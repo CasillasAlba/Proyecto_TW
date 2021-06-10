@@ -107,7 +107,7 @@
     // Realizamos una CONSULTA PREPARADA para insertar vacunas
     function insertar_vacuna($datos){
         global $db;
-        echo "HE ENTRADO?????";
+
         $prep = $db->prepare("INSERT INTO vacunas(Acronimo, Nombre, Descripcion) VALUES (?, ?, ?)");
 
         $prep->bind_param('sss', $acro, $nom, $desc);
@@ -129,18 +129,23 @@
     function insertar_calendario($datos){
         global $db;
 
+        // En el sistema trabajamos con el acrónimo por facilidad
+        // pero para insertar debemos recoger el ID de la vacuna (PRIMARY KEY)
+        //  Por lo cual obtenemos el objeto de la vacuna correspondiente y obtenemos su ID.
+        $v = devolver_vacuna($datos['VacunaRef']);
+
         $prep = $db->prepare("INSERT INTO calendario(IDVacuna, Sexo, Meses_ini, Meses_fin, Tipo, Comentarios)
                 VALUES (?, ?, ?, ?, ?, ?)");
 
         $prep->bind_param('isiiss', $idv, $sex, $mi, $mf, $tipo, $desc);
         
         // Establecer parámetros y ejecutar
-        $idv = $datos['idVacuna'];
+        $idv = $v['ID'];
         $sex = $datos['Sexo'];
         $mi = $datos['MesIni'];
         $mf = $datos['MesFin'];
         $tipo = $datos['Tipo'];
-        $desc = $datos['Descripcion'];
+        $desc = $datos['DescripCalend'];
 
         $prep->execute();
         
@@ -235,6 +240,32 @@
         return $datos;
     }
 
+    // Función que devuelve la lista de usuarios
+    function devolver_lista_usuarios(){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT * FROM usuarios");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+
+    }
+
     function usuario_ya_registrado($dni){
         global $db;
 
@@ -293,6 +324,89 @@
         $prep->close();
 
         return $datos;
+    }
+
+    function devolver_vacuna_por_id($id){
+        global $db;
+
+        $prep = $db->prepare("SELECT * FROM vacunas WHERE ID=?");
+
+        // El primer parametro es el tipo de datos que vamos a insertar, un caracter por cada tipo de dato.
+        $prep->bind_param('i', $id);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $prep->bind_result($id, $acro, $nom, $desc);
+
+            // Obtenemos los valores
+            if($prep->fetch()){
+                $datos['ID'] = $id;
+                $datos['Acronimo'] = $acro;
+                $datos['Nombre'] = $nom;
+                $datos['Descripcion'] = $desc;
+            }else{
+                $datos = false; // No hay resultados
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
+    // Función que devuelve un array con los acrónimos de las vacunas
+    function devolver_acronimos_vacunas(){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT Acronimo FROM vacunas");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem['Acronimo']);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+
+    }
+
+    // Función que devuelve la lista de vacunas
+    function devolver_lista_vacunas(){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT * FROM vacunas");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+
     }
 
     function vacuna_ya_registrada($acro){
@@ -450,4 +564,9 @@ function eliminar_usuario($dni){
 
     //modificar_usuario($db, $datos_admin);
     //eliminar_usuario($db, $datos_admin['DNI']);
+
+    //$result = devolver_acronimos_vacunas();
+    //foreach ($result as $v){
+        //echo $v;
+    //}
 ?>
