@@ -140,49 +140,17 @@
                         </div>
                     {% endif %} 
                 {% else %}
-                    {% if row['Sexo']   == "Masculino" %}    
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="masc" value="Masculino" checked="true" disabled>
-                            <label class="form-check-label" for="masc">Masculino</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" value="Femenino" id="fem" disabled>
-                            <label class="form-check-label" for="fem">Femenino</label>
-                        </div>
-
+                    {% if row['Sexo']  == "Masculino" %}    
+                        <input readonly class="form-control" type="text" name="genero" id="masc" value="Masculino">
                     {% else %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc" disabled>
-                            <label class="form-check-label" for="masc">Masculino</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="genero" id="fem" cvalue="Femenino" hecked="true" disabled>
-                            <label class="form-check-label" for="fem">Femenino</label>
-                        </div>
+                        <input readonly class="form-control" type="text" name="genero" id="masc" value="Femenino">
                     {% endif %}
                 {% endif %}
             {% else %}
                 {% if row['Sexo']   == "Masculino" %}    
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" id="masc" value="Masculino" checked="true" disabled>
-                        <label class="form-check-label" for="masc">Masculino</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" value="Femenino" id="fem" disabled>
-                        <label class="form-check-label" for="fem">Femenino</label>
-                    </div>
-
+                    <input readonly class="form-control" type="text" name="genero" id="masc" value="Masculino">
                 {% else %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" value="Masculino" id="masc" disabled>
-                        <label class="form-check-label" for="masc">Masculino</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="genero" id="fem" value="Femenino" checked="true" disabled>
-                        <label class="form-check-label" for="fem">
-                            Femenino
-                        </label>
-                    </div>
+                    <input readonly class="form-control" type="text" name="genero" id="masc" value="Femenino">
                 {% endif %}
             {% endif %}
             <span>{{ errores['sexoError']}}</span>
@@ -199,8 +167,8 @@
             <span>{{ errores['claveError']}}</span>
         </div>
         <div class="mb-3">
-            <label for="registerClaveRepInput" class="form-label">Repita la clave</label>
             {% if accion == "registrar" %}
+                <label for="registerClaveRepInput" class="form-label">Repita la clave</label>
                 <input class="form-control" id="registerClaveRepInput" type="password" name="clv_rep" required>
             {% endif %}
         </div>

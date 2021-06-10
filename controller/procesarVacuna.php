@@ -49,6 +49,8 @@
 
                 if($_SESSION["accionBD"] == "registrar"){
                     insertar_vacuna($_SESSION['row_datos_temp']);
+                }else if($_SESSION["accionBD"] == "editar"){
+                    modificar_vacuna($_SESSION['row_datos_temp']);
                 }
             }
 
@@ -59,6 +61,12 @@
             unset($_SESSION['row_datos_temp']);
             unset($_SESSION['accionPulsadaVac']);
             unset($_SESSION['accionBD']);
+
+            if(isset($_SESSION['acro_antigua'])){
+                unset($_SESSION['acro_antigua']);
+                unset($_SESSION['vacuna_a_editar']);
+            }
+
 
             header("Location: ../index.php");
 

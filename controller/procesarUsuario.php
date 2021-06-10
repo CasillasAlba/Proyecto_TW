@@ -95,6 +95,7 @@
                         $_SESSION['row_datos_temp']['Rol'] = $_SESSION['rol_admin'];
                         unset($_SESSION['rol_admin']);
                     }
+                    
 
                     modificar_usuario($_SESSION['row_datos_temp']);
                     unset($_SESSION['clave_antigua']);

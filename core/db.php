@@ -312,8 +312,8 @@
             if($prep->fetch()){
                 $datos['ID'] = $id;
                 $datos['Acronimo'] = $acro;
-                $datos['Nombre'] = $nom;
-                $datos['Descripcion'] = $desc;
+                $datos['NombreVac'] = $nom;
+                $datos['DescripVac'] = $desc;
             }else{
                 $datos = false; // No hay resultados
             }
@@ -343,8 +343,8 @@
             if($prep->fetch()){
                 $datos['ID'] = $id;
                 $datos['Acronimo'] = $acro;
-                $datos['Nombre'] = $nom;
-                $datos['Descripcion'] = $desc;
+                $datos['NombreVac'] = $nom;
+                $datos['DescripVac'] = $desc;
             }else{
                 $datos = false; // No hay resultados
             }
@@ -464,6 +464,37 @@
 
         $prep->send_long_data(6, $datos['Foto']);
         
+        if($prep->execute()){
+            $resultado_ejecucion = true; // El Update se ha reaLizado correctamente
+        }else{
+            $resultado_ejecucion = false;
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $resultado_ejecucion;
+    }
+
+    function modificar_vacuna($datos){
+        global $db;
+
+        $prep = $db->prepare("UPDATE vacunas SET Acronimo=?, Nombre=?, Descripcion=? WHERE Acronimo=?");
+  
+        // Establecer parámetros y ejecutar
+        $acro = $datos['Acronimo'];
+        $nom = $datos['NombreVac'];
+        $desc = $datos['DescripVac'];
+        $acro_cond = $datos['Acronimo'];
+
+        echo $acro;
+        echo $nom;
+        echo $desc;
+        echo $acro_cond;
+   
+        // El primer parametro es el tipo de datos que vamos a insertar, un caracter por cada tipo de dato.
+        $prep->bind_param('ssss', $acro, $nom, $desc, $acro_cond);
+     
         if($prep->execute()){
             $resultado_ejecucion = true; // El Update se ha reaLizado correctamente
         }else{

@@ -95,6 +95,7 @@
         
 
     }else if(isset($_POST['registrar-visitante'])){
+
         // Para cuando un visitante le de al boton de registar
         // Sus datos están inicialmente vacíos, no tiene un valor dni en la BBDD y su rol es Visitante
         $row = [
@@ -124,6 +125,7 @@
         echo $twig->render('inicio.twig');
 
     }else if(isset($_SESSION['login'])){
+
         // El usuario tiene la sesión iniciada, si vuelve para atrás, se mantiene.
         $us_user = $_SESSION['row_datos']['DNI'];
         $rol_user = $_SESSION['row_datos']['Rol'];
@@ -133,6 +135,7 @@
         // El usuario es ADMIN y puede registrar otros usuarios
         // o eres un visitante que quiere registrarse
         if(isset($_POST['regist']) or (isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "registrar")){
+
             $accion = "registrar";
 
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
@@ -144,20 +147,34 @@
                 echo $twig->render('formulario_usuario.twig', compact('us_user', 'rol_user', 'accion'));
             }
             
-        }else if(isset($_POST['editar-me']) or (isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "editar")){
+        }else if((isset($_POST['editar-me']) or (isset($_POST['idEditarUser']) or (isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "editar")))){
 
-            $accion = "editar";
-            // Cargamos los valores del propio usuario para cargar SUS datos
-            $row = $_SESSION['row_datos'];
-            // Editando debemos de controlar el DNI antinguo, para en validación
-            // poder comparar si es un usuario ya existente en la BBDD o no.
-            $_SESSION['dni_antiguo'] = $_SESSION['row_datos']['DNI'];
-            $_SESSION['clave_antigua'] = $row['Clave'];
+    
+            if(isset($_POST['idEditarUser'])){
+                $_SESSION['dni_antiguo'] = $_POST['idEditarUser']; //DNI DE LA PERSONA A LA QUE VAMOS A EDITAR
+                $_SESSION['user_a_editar'] = devolver_usuario($_SESSION['dni_antiguo']);
+                $row = $_SESSION['user_a_editar'];
+                $_SESSION['foto_antigua'] = $row['Foto'];
+                $accion = "editar";
+                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user','rol_user','accion'));
+            }else if(isset($_POST['editar-me'])){ // TE EDITAS A TI MISMO
+                $accion = "editar";
+                // Cargamos los valores del propio usuario para cargar SUS datos
+                $row = $_SESSION['row_datos'];
+                // Editando debemos de controlar el DNI antinguo, para en validación
+                // poder comparar si es un usuario ya existente en la BBDD o no.
+                $_SESSION['dni_antiguo'] = $_SESSION['row_datos']['DNI'];
+                $_SESSION['foto_antigua'] = $_SESSION['row_datos']['Foto'];
+                $_SESSION['clave_antigua'] = $row['Clave'];
 
-            // Necesitamos este if para que si el admin se edita a si mismo, que su rol no se vea afectado
-            // ya que Admin no es un rol que se pueda elegir ni cambiar en la plataforma
-            if(isset($_POST['editar-me']) and $_SESSION['row_datos']['Rol'] == "Admin"){
-                $_SESSION['rol_admin'] = "Admin";
+                // Necesitamos este if para que si el admin se edita a si mismo, que su rol no se vea afectado
+                // ya que Admin no es un rol que se pueda elegir ni cambiar en la plataforma
+                if(isset($_POST['editar-me']) and $_SESSION['row_datos']['Rol'] == "Admin"){
+                    $_SESSION['rol_admin'] = "Admin";
+                }
+
+                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user','rol_user','accion'));
+
             }
 
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
@@ -166,8 +183,6 @@
                 $errores = $_SESSION['row_errores_temp'];
 
                 echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
-            }else{
-                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
             }
 
         }else if(isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "confirmar"){
@@ -196,6 +211,7 @@
             echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
             
         }else if(isset($_POST['aniadir-vac-recomendada']) or (isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "registrar" )){
+
             $accion = "registrar"; // Creamos accion para la 1a vez
 
             // Obtenemos la lista de acronimos de vacunas disponibles a las que podemos hacerle referencia
@@ -212,9 +228,11 @@
             }
             
         }else if(isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "confirmar"){
+
             // Cargamos el formulario de confirmación
             $calend = $_SESSION['row_datos_temp']; 
             echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion'));
+
         }else if(isset($_POST['listado_vac'])){
 
             echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user'));
@@ -223,6 +241,23 @@
 
             echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user'));
             
+        }else if(isset($_POST['idEditarVac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "editar" )){
+            
+            // PARA LA EDICION DE VACUNAS
+
+            if(isset($_POST['idEditarVac'])){
+                $_SESSION['acro_antigua'] = $_POST['idEditarVac']; //Por si se modifica el acronimo
+                $_SESSION['vacuna_a_editar'] = devolver_vacuna($_SESSION['acro_antigua']);
+                $vac = $_SESSION['vacuna_a_editar'];
+                $accion = "editar";
+                echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
+            }else{
+                // Si el botón no existe, vienes de un fallo
+                $vac = $_SESSION['row_datos_temp'];
+                $erroresVac = $_SESSION['row_errores_temp'];
+                echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion'));
+            }
+
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
