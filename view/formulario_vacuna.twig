@@ -1,0 +1,46 @@
+{% extends 'index_view.twig' %}
+
+{% block content %}
+    <form action="{{funciones('procesarVacuna.php')}}" method="POST" enctype="multipart/form-data">
+        <!-- Acronimo -->
+        <div class="mb-3">
+            <label for="registerAcronimoInput" class="form-label">Acrónimo</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerAcronimoInput" type="text" name="acro" value="{{ vac['Acronimo'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerAcronimoInput" type="text" name="acro" value="{{ vac['Acronimo'] }}">
+            {% endif %}
+            <span>{{erroresVac['acronimoError']}}</span>
+        </div>
+
+        <!-- Nombre -->
+        <div class="mb-3">
+            <label for="registerNombreVacInput" class="form-label">Nombre</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerNombreVacInput" type="text" name="nomV" value="{{ vac['NombreVac'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerNombreVacInput" type="text" name="nomV" value="{{ vac['NombreVac'] }}">
+            {% endif %}
+            <span>{{erroresVac['nombreVacError']}}</span>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+            <label for="registerDescripVacInput" class="form-label">Descripción</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerDescripVacInput" type="text" name="descV" value="{{ vac['DescripVac'] }}" required>
+            {% else %}
+                <input readonly class="form-control" id="registerDescripVacInput" type="text" name="descV" value="{{ vac['DescripVac'] }}">
+            {% endif %}
+        </div>
+
+        {% if accion == "registrar" %}
+            <button class="btn btn-success" name="boton-registrar-vac" type="submit">Registrar datos</button>
+        {% elseif accion == "editar" %}
+                <button class="btn btn-success" name="boton-editar-vac" type="submit">Guardar cambios</button>
+        {% elseif accion == "confirmar" %}
+            <button class="btn btn-success" name="boton-confirmar-vac" type="submit">Confirmar datos</button>
+        {% endif %}
+        <input hidden name="accion" value="{{ accion }}">
+    </form>
+{% endblock %}

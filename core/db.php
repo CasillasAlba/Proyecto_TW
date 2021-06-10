@@ -93,12 +93,11 @@
         $ema = $datos['Email'];
         $nac = $datos['FechaNac'];
         $sex = $datos['Sexo'];
-        $foto = 'data:image/'.$imageFileType.';base64,'.$datos['Foto']; 
         $clv = $datos['Clave'];
         $estado = $datos['Estado'];
         $rol = $datos['Rol'];
 
-        //$prep->send_long_data(7, $foto); 
+        $prep->send_long_data(7, $datos['Foto']);
         $prep->execute();
 
         // Cerramos la consulta preparada
@@ -108,21 +107,21 @@
     // Realizamos una CONSULTA PREPARADA para insertar vacunas
     function insertar_vacuna($datos){
         global $db;
-
-        $prep = $db->prepare("INSERT INTO vacunas(Acronimo, Nombre, Descripcion)
-                VALUES (?, ?, ?)");
+        echo "HE ENTRADO?????";
+        $prep = $db->prepare("INSERT INTO vacunas(Acronimo, Nombre, Descripcion) VALUES (?, ?, ?)");
 
         $prep->bind_param('sss', $acro, $nom, $desc);
         
         // Establecer parámetros y ejecutar
         $acro = $datos['Acronimo'];
-        $nom = $datos['Nombre'];
-        $desc = $datos['Descripcion'];
+        $nom = $datos['NombreVac'];
+        $desc = $datos['DescripVac'];
 
         $prep->execute();
 
         // Cerramos la consulta preparada
         $prep->close();
+
     }
 
     
@@ -265,7 +264,6 @@
     }
 
 
-
     function devolver_vacuna($id){
         global $db;
 
@@ -297,6 +295,34 @@
         return $datos;
     }
 
+    function vacuna_ya_registrada($acro){
+        global $db;
+
+        $prep = $db->prepare("SELECT * FROM vacunas WHERE Acronimo=?");
+
+        // El primer parametro es el tipo de datos que vamos a insertar, un caracter por cada tipo de dato. 
+        $prep->bind_param('s', $acro);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $prep->bind_result($id, $acro, $nom, $desc);
+
+            // Obtenemos los valores
+            if($prep->fetch()){
+                $existe = true;
+            }else{
+                $existe = false; // No hay resultados
+            }
+        }else{
+            $existe = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $existe;
+    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                               FUNCIONES QUE MODIFICAN UN ELEMENTO DE LA TABLA                              //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,14 +339,15 @@
         $ema = $datos['Email'];
         $nac = $datos['FechaNac'];
         $sex = $datos['Sexo'];
-        $foto = $datos['Foto'];
         $clv = $datos['Clave'];
         $estado = $datos['Estado'];
         $rol = $datos['Rol'];
         $dni = $datos['DNI'];
-
+   
         // El primer parametro es el tipo de datos que vamos a insertar, un caracter por cada tipo de dato.
         $prep->bind_param('ssisssbssss', $nom, $apell, $tel, $ema, $nac, $sex, $foto, $clv, $estado, $rol,$dni);
+
+        $prep->send_long_data(6, $datos['Foto']);
         
         if($prep->execute()){
             $resultado_ejecucion = true; // El Update se ha reaLizado correctamente

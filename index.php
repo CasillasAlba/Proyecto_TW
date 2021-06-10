@@ -32,6 +32,8 @@
 
     if(isset($_SESSION['accionPulsada'])){
         $accion = $_SESSION['accionPulsada'];
+    }else if(isset($_SESSION['accionPulsadaVac'])){
+        $accion = $_SESSION['accionPulsadaVac'];
     }
 
     if(isset($_POST['boton-login-visitante'])){
@@ -83,7 +85,7 @@
         $us_user = '';
         $rol_user = 'Visitante';
     
-        echo $twig->render('formulario_sticky.twig', compact('row', 'us_user', 'rol_user', 'accion'));
+        echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
     }else if(isset($_POST['log-out'])){
         // Llamamos a la función de cerrar sesión ubicada en login.php
@@ -104,9 +106,9 @@
             if(isset($_SESSION['row_errores_temp'])){
                 $row = $_SESSION['row_datos_temp'];
                 $errores = $_SESSION['row_errores_temp'];
-                echo $twig->render('formulario_sticky.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
             }else{
-                echo $twig->render('formulario_sticky.twig', compact('us_user', 'rol_user', 'accion'));
+                echo $twig->render('formulario_usuario.twig', compact('us_user', 'rol_user', 'accion'));
             }
             
         }else if(isset($_POST['editar-me']) or (isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "editar")){
@@ -128,19 +130,34 @@
             if(isset($_SESSION['row_errores_temp'])){
                 $row = $_SESSION['row_datos_temp'];
                 $errores = $_SESSION['row_errores_temp'];
-                echo "HAY ERRORES";
-                foreach($errores as $valor){
-                    echo $valor;
-                }
-                //echo $twig->render('formulario_sticky.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
+
+                echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
             }else{
-                echo $twig->render('formulario_sticky.twig', compact('row', 'us_user', 'rol_user', 'accion'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
             }
 
         }else if(isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "confirmar"){
-            // Cargamos el formularia de confirmación
+            // Cargamos el formulario de confirmación
             $row = $_SESSION['row_datos_temp']; 
-            echo $twig->render('formulario_sticky.twig', compact('row', 'us_user', 'rol_user', 'accion'));
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
+
+        }else if(isset($_POST['regist-vac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "registrar" )){
+            $accion = "registrar"; // Creamos accion para la 1a vez
+    
+            // Si al registrar hay errores, se carga formulario sticky con los errores escritos
+            if(isset($_SESSION['row_errores_temp'])){
+                $vac = $_SESSION['row_datos_temp'];
+                $erroresVac = $_SESSION['row_errores_temp'];
+                echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion'));
+            }else{
+                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion'));
+            }
+    
+        }else if(isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "confirmar"){
+            // Cargamos el formulario de confirmación
+            $vac = $_SESSION['row_datos_temp']; 
+            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
+            
         }else{
             // El usuario tiene la sesión iniciada, si vuelve para atrás, se mantiene.
             $nombre_user = $_SESSION['row_datos']['Nombre'];
@@ -150,7 +167,7 @@
             echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user'));
         }
 
-    }else {
+    }else{
         echo $twig->render('inicio.twig');
     }
 

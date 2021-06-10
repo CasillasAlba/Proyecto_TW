@@ -203,4 +203,69 @@ require_once('../core/db.php');
         return $error;
     }
 
+    function comprobar_errores_vacunas(){
+        // Inicializamos el array de errores
+        $array_errores = array(
+            "acronimoError" => "",
+            "nombreVacError" => "",
+        );
+
+        $error = false;
+        $acro = $_SESSION['acronimo_vac_temp']; 
+        ////////////////////////////  Validaciones del Acrónimo //////////////////////////////////////
+        // Para controlar la validación al editar una vacuna
+        if(isset($_SESSION['acro_antigua'])){
+            $acro_antigua = $_SESSION['acro_antigua'];
+
+            if($acro != $acro_antigua){
+                $existe = vacuna_ya_registrada($acro);
+
+                if($existe == 'true'){
+                    $array_errores['acronimoError'] = 'Esta vacuna ya esta registrada en la base de datos';
+                    $error = True;
+                }else{
+                    if(strlen($_SESSION['acronimo_vac_temp']) > 10){
+                        $array_errores['acronimoError'] = 'El acrónimo no puede tener más de 10 caracteres';
+                        $error = True;
+            
+                    }
+                }
+            }
+        }else{
+            $existe = vacuna_ya_registrada($acro);
+
+            if($existe == true){
+                $array_errores['acronimoError'] = 'Esta vacuna ya esta registrada en la base de datos';
+                $error = True;
+            }else{
+                if(strlen($_SESSION['acronimo_vac_temp']) > 10){
+                    $array_errores['acronimoError'] = 'El acrónimo no puede tener más de 10 caracteres';
+                    $error = True;
+        
+                }
+            }
+        }
+
+
+        ////////////////////////////  Validaciones del Nombre //////////////////////////////////////
+
+        if(strlen($_SESSION['nombre_vac_temp']) > 50){
+            $array_errores['nombreVacError'] = 'El nombre de la vacuna no puede tener más de 50 caracteres';
+            $error = True;
+        }
+
+        
+        $array = array(
+            "Acronimo" => $_SESSION['acronimo_vac_temp'],
+            "NombreVac" => $_SESSION['nombre_vac_temp'],
+            "DescripVac" => $_SESSION['descrip_vac_temp']
+        );
+
+        $_SESSION['row_datos_temp'] = $array;
+        $_SESSION['row_errores_temp'] = $array_errores;
+
+        return $error;
+
+    }
+
 ?>
