@@ -2,7 +2,9 @@
 
 {% block content %}
     <div class = "listado_usuario">
-        {{lista_usuarios()}}
+        <form action="index.php" method="POST">
+            {{lista_usuarios()}}
+        </form>  
     </div>
 {% endblock %}
 

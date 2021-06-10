@@ -34,8 +34,8 @@
 
         foreach($lista as $vacuna){
             echo sprintf('<p>Acrónimo: %s Nombre: %s</p>', $vacuna['Acronimo'], $vacuna['Nombre']);
-            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idEditarVac" value="%s"/><button class="form-button">Editar</button></form>', $vacuna['Acronimo']);
-            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idBorrarVac" value="%s"/><button class="form-button">Borrar</button></form>', $vacuna['Acronimo']);
+            echo sprintf('<button class="form-button" name="idEditarVac" value="%s">Editar</button>', $vacuna['Acronimo']);
+            echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['Acronimo']);
         }
     }));
 
@@ -47,8 +47,8 @@
             if($usuario["Rol"] != "Admin"){
                 echo sprintf('<img height="130px" width="150px" src="data:image;base64,%s" />', $usuario["Fotografia"]);
                 echo sprintf('<p>Nombre: %s %s</p>', $usuario["Nombre"], $usuario['Apellidos']);
-                echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idEditarUser" value="%s"/><button class="form-button">Editar</button></form>', $usuario["DNI"]);
-                echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idBorrarUser" value="%s"/><button class="form-button">Borrar</button></form>', $usuario["DNI"]);
+                echo sprintf('<button class="form-button" name="idEditarUser" value="%s">Editar</button>', $usuario["DNI"]);
+                echo sprintf('<button class="form-button" name="idBorrarUser" value="%s">Borrar</button>', $usuario["DNI"]);
             }
         }
     }));
