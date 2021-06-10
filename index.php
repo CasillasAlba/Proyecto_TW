@@ -28,13 +28,28 @@
         return sprintf('./controller/%s', ltrim($funciones, '/'));
     }));
 
+    // Función que devuelve la lista de vacunas
     $twig->addFunction(new \Twig\TwigFunction('lista_vacunas', function () {
         $lista = devolver_lista_vacunas();
 
         foreach($lista as $vacuna){
             echo sprintf('<p>Acrónimo: %s Nombre: %s</p>', $vacuna['Acronimo'], $vacuna['Nombre']);
-            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idEditarVac" value="%s"/><button class="form-button">Editar Vacuna</button></form>', $vacuna['Acronimo']);
-            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idBorrarVac" value="%s"/><button class="form-button">Borrar Vacuna</button></form>', $vacuna['Acronimo']);
+            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idEditarVac" value="%s"/><button class="form-button">Editar</button></form>', $vacuna['Acronimo']);
+            echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idBorrarVac" value="%s"/><button class="form-button">Borrar</button></form>', $vacuna['Acronimo']);
+        }
+    }));
+
+    // Función que devuelve la lista de usuarios
+    $twig->addFunction(new \Twig\TwigFunction('lista_usuarios', function () {
+        $lista = devolver_lista_usuarios();
+
+        foreach($lista as $usuario){
+            if($usuario["Rol"] != "Admin"){
+                echo sprintf('<img height="130px" width="150px" src="data:image;base64,%s" />', $usuario["Fotografia"]);
+                echo sprintf('<p>Nombre: %s %s</p>', $usuario["Nombre"], $usuario['Apellidos']);
+                echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idEditarUser" value="%s"/><button class="form-button">Editar</button></form>', $usuario["DNI"]);
+                echo sprintf('<form action="index.php" method="POST"><input type="hidden" name="idBorrarUser" value="%s"/><button class="form-button">Borrar</button></form>', $usuario["DNI"]);
+            }
         }
     }));
 
@@ -203,6 +218,11 @@
         }else if(isset($_POST['listado_vac'])){
 
             echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user'));
+
+        }else if(isset($_POST['listado_user'])){
+
+            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user'));
+            
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera

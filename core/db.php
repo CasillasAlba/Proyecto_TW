@@ -248,6 +248,7 @@
         $prep = $db->prepare("SELECT * FROM usuarios");
 
         if($prep->execute()){
+
             //Vinculamos variables a consultas
             $result = $prep->get_result();
 
