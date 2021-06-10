@@ -322,7 +322,7 @@ require_once('../core/db.php');
             $error = True;
         }
 
-        if($_SESSION['tipo_calend_temp']!= "Sistemática" && $_SESSION['tipo_calend_temp'] != "Recomendada"){
+        if($_SESSION['tipo_calend_temp']!= "Sistematica" && $_SESSION['tipo_calend_temp'] != "Recomendada"){
             $array_errores['tipoCalendError'] = 'El tipo no es correcto';
             $error = True;
         }
