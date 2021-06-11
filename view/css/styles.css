@@ -1,8 +1,15 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 header {
   background-color: #f7f7f7;
 }
 
 .content {
+  flex-grow: 10;
   display: flex;
 }
 
@@ -16,9 +23,12 @@ aside {
   flex-basis: 25%;
 }
 
-.titulo-asides{
+.titulo-asides {
   font-size: x-large;
   font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 footer {
@@ -38,6 +48,7 @@ footer {
   border: solid;
   border-color: black;
   border-width: thin;
+  padding-bottom: 0.5em;
 }
 
 .widget > div:first-of-type {
@@ -60,9 +71,14 @@ form {
 form > p,
 button {
   align-self: center;
+  margin-bottom: 0.5em;
 }
 
 .hor-buttons {
   display: flex;
   justify-content: space-evenly;
+}
+
+.error-msg {
+  color: red;
 }
