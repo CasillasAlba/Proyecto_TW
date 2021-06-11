@@ -2,14 +2,14 @@
 
 {% block content %}
     <form action="{{funciones('procesarUsuario.php')}}" method="POST" enctype="multipart/form-data">
+        {% if accion == "registrar" %}
+            <img id="ver_user_img" height="200px" width="200px" src="{{ asset('img/NotPhoto.png')}}"/>
+        {% else %}
+            <img id="ver_user_img" height="200px" width="200px" src="data:image;base64,{{ row['Foto'] }}"/>
+        {% endif %}
         <div class="mb-3">
-            <label for="file" class="form-label">Foto de perfil</label>
-            {% if accion == "registrar" %}
-                <img id="ver_user_img" height="80px" width="80px" src="{{ asset('img/NotPhoto.png')}}"/>
-            {% else %}
-                <img id="ver_user_img" height="80px" width="80px" src="data:image;base64,{{ row['Foto'] }}"/>
-            {% endif %}
             {% if accion == "registrar" or accion == "editar"%}
+                <label for="file" class="form-label">Foto de perfil</label>
                 <input class="form-control" type="file" id="file" name="file">
             {% endif %}
         </div>

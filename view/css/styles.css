@@ -61,7 +61,7 @@ footer {
 }
 
 form {
-  padding: 0.5em 0.5em 0em 0.5em;
+  padding: 0.5em 15em 0em 15em;
   display: flex;
   flex-direction: column;
 }
@@ -79,4 +79,14 @@ button {
 
 .error-msg {
   color: red;
+}
+
+.profile-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ver_user_img {
+  align-self: center;
 }
