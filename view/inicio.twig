@@ -5,12 +5,12 @@
 
 {% block login %}
     <section class="widget">
-        <div class="bg-success .bg-gradient">
+        <div class="bg-success">
             <p class="titulo-asides">Iniciar sesión</p>
         </div>
     
         <div>
-            <form action="index.php" method="POST">
+            <form class="login-form" action="index.php" method="POST">
                 <div class="mb-3">
                     <input type="text" name="usr" class="form-control" placeholder="DNI" id="loginUserInput"/>
                 </div>
@@ -23,11 +23,11 @@
         </div>
     </section>
     <section class="widget">
-        <div class="bg-success .bg-gradient">
+        <div class="bg-success">
             <p class="titulo-asides">Registro</p>
         </div>
         <div>
-            <form action='index.php' method="POST">
+            <form class="login-form" action='index.php' method="POST">
                 <p>¿Aún no tienes cuenta?</p>
                 <button class="btn btn-success" name="registrar-visitante" type="submit">Regístrate</button>
             </form>

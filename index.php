@@ -124,8 +124,9 @@
             $nombre_user = $datos_logueado['Nombre'];
             $rol_user = $datos_logueado['Rol'];
             $image_user = $datos_logueado['Foto'];
+            $sexo_user = $datos_logueado['Sexo'];
             
-            echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user'));
+            echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
         }
         
 
@@ -167,6 +168,7 @@
         $rol_user = $_SESSION['row_datos']['Rol'];
         $nombre_user = $_SESSION['row_datos']['Nombre'];
         $image_user = $_SESSION['row_datos']['Foto'];
+        $sexo_user = $_SESSION['row_datos']['Sexo'];
 
         // El usuario es ADMIN y puede registrar otros usuarios
         // o eres un visitante que quiere registrarse
@@ -316,7 +318,7 @@
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
-            echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user'));
+            echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
         }
 
     }else if(isset($_SESSION['accionPulsada']) and ($_SESSION['accionPulsada'] == "registrar" or $_SESSION['accionPulsada'] == "confirmar")){
