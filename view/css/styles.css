@@ -1,8 +1,15 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 header {
   background-color: #f7f7f7;
 }
 
 .content {
+  flex-grow: 10;
   display: flex;
 }
 
@@ -16,9 +23,14 @@ aside {
   flex-basis: 25%;
 }
 
-.titulo-asides{
+.titulo-asides {
   font-size: x-large;
   font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
 }
 
 footer {
@@ -38,21 +50,24 @@ footer {
   border: solid;
   border-color: black;
   border-width: thin;
+  padding: 0.5em 0.5em 0.5em 0.5em;
 }
 
 .widget > div:first-of-type {
   height: 5%;
   display: flex;
   align-items: center;
-}
-
-.bar {
   color: aliceblue;
-  padding: 1em;
 }
 
-form {
-  padding: 0.5em 0.5em 0em 0.5em;
+.login-form {
+  padding-bottom: 0.5em;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-screen-form {
+  padding: 0.5em 15em 0em 15em;
   display: flex;
   flex-direction: column;
 }
@@ -60,9 +75,42 @@ form {
 form > p,
 button {
   align-self: center;
+  margin-bottom: 0.5em;
 }
 
 .hor-buttons {
   display: flex;
   justify-content: space-evenly;
+}
+
+.error-msg {
+  color: red;
+}
+
+.profile-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ver_user_img {
+  align-self: center;
+}
+
+.profile-pic {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.logged-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.logged-buttons > button {
+  flex-basis: 45%;
+  flex-grow: 2;
+  margin: 5px;
 }

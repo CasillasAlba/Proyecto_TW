@@ -15,16 +15,24 @@
 {% endblock %}
 
 {% block login %}
-    <h2 class="w-hdos">¡BIENVENIDO/A {{nombre_user}}! </h2>
-    <img height="150px" width="150px" src="data:image;base64,{{ image_user }}" />
-    <div class="w-button-register">
-        <form action="index.php" method="POST">
-            {% if rol_user == "Admin" %} 
-                <button name="regist" class="form-button">Registrar Usuario</button>
-                <button name="regist-vac" class="form-button">Registrar Vacuna</button> 
+    <section class="widget">
+        <div class="bg-success">
+            {% if sexo_user == "Masculino" %}
+                <p class="titulo-asides">¡Bienvenido {{nombre_user}}!</p>
+            {% else %}
+                <p class="titulo-asides">¡Bienvenida {{nombre_user}}!</p>
             {% endif %}
-            <button name="editar-me" class="form-button">Editar Perfil</button>
-            <button name="log-out" class="form-button">Cerrar Sesión</button>
-        </form>
-    </div>
+        </div>
+        <div>
+            <img class="profile-pic" height="150px" width="150px" src="data:image;base64,{{ image_user }}" />
+            <form class="logged-buttons" action="index.php" method="POST">
+                {% if rol_user == "Admin" %} 
+                    <button name="regist" class="btn btn-success">Registrar Usuario</button>
+                    <button name="regist-vac" class="btn btn-success">Registrar Vacuna</button> 
+                {% endif %}
+                <button name="editar-me" class="btn btn-success">Edita tu Perfil</button>
+                <button name="log-out" class="btn btn-success">Cerrar Sesión</button>
+            </form>
+        </div>
+    </section>
 {% endblock %}

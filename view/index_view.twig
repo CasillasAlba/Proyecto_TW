@@ -20,7 +20,7 @@
     <header>
         <img src="{{ asset('img/logo.jpeg')}}">
     </header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success .bg-gradient">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
 
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -34,43 +34,43 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         
                         <li class="nav-item">
-                            <button type="submit" class="nav-link active" aria-current="page" name="inicio">Calendario de vacunación</button>
+                            <button type="submit" class="btn btn-success" aria-current="page" name="inicio">Calendario de vacunación</button>
                         </li>
 
                         {% if rol_user == "Admin" %}
 
                             <li class="nav-item">
-                                <button type="submit" class="nav-link active" name="listado_user">Listado de Usuarios</button>
+                                <button type="submit" class="btn btn-success" name="listado_user">Listado de Usuarios</button>
                             </li>
                             <li class="nav-item">
-                                <button type="submit" class="nav-link active" name="listado_vac">Listado de Vacunas</button>
+                                <button type="submit" class="btn btn-success" name="listado_vac">Listado de Vacunas</button>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="#">Visualizar Log</a>
+                                <a class="btn btn-success" href="#">Visualizar Log</a>
                             </li>
                             <li class="nav-item">
-                                <button type="submit" class="nav-link active" name="peticiones">Peticiones</button>
+                                <button type="submit" class="btn btn-success" name="peticiones">Peticiones</button>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="#">Copias de Seguridad</a>
+                                <a class="btn btn-success" href="#">Copias de Seguridad</a>
                             </li>
 
                         {% elseif rol_user == "Sanitario" or rol_user == "Paciente" %}
                             <li class="nav-item">
-                                <button type="submit" class="nav-link active" aria-current="page" name="inicio">Cartilla de Vacunación</button>
+                                <button type="submit" class="btn btn-success" aria-current="page" name="inicio">Cartilla de Vacunación</button>
                             </li>
 
                             <li class="nav-item">
-                                <button type="submit" class="nav-link active" aria-current="page" name="inicio">Vacunas Pendientes</button>
+                                <button type="submit" class="btn btn-success" aria-current="page" name="inicio">Vacunas Pendientes</button>
                             </li>
 
                             {% if rol_user == "Sanitario" %}
                             
                                 <li class="nav-item">
-                                    <button type="submit" class="nav-link active" name="listado_user">Listado de Usuarios</button>
+                                    <button type="submit" class="btn btn-success" name="listado_user">Listado de Usuarios</button>
                                 </li>
                                 <li class="nav-item">
-                                    <button type="submit" class="nav-link active" name="peticiones">Peticiones</button>
+                                    <button type="submit" class="btn btn-success" name="peticiones">Peticiones</button>
                                 </li>
 
                             {% endif %}
@@ -94,7 +94,7 @@
             </section>
 
             <section class="widget">
-                <div class="bar bg-success .bg-gradient">
+                <div class="bg-success">
                     <p class="titulo-asides">Estadísticas de uso</p>
                 </div>
                 <div>

@@ -1,15 +1,15 @@
 {% extends 'index_view.twig' %}
 
 {% block content %}
-    <form action="{{funciones('procesarUsuario.php')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{funciones('procesarUsuario.php')}}" method="POST" enctype="multipart/form-data" class="full-screen-form">
+        {% if accion == "registrar" %}
+            <img id="ver_user_img" height="200px" width="200px" src="{{ asset('img/NotPhoto.png')}}"/>
+        {% else %}
+            <img id="ver_user_img" height="200px" width="200px" src="data:image;base64,{{ row['Foto'] }}"/>
+        {% endif %}
         <div class="mb-3">
-            <label for="file" class="form-label">Foto de perfil</label>
-            {% if accion == "registrar" %}
-                <img id="ver_user_img" height="80px" width="80px" src="{{ asset('img/NotPhoto.png')}}"/>
-            {% else %}
-                <img id="ver_user_img" height="80px" width="80px" src="data:image;base64,{{ row['Foto'] }}"/>
-            {% endif %}
             {% if accion == "registrar" or accion == "editar"%}
+                <label for="file" class="form-label">Foto de perfil</label>
                 <input class="form-control" type="file" id="file" name="file">
             {% endif %}
         </div>
@@ -29,7 +29,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerNombreInput" type="text" name="nom" value="{{ row['Nombre'] }}">
             {% endif %}
-            <span>{{ errores['nombreError']}}</span>
+            <span class="error-msg">{{ errores['nombreError']}}</span>
         </div>
 
         <!-- Apellidos -->
@@ -46,7 +46,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerApellidoInput" type="text" name="apell" value="{{ row['Apellidos'] }}">
             {% endif %}
-            <span>{{errores['apellidosError']}}</span>
+            <span class="error-msg">{{errores['apellidosError']}}</span>
         </div>
 
         <!-- DNI -->
@@ -63,7 +63,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerDniInput" type="text" name="dn" value="{{ row['DNI'] }}">
             {% endif %}
-            <span>{{ errores['dniError']}}</span>
+            <span class="error-msg">{{ errores['dniError']}}</span>
         </div>
 
         <!-- Email -->
@@ -74,7 +74,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerEmailInput" type="email" name="ema" value="{{ row['Email'] }}">
             {% endif %}
-            <span>{{ errores['emailError']}}</span>
+            <span class="error-msg">{{ errores['emailError']}}</span>
         </div>
 
         <!-- Telefono -->
@@ -85,7 +85,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerTelefonoInput" type="number" name="tel" value="{{ row['Telefono'] }}">
             {% endif %}
-            <span>{{ errores['telefonoError']}}</span>
+            <span class="error-msg">{{ errores['telefonoError']}}</span>
         </div>
 
         <!-- Fecha Nacimiento -->
@@ -102,7 +102,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerFechaInput" type="date" name="nac" value="{{ row['FechaNac'] }}">
             {% endif %}
-            <span>{{ errores['fechaNacError']}}</span>
+            <span class="error-msg">{{ errores['fechaNacError']}}</span>
         </div>
                     
         <!-- Sexo (Checkbox) -->
@@ -153,7 +153,7 @@
                     <input readonly class="form-control" type="text" name="genero" id="masc" value="Femenino">
                 {% endif %}
             {% endif %}
-            <span>{{ errores['sexoError']}}</span>
+            <span class="error-msg">{{ errores['sexoError']}}</span>
         </div>
 
         <!-- Clave (Repeticion) -->
@@ -164,7 +164,7 @@
             {% else %}
                 <input readonly class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}">
             {% endif %}
-            <span>{{ errores['claveError']}}</span>
+            <span class="error-msg">{{ errores['claveError']}}</span>
         </div>
         <div class="mb-3">
             {% if accion == "registrar" %}
