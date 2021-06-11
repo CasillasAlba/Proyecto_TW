@@ -138,6 +138,7 @@
                 $_SESSION['datos_visitante']['Estado'] = "Activo";
                 modificar_usuario($_SESSION['datos_visitante']);
                 unset( $_SESSION['datos_visitante']);
+                unset( $_SESSION['rol_user_visitante']);
                 
             }else if(isset($_POST['boton-informar-error-user'])){
                 echo "Ay mecachis";

@@ -1,0 +1,51 @@
+{% extends 'index_view.twig' %}
+
+{% block content %}
+    <form action="{{funciones('procesarVacunacion.php')}}" method="POST" enctype="multipart/form-data">
+        <!-- Referencia a un listado de vacunas -->
+        <div class="mb-3">
+            <label for="registerVacVacunacionInput" class="form-label">Vacunas disponible:</label>
+            {% if accion == "registrar" or accion == "editar" %}
+            <select class="form-select" name="vacunaRef" id="registerVacVacunacionInput">
+
+                <option value="{{ vacunaPorDefecto['Acronimo'] }}" selected>{{ vacunaPorDefecto['Acronimo'] }}</option>
+                {% for v in vacunas %}
+                    <option value="{{ v['Acronimo'] }}" >{{ v['Acronimo'] }}</option>
+                {% endfor %}
+                
+            </select>
+            {% else %}
+                <input readonly class="form-control" id="registerVacVacunacionInput" type="text" name="vacunaRef" value="{{ vacunacion['VacunaRef'] }}">
+            {% endif %}
+        </div>
+
+        <!-- Fabricante -->
+        <div class="mb-3">
+            <label for="registerFabricVacunacionInput" class="form-label">Fabricante</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <input class="form-control" id="registerFabricVacunacionInput" type="text" name="fabric" value="{{ vacunacion['Fabricante'] }}">
+            {% else %}
+                <input readonly class="form-control" id="registerFabricVacunacionInput" type="text" name="fabric" value="{{ vacunacion['Fabricante'] }}">
+            {% endif %}
+        </div>
+
+        <!-- Comentario -->
+        <div class="mb-3">
+            <label for="registerDescripVacunaciondInput" class="form-label">Comentarios</label>
+            {% if accion == "registrar" or accion == "editar" %}
+                <textarea class="form-control" id="registerDescripVacunaciondInput" name="descVacun">{{ vacunacion['DescripVacunacion'] }}</textarea>
+            {% else %}
+                <textarea readonly class="form-control" id="registerDescripVacunaciondInput" name="descVacun">{{ vacunacion['DescripVacunacion'] }}</textarea>
+            {% endif %}
+        </div>
+
+        {% if accion == "registrar" %}
+            <button class="btn btn-success" name="boton-registrar-vacunacion" type="submit">Registrar datos</button>
+        {% elseif accion == "editar" %}
+                <button class="btn btn-success" name="boton-editar-vacunacion" type="submit">Guardar cambios</button>
+        {% elseif accion == "confirmar" %}
+            <button class="btn btn-success" name="boton-confirmar-vacunacion" type="submit">Confirmar datos</button>
+        {% endif %}
+        <input hidden name="accion" value="{{ accion }}">
+    </form>
+{% endblock %}

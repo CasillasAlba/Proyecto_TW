@@ -86,10 +86,6 @@
     }));
 
 
-    //////////////////////////////////////////////////////////////////////////////
-    // ESTO LO ESTOY USANDO PARA HACER PRUEBAS CON PHP                          //
-    //////////////////////////////////////////////////////////////////////////////
-
     if(isset($_SESSION['accionPulsada'])){
         $accion = $_SESSION['accionPulsada'];
     }else if(isset($_SESSION['accionPulsadaVac'])){
@@ -109,10 +105,10 @@
         // El login no ha sido correcto
         if($datos_logueado == False){
             $motivo = "DNI O CONTRASEÑA INCORRECTA :(";
-            echo $twig->render('error_inicio.twig', compact('motivo'));
+            echo $twig->render('errores.twig', compact('motivo'));
         }else if($datos_logueado == "Inactivo"){
             $motivo = "NO PUEDE INICIAR SESIÓN HASTA QUE LE DEN DE ALTA EN EL SISTEMA";
-            echo $twig->render('error_inicio.twig', compact('motivo'));
+            echo $twig->render('errores.twig', compact('motivo'));
         }else{
             // Se ha iniciado sesión correctamente
             // Esta será la variable con la que se guarde la sesión
@@ -283,11 +279,13 @@
             // PARA LA EDICION DE VACUNAS
 
             if(isset($_POST['idEditarVac'])){
+
                 $_SESSION['acro_antigua'] = $_POST['idEditarVac']; //Por si se modifica el acronimo
                 $_SESSION['vacuna_a_editar'] = devolver_vacuna($_SESSION['acro_antigua']);
                 $vac = $_SESSION['vacuna_a_editar'];
                 $accion = "editar";
                 echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
+
             }else{
                 // Si el botón no existe, vienes de un fallo
                 $vac = $_SESSION['row_datos_temp'];
@@ -301,6 +299,7 @@
             echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
 
         }else if(isset($_POST['idProcesarPeticion'])){
+
             $accion = "activar";
             $dni_visitante = $_POST['idProcesarPeticion'];
             $row = devolver_usuario($dni_visitante);
@@ -313,6 +312,52 @@
             $boton_accion = "listadoPeticiones";
             echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
               
+        }else if(isset($_POST['idPonerVacuna'])){
+
+            // En este punto, un sanitario puede añadir una vacuna a la cartilla de vacunación de un paciente.
+
+            // Devolvemos los datos del usuario al que vamos a modificar la cartilla
+            $_SESSION['datos_paciente'] = devolver_usuario($_POST['idPonerVacuna']);
+
+            // Obtenemos el sexo y la fecha de nacimiento del paciente, que son los datos necesarios
+            // para saber las vacunas que se tiene o ha tenido que poner.
+            $sexo_paciente = $_SESSION['datos_paciente']['Sexo'];
+
+            // Calculamos su edad
+            $edad_paciente = calcular_edad($_SESSION['datos_paciente']['FechaNac']);
+
+            // Si la edad la devolvemos en años, la convertimos en meses
+            if($edad_paciente['mes'] == false){
+                $meses_paciente = $edad_paciente['valor'] * 12;
+            }else{
+                $meses_paciente = $edad_paciente['valor'];
+            }            
+
+            // Devolvemos la el acronimo de las vacunas que disponibles para ponerse para cada usuario en su cartilla 
+            // y el ID del calendario
+            $resultado = devolver_calendario($sexo_paciente, $meses_paciente, $_POST['idPonerVacuna']);
+            
+            if($resultado != false){
+                $_SESSION['vacunacion_disponible'] = $resultado;
+                $vacunas = $resultado;
+                $vacunaPorDefecto = $vacunas[0];
+                unset($vacunas[0]);
+
+                $accion = "registrar";
+                
+                echo $twig->render('formulario_vacunacion.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas'));
+
+            }else{
+                $motivo = "ESTE USUARIO NO TIENE NINGUNA VACUNA PENDIENTE.";
+                echo $twig->render('errores.twig', compact('motivo'));
+            }
+
+        }else if(isset($_SESSION['accionPulsadaVacunacion']) and $_SESSION['accionPulsadaVacunacion'] == "confirmar"){
+
+            $vacunacion = $_SESSION['row_datos_temp'];
+            $accion = "confirmar";
+            echo $twig->render('formulario_vacunacion.twig', compact('vacunacion', 'us_user', 'accion'));
+
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera

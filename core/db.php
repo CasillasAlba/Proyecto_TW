@@ -154,20 +154,20 @@
     }
 
     // Realizamos una CONSULTA PREPARADA para insertar datos de tipo Vacunacion
-    function insertar_vacunacion($datos){
+    function insertar_vacunacion($datos, $dni_user, $id_calend, $fecha_actual){
         global $db;
 
-        $prep = $db->prepare("INSERT INTO calendario(IDUsuario, IDCalendario, Fecha, Fabricante, Comentarios)
+        $prep = $db->prepare("INSERT INTO vacunacion(IDUsuario, IDCalendario, Fecha, Fabricante, Comentarios)
                 VALUES (?, ?, ?, ?, ?)");
 
         $prep->bind_param('sisss', $idu, $idc, $fec, $fabric, $desc);
         
         // Establecer parámetros y ejecutar
-        $idu = $datos['idUsuario'];
-        $idc = $datos['idCalendario'];
-        $fec = $datos['Fecha'];
+        $idu = $dni_user;
+        $idc = $id_calend;
+        $fec = $fecha_actual; // Guardamos la fecha actual del registro
         $fabric = $datos['Fabricante'];
-        $desc = $datos['Descripcion'];
+        $desc = $datos['DescripVacunacion'];
 
         $prep->execute();
         
@@ -464,6 +464,74 @@
         return $existe;
     }
 
+    function devolver_calendario($sex, $meses, $id_us){
+        global $db;
+        $datos = [];
+
+        // Devolvemos el nombre y el acronimo de las vacunas que están en el calendario.
+        // Para ello indicamos que ambas tablas están relacionadas (calendario.IDVacuna = vacunas.ID)
+        // donde el sexo sea el del usuario que va a vacunarse (más las que son para ambos sexos)
+        // que la edad para ponerse la vacuna sea menor a su edad
+        // y que el usuario no se la haya puesto
+
+        $prep = $db->prepare("SELECT vacunas.Acronimo, calendario.Meses_ini, calendario.ID FROM vacunas, calendario
+                WHERE calendario.IDVacuna = vacunas.ID 
+                AND (calendario.Sexo = ? OR calendario.Sexo = 'Ambos')
+                AND (calendario.Meses_ini <= ?)
+                AND (calendario.ID NOT IN (SELECT vacunacion.IDCalendario FROM usuarios, vacunacion
+                             WHERE vacunacion.IDUsuario = ?))
+                ");
+
+        $prep->bind_param('sis', $sex, $meses, $id_us);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+            $datos_temp = [];
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos_temp, $elem);
+            }
+
+            // Este for se realiza porque debemos de tener el cuenta el caso en el que tengamos
+            // dos vacunas con el mismo acrónimo, pero con distinta fecha
+            // P.ej: tienes 13 años y no te has puesto la dosis de la vacuna de VPH de los 12
+            // años ni la dosis de entre los 13-18 años. Sin embargo, a la cartilla de vacunación
+            // solo debería añadirse la dosis que deba ponerse antes, por lo cual nos quedamos
+            // con la que tiene el mes de inicio menor.
+
+            foreach($datos_temp as $t){
+                if(count($datos) > 0){
+                    $actualizado = false;
+                    foreach($datos as $d){
+                        if($t['Acronimo'] == $d['Acronimo']){
+                            if($t['Meses_ini'] > $d['Meses_ini']){
+                                $d = $t;
+                                $actualizado = true;
+                            }
+                        }
+                    }
+                    
+                    if($actualizado == false){
+                        array_push($datos, $t);
+                    }else{
+                        $actualizado = false;
+                    }
+                }else{
+                    array_push($datos, $t);
+                }
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                               FUNCIONES QUE MODIFICAN UN ELEMENTO DE LA TABLA                              //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -581,6 +649,31 @@ function eliminar_usuario($dni){
         }
 
         return $hash_clv;     
+    }
+
+    // Calcular la edad a partir de la fecha de nacimiento de un usuario
+    function calcular_edad($fecha){
+        $nacimiento = new DateTime($fecha);
+        $ahora = new DateTime(date("Y-m-d"));
+
+        $diferencia = $ahora->diff($nacimiento);
+
+        $edad = $diferencia->format("%y");
+
+        $edad_user = array(
+            'mes' => false,
+            'valor' => $edad
+        );
+
+        // Si la persona tiene menos de un año, devolvemos los meses de vida
+        if($edad == 0){
+            $edad = $diferencia->format("%m");
+
+            $edad_user['mes'] = true;
+            $edad_user['valor'] = $edad;
+        }
+
+        return $edad_user;
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

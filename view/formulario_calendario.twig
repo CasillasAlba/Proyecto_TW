@@ -136,11 +136,11 @@
         </div>
 
         {% if accion == "registrar" %}
-            <button class="btn btn-success" name="boton-registrar-vac" type="submit">Registrar datos</button>
+            <button class="btn btn-success" name="boton-registrar-calend" type="submit">Registrar datos</button>
         {% elseif accion == "editar" %}
-                <button class="btn btn-success" name="boton-editar-vac" type="submit">Guardar cambios</button>
+                <button class="btn btn-success" name="boton-editar-calend" type="submit">Guardar cambios</button>
         {% elseif accion == "confirmar" %}
-            <button class="btn btn-success" name="boton-confirmar-vac" type="submit">Confirmar datos</button>
+            <button class="btn btn-success" name="boton-confirmar-calend" type="submit">Confirmar datos</button>
         {% endif %}
         <input hidden name="accion" value="{{ accion }}">
     </form>
