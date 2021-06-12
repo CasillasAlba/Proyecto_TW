@@ -1,0 +1,15 @@
+{% extends 'inicio_logueado.twig' %}
+
+{% block content %}
+    <div class="calendario">
+        <!-- Aqui dentro va el calendario-->
+        <h1>HOLA</h1>
+    </div>
+    <div>
+        {% if rol_user == "Admin" %}
+        <form action="index.php" method="POST">
+            <button name="aniadir-vac-recomendada" class="form-button">Añadir Vacuna Recomendada</button> 
+        </form>   
+        {% endif %}
+    </div>
+{% endblock %}
