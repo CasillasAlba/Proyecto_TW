@@ -7,7 +7,9 @@
 
     $_SESSION["accionPulsadaVac"] = $_POST['accion'];
 
-    if($_SESSION["accionPulsadaVac"] != "confirmar"){
+    if($_SESSION["accionPulsadaVac"] == "borrar"){
+        $_SESSION['id_vac_temp'] = $_POST['id_vac'];
+    }else if($_SESSION["accionPulsadaVac"] != "confirmar"){
         
         $_SESSION['acronimo_vac_temp'] = $_POST["acro"];
         $_SESSION['nombre_vac_temp'] = $_POST["nomV"];
@@ -15,9 +17,7 @@
 
     }
     
-    if($_SESSION["accionPulsadaVac"] == "borrar"){
-        $_SESSION['id_vac_temp'] = $_POST['id_vac'];
-    }
+
 
     switch($_SESSION["accionPulsadaVac"]){
         case "registrar":

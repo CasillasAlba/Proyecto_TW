@@ -6,7 +6,10 @@
     // realizar la acción indicada por el usuario (pulsando el botón en el formualrio)
     $_SESSION["accionPulsada"] = $_POST['accion'];
 
-    if($_SESSION["accionPulsada"] != "confirmar"){
+    
+    if($_SESSION["accionPulsada"] == "borrar"){
+        $_SESSION['id_us_temp'] = $_POST['dn'];
+    }else if($_SESSION["accionPulsada"] != "confirmar"){
 
         // '_temp' hara referencia a los datos que introduce el usuario que 
         // esta haciendo una accion con el formulario.
@@ -47,6 +50,7 @@
         }
         
     }
+
  
     switch($_SESSION["accionPulsada"]){
         case "registrar":
@@ -145,6 +149,15 @@
             }else if(isset($_POST['boton-borrar-user'])){
                 echo "Ay mecachis";
             }
+
+            header("Location: ../index.php");
+
+        break;
+
+        case "borrar":
+            eliminar_usuario($_SESSION['id_us_temp']);
+            unset($_SESSION['id_us_temp']);
+            unset($_SESSION['accionPulsada']);
 
             header("Location: ../index.php");
 

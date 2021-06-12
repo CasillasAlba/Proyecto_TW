@@ -224,6 +224,13 @@
                 echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
             }
 
+        }else if(isset($_POST['idBorrarUser'])){
+
+            $accion = "borrar";
+            $row = devolver_usuario($_POST['idBorrarUser']);
+
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'accion'));
+
         }else if(isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "confirmar"){
 
             // Cargamos el formulario de confirmación
