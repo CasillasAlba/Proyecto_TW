@@ -907,8 +907,12 @@ function eliminar_log($id){
 
     function total_vacunas_30dias() {
         global $db;
+        $date = date_create(date('Y-m-d'));
+        date_sub($date,date_interval_create_from_date_string("30 days"));
+        $date = date_format($date,"Y/m/d");
 
-        $prep = $db->prepare("SELECT COUNT(ID) FROM vacunacion");
+        $prep = $db->prepare("SELECT COUNT(ID) FROM vacunacion WHERE fecha >= ?");
+        $prep->bind_param('s', $date);
 
         if($prep->execute()){
             //Vinculamos variables a consultas
