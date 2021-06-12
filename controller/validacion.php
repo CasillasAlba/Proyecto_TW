@@ -138,7 +138,7 @@ require_once('../core/db.php');
                 $array_errores['claveError'] = 'La clave no es correcta';
                 $error = True;
             }else{
-                if(isset($_POST["clv_rep"])){ // en editar no existe
+                if(isset($_SESSION['clave_rep_temp'])){ // en editar no existe
                     // Comrpobar si las dos claves son la misma
                     if($_SESSION['clave_temp'] != $_SESSION['clave_rep_temp']){
                         $array_errores['claveError'] = 'Ambas claves no coinciden';

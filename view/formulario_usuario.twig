@@ -156,13 +156,15 @@
             <span class="error-msg">{{ errores['sexoError']}}</span>
         </div>
 
-        <!-- Clave (Repeticion) -->
+        <!-- Clave  -->
         <div class="mb-3">
             <label for="registerClaveInput" class="form-label">Clave</label>
-            {% if accion == "registrar" or accion == "editar" %}
-                <input class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}" required>
+            {% if accion == "registrar"  %}
+                <input class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave'] }}" required>
+            {% elseif accion == "editar" %}
+                <input class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6) }}" required>
             {% else %}
-                <input readonly class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6)}}">
+                <input readonly class="form-control" id="registerClaveInput" type="password" name="clv" value="{{ row['Clave']|slice(0,6) }}">
             {% endif %}
             <span class="error-msg">{{ errores['claveError']}}</span>
         </div>
