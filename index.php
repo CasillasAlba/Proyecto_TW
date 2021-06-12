@@ -122,7 +122,7 @@
             $image_user = $datos_logueado['Foto'];
             $sexo_user = $datos_logueado['Sexo'];
             
-            echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
         }
         
 
@@ -155,7 +155,7 @@
         // Llamamos a la función de cerrar sesión ubicada en login.php
         procesar_logout();
 
-        echo $twig->render('inicio.twig');
+        echo $twig->render('inicio_visitante.twig');
 
     }else if(isset($_SESSION['login'])){
 
@@ -363,7 +363,7 @@
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
-            echo $twig->render('inicio_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
         }
 
     }else if(isset($_SESSION['accionPulsada']) and ($_SESSION['accionPulsada'] == "registrar" or $_SESSION['accionPulsada'] == "confirmar")){
@@ -382,7 +382,7 @@
 
         
     }else{
-        echo $twig->render('inicio.twig');
+        echo $twig->render('inicio_visitante.twig');
     }
 
     
