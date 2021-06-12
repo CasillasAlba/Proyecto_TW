@@ -1,7 +1,6 @@
 {% extends 'inicio_logueado.twig' %}
 
 {% block content %}
-    {% if boton_accion == "listadoUsuarios" %}
     <div class="filtro_usuarios">
         <form action="index.php">
             <input type="text" placeholder="Buscar..." name="search">
@@ -17,12 +16,8 @@
         </form>
         
     </div>
-    {% endif %}
-    <div class = "listado_usuarios">    
-            {% if boton_accion == "listadoUsuarios" %}
-                {{lista_usuarios()}}
-            {% else %}
-                {{lista_peticiones()}}
-            {% endif %}
+
+    <div>    
+        {{lista_usuarios()}}
     </div>
 {% endblock %}

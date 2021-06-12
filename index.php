@@ -273,9 +273,7 @@
             echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user', 'vacunas'));
 
         }else if(isset($_POST['listado_user'])){
-
-            $boton_accion = "listadoUsuarios";
-            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
+            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user'));
             
         }else if(isset($_POST['idEditarVac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "editar" )){
             
@@ -297,9 +295,7 @@
             }
 
         }else if(isset($_POST['peticiones'])){
-
-            $boton_accion = "listadoPeticiones";
-            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
+            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user'));
 
         }else if(isset($_POST['idProcesarPeticion'])){
 
@@ -311,9 +307,7 @@
             echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
         }else if(isset($_SESSION["accionPulsada"]) and $_SESSION["accionPulsada"] == "activar"){
-            
-            $boton_accion = "listadoPeticiones";
-            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'boton_accion'));
+            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user'));
               
         }else if(isset($_POST['idPonerVacuna'])){
 
