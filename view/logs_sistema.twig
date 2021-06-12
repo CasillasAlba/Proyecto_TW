@@ -1,18 +1,28 @@
 {% extends 'inicio_logueado.twig' %}
 
-{% block content %}  
+{% block content %}
     <h2>Cuaderno de bitácora del sistema </h2>
-    <div class="log_sistema">
-        {% if datos_log != "False" %}
-            {% if n_peticiones > 0 %}
-                {% for log in datos_log %}
-                    <P>FECHA: {{ log.Fecha }}</P>
-                    <p>SUCESO: {{ log.Descripcion }}</p>
-                {% endfor %}
-            {% else %}
-                <h2>No hay información disponible.</h2>
-            {% endif %}
+    {% if datos_log != "False" %}
+        {% if n_peticiones > 0 %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Suceso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in datos_log %}
+                        <tr>
+                            <td>{{ log.Fecha }}</td>
+                            <td>{{ log.Descripcion }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h2>No hay información disponible.</h2>
         {% endif %}
-    </div>
+    {% endif %}
 
 {% endblock %}
