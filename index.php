@@ -41,6 +41,8 @@
     }));*/
 
     // Función que devuelve la lista de usuarios
+    //DEPRECATED no la borro por si hiciese falta, pero ya no se usa
+    /*
     $twig->addFunction(new \Twig\TwigFunction('lista_usuarios', function () {
         global $rol_user;
         $lista = devolver_lista_usuarios();
@@ -63,9 +65,11 @@
         }
         echo sprintf('</form>');
     }));
+    */
 
     // Función que devuelve la lista de usuarios
-    $twig->addFunction(new \Twig\TwigFunction('lista_peticiones', function () {
+    // LO MISMO QUE ARRIBA
+    /*$twig->addFunction(new \Twig\TwigFunction('lista_peticiones', function () {
         global $rol_user;
         $lista = devolver_lista_peticiones();
 
@@ -84,7 +88,7 @@
 
         }
         
-    }));
+    }));*/
 
 
     if(isset($_SESSION['accionPulsada'])){
@@ -273,7 +277,8 @@
             echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user', 'vacunas'));
 
         }else if(isset($_POST['listado_user'])){
-            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user'));
+            $usuarios = devolver_lista_usuarios();
+            echo $twig->render('listado_usuarios.twig', compact('nombre_user','rol_user', 'image_user', 'usuarios'));
             
         }else if(isset($_POST['idEditarVac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "editar" )){
             
@@ -295,7 +300,9 @@
             }
 
         }else if(isset($_POST['peticiones'])){
-            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user'));
+            $peticiones = devolver_lista_peticiones();
+            $n_peticiones = count($peticiones);
+            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user', 'peticiones', 'n_peticiones'));
 
         }else if(isset($_POST['idProcesarPeticion'])){
 
@@ -307,7 +314,9 @@
             echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
         }else if(isset($_SESSION["accionPulsada"]) and $_SESSION["accionPulsada"] == "activar"){
-            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user'));
+            $peticiones = devolver_lista_peticiones();
+            $n_peticiones = count($peticiones);
+            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user', 'peticiones', 'n_peticiones'));
               
         }else if(isset($_POST['idPonerVacuna'])){
 
