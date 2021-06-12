@@ -58,6 +58,14 @@
                 if($_SESSION["accionBD"] == "registrar"){
                     insertar_vacunacion($_SESSION['row_datos_temp'], $_SESSION['datos_paciente']['DNI'], $id_calendario, $fecha_actual);
                 }
+
+                $datos_log = array(
+                    'Tipo' => "tipo_vacunacion",
+                    'Fecha' => date("Y-m-d H:i:s"),
+                    'Descripcion' => "VACUNACION A USUARIO"
+                ); 
+    
+                insertar_log($datos_log);
             }
 
             unset($_SESSION['acro_ref_vacunacion_temp']);

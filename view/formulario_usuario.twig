@@ -182,7 +182,7 @@
         {% if rol_user == "Admin" %}
             <div class="mb-3">
                 <label for="registerRoleInput" class="form-label">Rol</label>
-                {% if accion == "confirmar" or accion == "activar" %}
+                {% if accion == "confirmar" or accion == "activar" or accion == "borrar" %}
                     {% if row['Rol']  == "Sanitario" %}
                         <input readonly class="form-control" type="text" id="registerRoleInput" name="rol" value="Sanitario">
                     {% else %}
@@ -205,7 +205,7 @@
 
             <div class="mb-3">
                 <label for="registerEstadoInput" class="form-label">Estado</label>
-                {% if accion == "confirmar" or accion == "activar" %}
+                {% if accion == "confirmar" or accion == "activar" or accion == "borrar" %}
                     {% if row['Estado']  == "Activo" %}
                         <input readonly class="form-control" type="text" id="registerEstadoInput" name="estado" value="Activo">
                     {% else %}

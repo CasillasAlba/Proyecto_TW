@@ -109,13 +109,32 @@
 
         // El login no ha sido correcto
         if($datos_logueado == False){
+            // Se ha iniciado sesión correctamente
+            $datos_log = array(
+                'Tipo' => "tipo_log_error",
+                'Fecha' => date("Y-m-d H:i:s"),
+                'Descripcion' => "IDENTIFICACIÓN INCORRECTA"
+            ); 
+
+            insertar_log($datos_log);
+
             $motivo = "DNI O CONTRASEÑA INCORRECTA :(";
             echo $twig->render('errores.twig', compact('motivo'));
+
         }else if($datos_logueado == "Inactivo"){
+
             $motivo = "NO PUEDE INICIAR SESIÓN HASTA QUE LE DEN DE ALTA EN EL SISTEMA";
             echo $twig->render('errores.twig', compact('motivo'));
+
         }else{
             // Se ha iniciado sesión correctamente
+            $datos_log = array(
+                'Tipo' => "tipo_login",
+                'Fecha' => date("Y-m-d H:i:s"),
+                'Descripcion' => "USUARIO LOGUEADO"
+            ); 
+
+            insertar_log($datos_log);
             // Esta será la variable con la que se guarde la sesión
             $_SESSION['login'] = True;
 
@@ -157,6 +176,13 @@
         echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
 
     }else if(isset($_POST['log-out'])){
+        $datos_log = array(
+            'Tipo' => "tipo_logout",
+            'Fecha' => date("Y-m-d H:i:s"),
+            'Descripcion' => "USUARIO DESLOGUEADO"
+        ); 
+
+        insertar_log($datos_log);
         // Llamamos a la función de cerrar sesión ubicada en login.php
         procesar_logout();
 
@@ -218,6 +244,7 @@
 
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
             if(isset($_SESSION['row_errores_temp'])){
+                
                 $row = $_SESSION['row_datos_temp'];
                 $errores = $_SESSION['row_errores_temp'];
 
@@ -280,13 +307,21 @@
             echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
 
         }else if(isset($_POST['listado_vac'])){
+
             $vacunas = devolver_lista_vacunas();
             echo $twig->render('listado_vacunas.twig', compact('rol_user', 'image_user', 'vacunas', 'nombre_user', 'sexo_user'));
 
         }else if(isset($_POST['listado_user'])){
+
             $usuarios = devolver_lista_usuarios();
             echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user'));
             
+        }else if(isset($_POST['listado_log'])){
+
+            $datos_log = devolver_lista_logs();
+            $n_peticiones = count($datos_log);
+            echo $twig->render('logs_sistema.twig', compact('rol_user', 'image_user', 'n_peticiones', 'datos_log' , 'nombre_user', 'image_user', 'sexo_user'));
+
         }else if(isset($_POST['idEditarVac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "editar" )){
             
             // PARA LA EDICION DE VACUNAS
@@ -426,10 +461,6 @@
         
     }else{
         echo $twig->render('inicio_visitante.twig');
-    }
-
-    
-
-   
+    } 
 
 ?>

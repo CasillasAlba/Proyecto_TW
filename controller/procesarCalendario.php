@@ -52,6 +52,14 @@
 
                 if($_SESSION["accionBD"] == "registrar"){
                     insertar_calendario($_SESSION['row_datos_temp']);
+
+                    $datos_log = array(
+                        'Tipo' => "tipo_modif_calend",
+                        'Fecha' => date("Y-m-d H:i:s"),
+                        'Descripcion' => "CALENDARIO MODIFICADO"
+                    ); 
+        
+                    insertar_log($datos_log);
                 }
             }
 

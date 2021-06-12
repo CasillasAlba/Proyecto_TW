@@ -92,6 +92,14 @@
                     $_SESSION['row_datos_temp']['Clave'] = cifrar_claves($_SESSION['row_datos_temp']['Clave']);
                     insertar_usuario($_SESSION['row_datos_temp']);
 
+                    $datos_log = array(
+                        'Tipo' => "tipo_registro_user",
+                        'Fecha' => date("Y-m-d H:i:s"),
+                        'Descripcion' => "USUARIO REGISTRADO"
+                    ); 
+        
+                    insertar_log($datos_log);
+
                 }else if($_SESSION["accionBD"] == "editar"){
 
                     $clave_formulario = $_SESSION['row_datos_temp']['Clave'];
@@ -105,6 +113,15 @@
                     
 
                     modificar_usuario($_SESSION['row_datos_temp']);
+
+                    $datos_log = array(
+                        'Tipo' => "tipo_log_modif_user",
+                        'Fecha' => date("Y-m-d H:i:s"),
+                        'Descripcion' => "USUARIO EDITADO"
+                    ); 
+        
+                    insertar_log($datos_log);
+
                     unset($_SESSION['clave_antigua']);
                     
                 }
@@ -153,6 +170,14 @@
 
                 eliminar_usuario($_SESSION['dni_temp']);
 
+                $datos_log = array(
+                    'Tipo' => "tipo_log_eliminar_user",
+                    'Fecha' => date("Y-m-d H:i:s"),
+                    'Descripcion' => "USUARIO ELIMINADO"
+                ); 
+    
+                insertar_log($datos_log);
+
             }
 
                               
@@ -178,6 +203,15 @@
 
         case "borrar":
             eliminar_usuario($_SESSION['id_us_temp']);
+
+            $datos_log = array(
+                'Tipo' => "tipo_log_eliminar_user",
+                'Fecha' => date("Y-m-d H:i:s"),
+                'Descripcion' => "USUARIO ELIMINADO"
+            ); 
+
+            insertar_log($datos_log);
+
             unset($_SESSION['id_us_temp']);
             unset($_SESSION['accionPulsada']);
 

@@ -54,8 +54,27 @@
 
                 if($_SESSION["accionBD"] == "registrar"){
                     insertar_vacuna($_SESSION['row_datos_temp']);
+
+                    $datos_log = array(
+                        'Tipo' => "tipo_registar_vac",
+                        'Fecha' => date("Y-m-d H:i:s"),
+                        'Descripcion' => "VACUNA REGISTRADA"
+                    ); 
+        
+                    insertar_log($datos_log);
+
                 }else if($_SESSION["accionBD"] == "editar"){
+
                     modificar_vacuna($_SESSION['row_datos_temp']);
+
+                    $datos_log = array(
+                        'Tipo' => "tipo_modif_vac",
+                        'Fecha' => date("Y-m-d H:i:s"),
+                        'Descripcion' => "VACUNA EDITADA"
+                    ); 
+        
+                    insertar_log($datos_log);
+
                 }
             }
 
@@ -79,6 +98,15 @@
 
         case "borrar":
             eliminar_vacuna($_SESSION['id_vac_temp']);
+
+            $datos_log = array(
+                'Tipo' => "tipo_eliminar_vac",
+                'Fecha' => date("Y-m-d H:i:s"),
+                'Descripcion' => "VACUNA ELIMINADA"
+            ); 
+
+            insertar_log($datos_log);
+
             unset($_SESSION['id_vac_temp']);
             unset($_SESSION['accionPulsadaVac']);
 
