@@ -35,7 +35,7 @@
         foreach($lista as $vacuna){
             echo sprintf('<p>Acrónimo: %s Nombre: %s</p>', $vacuna['Acronimo'], $vacuna['Nombre']);
             echo sprintf('<button class="form-button" name="idEditarVac" value="%s">Editar</button>', $vacuna['Acronimo']);
-            echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['Acronimo']);
+            echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['ID']);
         }
     }));
 
@@ -295,6 +295,12 @@
                 echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion'));
             }
 
+        }else if(isset($_POST['idBorrarVac'])){
+            $accion = "borrar";
+            $vac = devolver_vacuna_por_id($_POST['idBorrarVac']);
+
+            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
+            
         }else if(isset($_POST['peticiones'])){
 
             $boton_accion = "listadoPeticiones";
