@@ -532,6 +532,40 @@
         return $datos;
     }
 
+    // Función que devuelve la lista de vacunación de un usuario
+
+    function devolver_lista_vacunacion($dni){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT vacunacion.IDCalendario, vacunacion.Fecha, vacunacion.Fabricante, vacunacion.Comentarios, vacunacion.IDUsuario,
+                                vacunas.Acronimo, vacunas.Nombre, vacunas.Descripcion FROM vacunacion, calendario, vacunas 
+                                WHERE vacunacion.IDUsuario = ?
+                                AND (vacunacion.IDCalendario = calendario.ID)
+                                AND(calendario.IDVacuna = vacunas.ID)");
+
+        $prep->bind_param('s', $dni);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+
+    }
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                               FUNCIONES QUE MODIFICAN UN ELEMENTO DE LA TABLA                              //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

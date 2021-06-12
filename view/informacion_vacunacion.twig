@@ -1,0 +1,13 @@
+{% extends 'inicio_logueado.twig' %}
+
+{% block content %}
+    <div class = "informacion_vacunacion">
+        <p>Vacuna: {{vacuna['Nombre']}} , {{vacuna['Acronimo']}}  </p>
+        <p>Fecha de vacunación: {{vacuna['Fecha']}}</p>
+        <p>Fabricante: {{vacuna['Fabricante']}}</p>
+        <p>Descripcion: {{vacuna['Descripcion']}}</p>
+        {% if vacuna['Comentarios'] != "" %}
+            <p>Comentarios: {{vacuna['Comentarios']}}</p>
+        {% endif %}
+    </div>
+{% endblock %}

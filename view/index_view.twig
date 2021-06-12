@@ -60,11 +60,11 @@
 
                         {% elseif rol_user == "Sanitario" or rol_user == "Paciente" %}
                             <li class="nav-item">
-                                <button type="submit" class="btn btn-success" aria-current="page" name="inicio">Cartilla de Vacunación</button>
+                                <button type="submit" class="btn btn-success" aria-current="page" name="cartilla">Cartilla de Vacunación</button>
                             </li>
 
                             <li class="nav-item">
-                                <button type="submit" class="btn btn-success" aria-current="page" name="inicio">Vacunas Pendientes</button>
+                                <button type="submit" class="btn btn-success" aria-current="page" name="vacunas_pendientes">Vacunas Pendientes</button>
                             </li>
 
                             {% if rol_user == "Sanitario" %}

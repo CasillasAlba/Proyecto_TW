@@ -1,0 +1,18 @@
+{% extends 'inicio_logueado.twig' %}
+
+{% block content %}
+    <div class = "cartilla_vacunacion">
+        {% if lista_vacunacion != "False" %}
+            {% if n_peticiones > 0 %}
+                <form action="index.php" method="POST">
+                    {% for vacuna in lista_vacunacion %}
+                        <p>Nombre: {{vacuna.Acronimo}}</p>
+                        <button class="form-button" name="idProcesarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}">Mostrar información completa</button>
+                    {% endfor %}
+                </form>
+            {% else %}
+                <h2>Este usuario aún no tiene ninguna vacuna añadida a su lista</h2>
+            {% endif %}
+        {% endif %} 
+    </div>
+{% endblock %}
