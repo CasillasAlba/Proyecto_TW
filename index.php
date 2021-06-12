@@ -29,7 +29,8 @@
     }));
 
     // Función que devuelve la lista de vacunas
-    $twig->addFunction(new \Twig\TwigFunction('lista_vacunas', function () {
+    // DEPRECATED no la borro por si hiciese falta, pero ya no se usa
+    /*$twig->addFunction(new \Twig\TwigFunction('lista_vacunas', function () {
         $lista = devolver_lista_vacunas();
 
         foreach($lista as $vacuna){
@@ -37,7 +38,7 @@
             echo sprintf('<button class="form-button" name="idEditarVac" value="%s">Editar</button>', $vacuna['Acronimo']);
             echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['Acronimo']);
         }
-    }));
+    }));*/
 
     // Función que devuelve la lista de usuarios
     $twig->addFunction(new \Twig\TwigFunction('lista_usuarios', function () {
@@ -268,8 +269,8 @@
             echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion'));
 
         }else if(isset($_POST['listado_vac'])){
-
-            echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user'));
+            $vacunas = devolver_lista_vacunas();
+            echo $twig->render('listado_vacunas.twig', compact('nombre_user','rol_user', 'image_user', 'vacunas'));
 
         }else if(isset($_POST['listado_user'])){
 
