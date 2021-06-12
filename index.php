@@ -187,7 +187,8 @@
         // Llamamos a la función de cerrar sesión ubicada en login.php
         procesar_logout();
 
-        echo $twig->render('inicio_visitante.twig');
+        $calendario = devolver_calendario_full();
+        echo $twig->render('inicio_visitante.twig', compact('calendario'));
 
     }else if(isset($_SESSION['login'])){
 
@@ -462,7 +463,8 @@
 
         
     }else{
-        echo $twig->render('inicio_visitante.twig');
+        $calendario = devolver_calendario_full();
+        echo $twig->render('inicio_visitante.twig', compact('calendario'));
     } 
 
 ?>
