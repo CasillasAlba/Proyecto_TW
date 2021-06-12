@@ -18,19 +18,25 @@
     </div>
 
     <div>    
-        <form action="index.php" method="POST">
+        <form action="index.php" method="POST" class="user-list">
             {% for usuario in usuarios %}
                 {% if usuario.Rol != "Admin" %}
-                    <img height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}" />
-                    <p>Nombre: {{usuario.Nombre}} {{usuario.Apellidos}}</p>
-                    {% if rol_user == "Admin" %}
-                        <button class="form-button" name="idEditarUser" value="{{usuario.DNI}}">Editar</button>
-                        <button class="form-button" name="idBorrarUser" value="{{usuario.DNI}}">Borrar</button>
-                    {% elseif rol_user == "Sanitario" %}
-                        <button class="form-button" name="idVerVacunacion" value="{{usuario.DNI}}">Ver Cartilla</button>
-                        <button class="form-button" name="idEditarVacunacion" value="{{usuario.DNI}}">Modificar Cartilla</button>
-                        <button class="form-button" name="idPonerVacuna" value="{{usuario.DNI}}">Añadir Vacuna</button>
-                    {% endif %}
+                    <div class="card user-card">
+                        <img class="card-img-top" height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}"/>
+                        <div class="card-body">
+                            <h5 class="card-title">{{usuario.Nombre}} {{usuario.Apellidos}}</h5>
+                            <div class="hor-buttons">
+                                {% if rol_user == "Admin" %}
+                                    <button class="btn btn-success" name="idEditarUser" value="{{usuario.DNI}}">Editar</button>
+                                    <button class="btn btn-danger" name="idBorrarUser" value="{{usuario.DNI}}">Borrar</button>
+                                {% elseif rol_user == "Sanitario" %}
+                                    <button class="form-button" name="idVerVacunacion" value="{{usuario.DNI}}">Ver Cartilla</button>
+                                    <button class="form-button" name="idEditarVacunacion" value="{{usuario.DNI}}">Modificar Cartilla</button>
+                                    <button class="form-button" name="idPonerVacuna" value="{{usuario.DNI}}">Añadir Vacuna</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             {% endfor %}
         </form>

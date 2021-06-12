@@ -99,7 +99,7 @@
                 <input class="form-control" id="registerFechaInput" type="date" name="nac" value="{{ row['FechaNac'] }}" required>
             {% elseif accion == "editar" %}
                 {% if rol_user == "Admin" %}
-                    <input class="form-control" id="registerFechaInput" type="text" type="date" name="nac" value="{{ row['FechaNac'] }}" required>
+                    <input class="form-control" id="registerFechaInput" type="date" type="date" name="nac" value="{{ row['FechaNac'] }}" required>
                 {% else %}
                     <input readonly class="form-control" id="registerFechaInput" type="date" name="nac" value="{{ row['FechaNac'] }}">
                 {% endif %}

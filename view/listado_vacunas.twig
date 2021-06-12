@@ -1,13 +1,26 @@
 {% extends 'inicio_logueado.twig' %}
 
-{% block content %}
-    <div class = "listado_vacunas">
-        <form action="index.php" method="POST">
-            {% for vacuna in vacunas %}
-                <p>Acrónimo: {{vacuna.Acronimo}} Nombre: {{vacuna.Nombre}}</p>
-                <button class="form-button" name="idEditarVac" value="{{vacuna.Acronimo}}">Editar</button>
-                <button class="form-button" name="idBorrarVac" value="{{vacuna.Acronimo}}">Borrar</button>
-            {% endfor %}
-        </form>  
-    </div>
+{% block content %}  
+    <table class="table">
+        <thead class="table-success">
+            <tr>
+              <th scope="col">Acrónimo</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Editar</th>
+              <th scope="col">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <form action="index.php" method="POST">
+                {% for vacuna in vacunas %}
+                    <tr>
+                        <td>{{vacuna.Acronimo}}</td>
+                        <td>{{vacuna.Nombre}}</td>
+                        <td><button class="btn btn-success" name="idEditarVac" value="{{vacuna.Acronimo}}"><i class="bi-brush"></i></button></td>
+                        <td><button class="btn btn-danger" name="idBorrarVac" value="{{vacuna.ID}}"><i class="bi-trash"></button></td>
+                    </tr>
+                {% endfor %}
+            </form>  
+        </tbody>
+    </table>
 {% endblock %}
