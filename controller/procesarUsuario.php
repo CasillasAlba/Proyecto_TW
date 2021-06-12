@@ -6,7 +6,10 @@
     // realizar la acción indicada por el usuario (pulsando el botón en el formualrio)
     $_SESSION["accionPulsada"] = $_POST['accion'];
 
-    if($_SESSION["accionPulsada"] != "confirmar"){
+    
+    if($_SESSION["accionPulsada"] == "borrar"){
+        $_SESSION['id_us_temp'] = $_POST['dn'];
+    }else if($_SESSION["accionPulsada"] != "confirmar"){
 
         // '_temp' hara referencia a los datos que introduce el usuario que 
         // esta haciendo una accion con el formulario.
@@ -47,6 +50,7 @@
         }
         
     }
+
  
     switch($_SESSION["accionPulsada"]){
         case "registrar":
@@ -137,14 +141,45 @@
 
                 $_SESSION['datos_visitante']['Estado'] = "Activo";
                 modificar_usuario($_SESSION['datos_visitante']);
-                unset( $_SESSION['datos_visitante']);
-                unset( $_SESSION['rol_user_visitante']);
+                unset($_SESSION['datos_visitante']);
+                unset($_SESSION['rol_user_visitante']);
+
                 
             }else if(isset($_POST['boton-informar-error-user'])){
-                echo "Ay mecachis";
+
+                echo "ay mecachis";
+
             }else if(isset($_POST['boton-borrar-user'])){
-                echo "Ay mecachis";
+
+                eliminar_usuario($_SESSION['dni_temp']);
+
             }
+
+                              
+            // Cerramos las sesiones abiertas porque hemos acabado el proceso
+
+            unset($_SESSION['nombre_temp']);
+            unset($_SESSION['apellidos_temp']);
+            unset($_SESSION['dni_temp']);
+            unset($_SESSION['email_temp']);
+            unset($_SESSION['telefono_temp']);
+            unset($_SESSION['nacimiento_temp']);
+            unset($_SESSION['sexo_temp']);
+            unset($_SESSION['clave_temp']);
+            unset($_SESSION['clave_rep_temp']);
+            unset($_SESSION['rol_temp']);
+            unset($_SESSION['estado_temp']);
+            unset($_SESSION['row_datos_temp']);
+            unset($_SESSION['accionPulsada']);
+
+            header("Location: ../index.php");
+
+        break;
+
+        case "borrar":
+            eliminar_usuario($_SESSION['id_us_temp']);
+            unset($_SESSION['id_us_temp']);
+            unset($_SESSION['accionPulsada']);
 
             header("Location: ../index.php");
 

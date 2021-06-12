@@ -36,7 +36,7 @@
         foreach($lista as $vacuna){
             echo sprintf('<p>Acrónimo: %s Nombre: %s</p>', $vacuna['Acronimo'], $vacuna['Nombre']);
             echo sprintf('<button class="form-button" name="idEditarVac" value="%s">Editar</button>', $vacuna['Acronimo']);
-            echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['Acronimo']);
+            echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['ID']);
         }
     }));*/
 
@@ -224,6 +224,13 @@
                 echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion'));
             }
 
+        }else if(isset($_POST['idBorrarUser'])){
+
+            $accion = "borrar";
+            $row = devolver_usuario($_POST['idBorrarUser']);
+
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'accion'));
+
         }else if(isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "confirmar"){
 
             // Cargamos el formulario de confirmación
@@ -299,6 +306,12 @@
                 echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion'));
             }
 
+        }else if(isset($_POST['idBorrarVac'])){
+            $accion = "borrar";
+            $vac = devolver_vacuna_por_id($_POST['idBorrarVac']);
+
+            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion'));
+            
         }else if(isset($_POST['peticiones'])){
             $peticiones = devolver_lista_peticiones();
             $n_peticiones = count($peticiones);

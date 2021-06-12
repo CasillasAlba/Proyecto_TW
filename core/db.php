@@ -179,7 +179,7 @@
     function insertar_log($datos){
         global $db;
 
-        $prep = $db->prepare("INSERT INTO calendario(Tipo, Fecha, Descripcion)
+        $prep = $db->prepare("INSERT INTO log (Tipo, Fecha, Descripcion)
                 VALUES (?, ?, ?)");
 
         $prep->bind_param('sss', $tipo, $fec, $desc);
@@ -581,10 +581,6 @@
         $desc = $datos['DescripVac'];
         $acro_cond = $datos['Acronimo'];
 
-        echo $acro;
-        echo $nom;
-        echo $desc;
-        echo $acro_cond;
    
         // El primer parametro es el tipo de datos que vamos a insertar, un caracter por cada tipo de dato.
         $prep->bind_param('ssss', $acro, $nom, $desc, $acro_cond);
@@ -606,9 +602,41 @@
 //                               FUNCIONES QUE ELIMNAN UN ELEMENTO DE LA TABLA                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+function eliminar_vacunacion($dni_user, $id_calend){
+
+    global $db;
+
+    $prep = $db->prepare("DELETE FROM vacunacion WHERE IDUsuario=? AND IDCalendario=?");
+    $prep->bind_param('si', $dni_user, $id_calend);
+    $prep->execute();
+
+    if($prep->affected_rows == 1){
+        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+    }else{
+        $resultado_ejecucion = false;
+    }
+    
+    // Cerramos la consulta preparada
+    $prep->close();
+
+    return $resultado_ejecucion;
+
+}
+
+
 function eliminar_usuario($dni){
     global $db;
 
+    // Antes de borrar un usuario, debemos asegurarnos de que no existe
+    // ningun objeto cuya creación dependa de ese usuario
+
+    $prep_vacunacion = $db->prepare("DELETE FROM vacunacion WHERE IDUsuario = ?");
+
+    $prep_vacunacion->bind_param('s', $dni);
+    $prep_vacunacion->execute();
+
+    
     $prep = $db->prepare("DELETE FROM usuarios WHERE DNI=?");
     $prep->bind_param('s', $dni);
     $prep->execute();
@@ -625,11 +653,104 @@ function eliminar_usuario($dni){
     return $resultado_ejecucion;
 }
 
+
+function eliminar_calendario($calend){
+    global $db;
+
+    $prep_vacunacion = $db->prepare("DELETE FROM vacunacion WHERE IDCalendario = ?");
+
+    $prep_vacunacion->bind_param('i', $calend);
+    $prep_vacunacion->execute();
+
+    
+    $prep = $db->prepare("DELETE FROM calendario WHERE ID=?");
+    $prep->bind_param('i', $calend);
+    $prep->execute();
+
+    if($prep->affected_rows == 1){
+        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+    }else{
+        $resultado_ejecucion = false;
+    }
+    
+    // Cerramos la consulta preparada
+    $prep->close();
+
+    return $resultado_ejecucion;
+
+}
+
+function eliminar_vacuna($vac){
+    global $db;
+
+    /*
+        Para borrar una vacuna primero hay que borrar todos los elementos de calendario asociado, que requiere borrar todas la vacunaciones
+        La Tabla que cuya existencia depende de más tablas es Vacunacion, ya que esta existe gracias a Calendario, pero Calendario existe gracias a Vacuna
+        Se borran todas las vacunaciones que tengan un IDCalendario = Al ID asociado a cada IDVacuna
+        Si por ejemplo la Vacuna VPH tiene 3 elementos en Calendario que dependen de ella, habrá 3 IDs de Calendario distinto con IDVacuna asociada
+        El segundo select devuelve TODOS esos IDs, por eso la condición WHERE es IN, ya que está diciendo: Elimina todas la VACUNACIONES 
+        cuyo ID sea ALGUNO de los que devuelve el anterior SELECT
+    */
+
+    $prep_vacunacion = $db->prepare("DELETE FROM vacunacion WHERE IDCalendario IN (SELECT ID FROM calendario WHERE IDVacuna = ?)");
+
+    $prep_vacunacion->bind_param('i', $vac);
+    $prep_vacunacion->execute();
+
+    
+    $prep_calendario = $db->prepare("DELETE FROM calendario WHERE IDVacuna=?");
+    $prep_calendario->bind_param('i', $vac);
+    $prep_calendario->execute();
+
+
+    $prep = $db->prepare("DELETE FROM vacunas WHERE ID = ?");
+    $prep->bind_param('i', $vac);
+    $prep->execute();
+
+
+    if($prep->affected_rows == 1){
+        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+    }else{
+        $resultado_ejecucion = false;
+    }
+    
+    // Cerramos la consulta preparada
+    $prep->close();
+
+    return $resultado_ejecucion;
+}
+
+
+function eliminar_log($id){
+    global $db;
+
+    $prep = $db->prepare("DELETE FROM log WHERE ID=?");
+    $prep->bind_param('s', $id);
+    $prep->execute();
+
+    if($prep->affected_rows == 1){
+        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+    }else{
+        $resultado_ejecucion = false;
+    }
+    
+    // Cerramos la consulta preparada
+    $prep->close();
+
+    return $resultado_ejecucion;
+
+}
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           FUNCIONES AUXILIARES                                             //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Funcion que cifra una clave
+
     function cifrar_claves($clave){
         $opciones = [
             'cost'=> 12,
