@@ -1,7 +1,24 @@
 {% extends 'index_view.twig' %}
 
 {% block content %}
-    <div class = "listado_usuario">    
+    {% if boton_accion == "listadoUsuarios" %}
+    <div class="filtro_usuarios">
+        <form action="index.php">
+            <input type="text" placeholder="Buscar..." name="search">
+            <!-- Falta de ordenacion por rango de edad -->-->
+            <input type="checkbox" id="activo" name="activo" value="activo">
+            <label for="activo">Activo</label>
+            <input type="checkbox" id="inactivo" name="inactivo" value="inactivo">
+            <label for="inactivo">Inactivo</label>
+            <input type="checkbox" id="pendiente" name="pendiente" value="vacunas_pendientes">
+            <label for="Activo">Vacunas Pendientes</label>
+            <label for="VacunaXSemanasInput" class="form-label">Vacunarse en:</label>
+            <input type="number" id="VacunaXSemanasInput" placeholder="Semanas" name="vacuna_x_semanas">
+        </form>
+        
+    </div>
+    {% endif %}
+    <div class = "listado_usuarios">    
             {% if boton_accion == "listadoUsuarios" %}
                 {{lista_usuarios()}}
             {% else %}
