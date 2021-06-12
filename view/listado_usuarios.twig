@@ -1,7 +1,6 @@
 {% extends 'inicio_logueado.twig' %}
 
 {% block content %}
-    {% if boton_accion == "listadoUsuarios" %}
     <div class="filtro_usuarios">
         <form action="index.php">
             <input type="text" placeholder="Buscar..." name="search">
@@ -17,12 +16,21 @@
         </form>
         
     </div>
-    {% endif %}
-    <div class = "listado_usuarios">    
-            {% if boton_accion == "listadoUsuarios" %}
-                {{lista_usuarios()}}
-            {% else %}
-                {{lista_peticiones()}}
-            {% endif %}
+
+    <div>    
+        <form action="index.php" method="POST">
+            {% for usuario in usuarios %}
+                <img height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}" />
+                <p>Nombre: {{usuario.Nombre}} {{usuario.Apellidos}}</p>
+                {% if rol_user == "Admin" %}
+                    <button class="form-button" name="idEditarUser" value="{{usuario.DNI}}">Editar</button>
+                    <button class="form-button" name="idBorrarUser" value="{{usuario.DNI}}">Borrar</button>
+                {% elseif rol_user == "Sanitario" %}
+                    <button class="form-button" name="idVerVacunacion" value="{{usuario.DNI}}">Ver Cartilla</button>
+                    <button class="form-button" name="idEditarVacunacion" value="{{usuario.DNI}}">Modificar Cartilla</button>
+                    <button class="form-button" name="idPonerVacuna" value="{{usuario.DNI}}">Añadir Vacuna</button>
+                {% endif %}
+            {% endfor %}
+        </form>
     </div>
 {% endblock %}

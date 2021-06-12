@@ -3,7 +3,11 @@
 {% block content %}
     <div class = "listado_vacunas">
         <form action="index.php" method="POST">
-            {{lista_vacunas()}}
+            {% for vacuna in vacunas %}
+                <p>Acrónimo: {{vacuna.Acronimo}} Nombre: {{vacuna.Nombre}}</p>
+                <button class="form-button" name="idEditarVac" value="{{vacuna.Acronimo}}">Editar</button>
+                <button class="form-button" name="idBorrarVac" value="{{vacuna.Acronimo}}">Borrar</button>
+            {% endfor %}
         </form>  
     </div>
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'inicio_logueado.twig' %}
+
+{% block content %}
+    <div>    
+        {% if lista != "False" %}
+            {% if n_peticiones > 0 %}
+                <form action="index.php" method="POST">
+                    {% for usuario in peticiones %}
+                        <img height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}"/>
+                        <p>Nombre: {{usuario.Nombre}} {{usuario.Apellido}}</p>
+                        <button class="form-button" name="idProcesarPeticion" value="{{usuario.DNI}}">Procesar</button>
+                    {% endfor %}
+                </form>
+            {% else %}
+                <h2>No hay peticiones pendientes</h2>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
