@@ -1,23 +1,32 @@
 {% extends 'inicio_logueado.twig' %}
 
 {% block content %}
-    <div>    
-        {% if lista != "False" %}
-            {% if n_peticiones > 0 %}
-                <form action="index.php" method="POST" class"user-list">
-                    {% for usuario in peticiones %}
-                        <div class="card user-card">
-                            <img class="card-img-top" height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}"/>
-                            <div class="card-body">
-                                <h5 class="card-title">{{usuario.Nombre}} {{usuario.Apellidos}}</h5>
-                                <button class="btn btn-success" name="idProcesarPeticion" value="{{usuario.DNI}}">Procesar</button>
-                          </div>
-                        </div>
-                    {% endfor %}
-                </form>
-            {% else %}
-                <h2>No hay peticiones pendientes.</h2>
-            {% endif %}
+    {% if lista != "False" %}
+        {% if n_peticiones > 0 %}
+            <table class="table">
+                <thead class="table-success">
+                    <tr>
+                        <th>Foto de perfil</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Procesar petición</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form action="index.php" method="POST">
+                        {% for usuario in peticiones %}
+                            <tr>
+                                <td><img height="100px" width="100px" src="data:image;base64,{{usuario.Fotografia}}"/></td>
+                                <td>{{usuario.Nombre}} {{usuario.Apellidos}}</td>
+                                <td>{{usuario.Email}}</td>
+                                <td><button class="btn btn-success" name="idProcesarPeticion" value="{{usuario.DNI}}"><i class="bi bi-check2"></i></button></td>
+                            </tr>
+                        {% endfor %}
+                    </form>
+                </tbody>
+            </table>
+        {% else %}
+            <h2>No hay peticiones pendientes.</h2>
         {% endif %}
-    </div>
+    {% endif %}
 {% endblock %}
