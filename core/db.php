@@ -884,6 +884,49 @@ function eliminar_log($id){
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                           Funciones de estadísticas                                               //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function total_usuarios() {
+        global $db;
+
+        $prep = $db->prepare("SELECT COUNT(DNI) FROM usuarios");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $total = $prep->get_result()->fetch_row()[0];
+
+        }else{
+            $total = 0; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $total;
+    }
+
+    function total_vacunas_30dias() {
+        global $db;
+
+        $prep = $db->prepare("SELECT COUNT(ID) FROM vacunacion");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $total = $prep->get_result()->fetch_row()[0];
+
+        }else{
+            $total = 0; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $total;
+    }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           'MAIN' DEL CODIGO                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

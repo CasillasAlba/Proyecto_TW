@@ -99,6 +99,10 @@
         $accion = $_SESSION['accionPulsadaCalend'];
     }
 
+    //Global variables
+    $n_usuarios = total_usuarios();
+    $n_vacunas = total_vacunas_30dias();
+
     if(isset($_POST['boton-login-visitante'])){
         // ENTRAMOS EN ESTE IF CUANDO UN VISITANTE INTENTE LOGUEARSE
         // Obtenemos los valores introducidos por el usuario
@@ -119,12 +123,12 @@
             insertar_log($datos_log);
 
             $motivo = "DNI O CONTRASEÑA INCORRECTA :(";
-            echo $twig->render('errores.twig', compact('motivo'));
+            echo $twig->render('errores.twig', compact('motivo', 'n_usuarios', 'n_vacunas'));
 
         }else if($datos_logueado == "Inactivo"){
 
             $motivo = "NO PUEDE INICIAR SESIÓN HASTA QUE LE DEN DE ALTA EN EL SISTEMA";
-            echo $twig->render('errores.twig', compact('motivo'));
+            echo $twig->render('errores.twig', compact('motivo', 'n_usuarios', 'n_vacunas'));
 
         }else{
             // Se ha iniciado sesión correctamente
@@ -147,7 +151,7 @@
             $sexo_user = $datos_logueado['Sexo'];
             
             $calendario = devolver_calendario_full();
-            echo $twig->render('calendario_logueado.twig', compact('us_user', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'calendario'));
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'calendario', 'n_usuarios', 'n_vacunas'));
         }
         
 
@@ -174,7 +178,7 @@
         $rol_user = 'Visitante';
         $_SESSION['rol_user_visitante'] = $rol_user;
     
-        echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion'));
+        echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion', 'n_usuarios', 'n_vacunas'));
 
     }else if(isset($_POST['log-out'])){
         $datos_log = array(
@@ -188,7 +192,7 @@
         procesar_logout();
 
         $calendario = devolver_calendario_full();
-        echo $twig->render('inicio_visitante.twig', compact('calendario'));
+        echo $twig->render('inicio_visitante.twig', compact('calendario', 'n_usuarios', 'n_vacunas'));
 
     }else if(isset($_SESSION['login'])){
 
@@ -209,9 +213,9 @@
             if(isset($_SESSION['row_errores_temp'])){
                 $row = $_SESSION['row_datos_temp'];
                 $errores = $_SESSION['row_errores_temp'];
-                echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }else{
-                echo $twig->render('formulario_usuario.twig', compact('us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_usuario.twig', compact('us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
             
         }else if((isset($_POST['editar-me']) or (isset($_POST['idEditarUser']) or (isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "editar")))){
@@ -223,7 +227,7 @@
                 $row = $_SESSION['user_a_editar'];
                 $_SESSION['foto_antigua'] = $row['Foto'];
                 $accion = "editar";
-                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user' , 'accion' , 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user' , 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }else if(isset($_POST['editar-me'])){ // TE EDITAS A TI MISMO
                 $accion = "editar";
                 // Cargamos los valores del propio usuario para cargar SUS datos
@@ -240,7 +244,7 @@
                     $_SESSION['rol_admin'] = "Admin";
                 }
 
-                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
             }
 
@@ -250,7 +254,7 @@
                 $row = $_SESSION['row_datos_temp'];
                 $errores = $_SESSION['row_errores_temp'];
 
-                echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_usuario.twig', compact('row', 'errores', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
 
         }else if(isset($_POST['idBorrarUser'])){
@@ -258,13 +262,13 @@
             $accion = "borrar";
             $row = devolver_usuario($_POST['idBorrarUser']);
 
-            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_SESSION['accionPulsada']) and $_SESSION['accionPulsada'] == "confirmar"){
 
             // Cargamos el formulario de confirmación
             $row = $_SESSION['row_datos_temp']; 
-            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['regist-vac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "registrar" )){
 
@@ -274,16 +278,16 @@
             if(isset($_SESSION['row_errores_temp'])){
                 $vac = $_SESSION['row_datos_temp'];
                 $erroresVac = $_SESSION['row_errores_temp'];
-                echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }else{
-                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion'));
+                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion', 'n_usuarios', 'n_vacunas'));
             }
     
         }else if(isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "confirmar"){
 
             // Cargamos el formulario de confirmación
             $vac = $_SESSION['row_datos_temp']; 
-            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             
         }else if(isset($_POST['aniadir-vac-recomendada']) or (isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "registrar" )){
 
@@ -297,32 +301,32 @@
             if(isset($_SESSION['row_errores_temp'])){
                 $calend = $_SESSION['row_datos_temp'];
                 $erroresCalend = $_SESSION['row_errores_temp'];
-                echo $twig->render('formulario_calendario.twig', compact('calend', 'erroresCalend', 'us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_calendario.twig', compact('calend', 'erroresCalend', 'us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }else{
-                echo $twig->render('formulario_calendario.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_calendario.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
             
         }else if(isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "confirmar"){
 
             // Cargamos el formulario de confirmación
             $calend = $_SESSION['row_datos_temp']; 
-            echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['listado_vac'])){
 
             $vacunas = devolver_lista_vacunas();
-            echo $twig->render('listado_vacunas.twig', compact('rol_user', 'image_user', 'vacunas', 'nombre_user', 'sexo_user'));
+            echo $twig->render('listado_vacunas.twig', compact('rol_user', 'image_user', 'vacunas', 'nombre_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['listado_user'])){
 
             $usuarios = devolver_lista_usuarios();
-            echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             
         }else if(isset($_POST['listado_log'])){
 
             $datos_log = devolver_lista_logs();
             $n_peticiones = count($datos_log);
-            echo $twig->render('logs_sistema.twig', compact('rol_user', 'image_user', 'n_peticiones', 'datos_log' , 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('logs_sistema.twig', compact('rol_user', 'image_user', 'n_peticiones', 'datos_log' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['idEditarVac']) or (isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "editar" )){
             
@@ -334,25 +338,25 @@
                 $_SESSION['vacuna_a_editar'] = devolver_vacuna($_SESSION['acro_antigua']);
                 $vac = $_SESSION['vacuna_a_editar'];
                 $accion = "editar";
-                echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
             }else{
                 // Si el botón no existe, vienes de un fallo
                 $vac = $_SESSION['row_datos_temp'];
                 $erroresVac = $_SESSION['row_errores_temp'];
-                echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
 
         }else if(isset($_POST['idBorrarVac'])){
             $accion = "borrar";
             $vac = devolver_vacuna_por_id($_POST['idBorrarVac']);
 
-            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_vacuna.twig', compact('vac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             
         }else if(isset($_POST['peticiones'])){
             $peticiones = devolver_lista_peticiones();
             $n_peticiones = count($peticiones);
-            echo $twig->render('listado_peticiones.twig', compact( 'peticiones', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('listado_peticiones.twig', compact( 'peticiones', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['idProcesarPeticion'])){
 
@@ -361,7 +365,7 @@
             $row = devolver_usuario($dni_visitante);
             $_SESSION['datos_visitante'] = $row;
 
-            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['cartilla'])){
 
@@ -370,7 +374,7 @@
             $_SESSION['lista_vacunacion'] = $lista_vacunacion;
             $n_peticiones = count($lista_vacunacion);
 
-            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
+            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_POST['idProcesarInfoCompleta'])){
 
@@ -387,12 +391,12 @@
 
             unset($_SESSION['lista_vacunacion']);
 
-            echo $twig->render('informacion_vacunacion.twig', compact('vacuna', 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('informacion_vacunacion.twig', compact('vacuna', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             
         }else if(isset($_SESSION["accionPulsada"]) and $_SESSION["accionPulsada"] == "activar"){
             $peticiones = devolver_lista_peticiones();
             $n_peticiones = count($peticiones);
-            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user', 'sexo_user', 'peticiones', 'n_peticiones'));
+            echo $twig->render('listado_peticiones.twig', compact('nombre_user','rol_user', 'image_user', 'sexo_user', 'peticiones', 'n_peticiones', 'n_usuarios', 'n_vacunas'));
               
         }else if(isset($_POST['idPonerVacuna'])){
 
@@ -427,24 +431,24 @@
 
                 $accion = "registrar";
                 
-                echo $twig->render('formulario_vacunacion.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+                echo $twig->render('formulario_vacunacion.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
             }else{
                 $motivo = "ESTE USUARIO NO TIENE NINGUNA VACUNA PENDIENTE.";
-                echo $twig->render('errores.twig', compact('motivo'));
+                echo $twig->render('errores.twig', compact('motivo', 'n_usuarios', 'n_vacunas'));
             }
 
         }else if(isset($_SESSION['accionPulsadaVacunacion']) and $_SESSION['accionPulsadaVacunacion'] == "confirmar"){
 
             $vacunacion = $_SESSION['row_datos_temp'];
             $accion = "confirmar";
-            echo $twig->render('formulario_vacunacion.twig', compact('vacunacion', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            echo $twig->render('formulario_vacunacion.twig', compact('vacunacion', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
             $calendario = devolver_calendario_full();
-            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user', 'calendario'));
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user', 'calendario', 'n_usuarios', 'n_vacunas'));
         }
 
     }else if(isset($_SESSION['accionPulsada']) and ($_SESSION['accionPulsada'] == "registrar" or $_SESSION['accionPulsada'] == "confirmar")){
@@ -456,15 +460,15 @@
         if(isset($_SESSION['row_errores_temp'])){
             $row = $_SESSION['row_datos_temp'];
             $errores = $_SESSION['row_errores_temp'];
-            echo $twig->render('formulario_usuario.twig', compact('row', 'errores' , 'rol_user', 'accion'));
+            echo $twig->render('formulario_usuario.twig', compact('row', 'errores' , 'rol_user', 'accion', 'n_usuarios', 'n_vacunas'));
         }else{
-            echo $twig->render('formulario_usuario.twig', compact('rol_user', 'accion'));
+            echo $twig->render('formulario_usuario.twig', compact('rol_user', 'accion', 'n_usuarios', 'n_vacunas'));
         }
 
         
     }else{
         $calendario = devolver_calendario_full();
-        echo $twig->render('inicio_visitante.twig', compact('calendario'));
+        echo $twig->render('inicio_visitante.twig', compact('calendario', 'n_usuarios', 'n_vacunas'));
     } 
 
 ?>
