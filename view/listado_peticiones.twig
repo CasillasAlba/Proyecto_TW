@@ -4,11 +4,15 @@
     <div>    
         {% if lista != "False" %}
             {% if n_peticiones > 0 %}
-                <form action="index.php" method="POST">
+                <form action="index.php" method="POST" class"user-list">
                     {% for usuario in peticiones %}
-                        <img height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}"/>
-                        <p>Nombre: {{usuario.Nombre}} {{usuario.Apellido}}</p>
-                        <button class="form-button" name="idProcesarPeticion" value="{{usuario.DNI}}">Procesar</button>
+                        <div class="card user-card">
+                            <img class="card-img-top" height="130px" width="150px" src="data:image;base64,{{usuario.Fotografia}}"/>
+                            <div class="card-body">
+                                <h5 class="card-title">{{usuario.Nombre}} {{usuario.Apellidos}}</h5>
+                                <button class="btn btn-success" name="idProcesarPeticion" value="{{usuario.DNI}}">Procesar</button>
+                          </div>
+                        </div>
                     {% endfor %}
                 </form>
             {% else %}

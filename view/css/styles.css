@@ -116,11 +116,11 @@ button {
 }
 
 .ui-slider .ui-btn-inner {
-  padding: 4px 0 0 0 ;
+  padding: 4px 0 0 0;
 }
 
 .ui-slider-popup {
-  position: absolute ;
+  position: absolute;
   width: 64px;
   height: 64px;
   text-align: center;
@@ -128,4 +128,19 @@ button {
   padding-top: 14px;
   z-index: 100;
   opacity: 0.8;
+}
+
+.user-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user-card {
+  width: 12rem;
+  margin: 0.5em;
+}
+
+.card-body {
+  margin-left: auto;
+  margin-right: auto;
 }
