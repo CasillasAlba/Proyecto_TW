@@ -24,7 +24,7 @@
         <tbody>
             {% for entry in calendario %}
                 <tr>
-                    <td class="fecha-vacuna">{{entry.Nombre}}</td>
+                    <th>{{entry.Nombre}}</th>
                     {% if entry.Meses_ini <= 0 and entry.Meses_fin >= 0 %}
                         {% if entry.Tipo == "S" %}
                             <td class="fecha-vacuna">
