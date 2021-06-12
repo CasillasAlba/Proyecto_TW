@@ -146,7 +146,8 @@
             $image_user = $datos_logueado['Foto'];
             $sexo_user = $datos_logueado['Sexo'];
             
-            echo $twig->render('calendario_logueado.twig', compact('us_user', 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+            $calendario = devolver_calendario_full();
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'calendario'));
         }
         
 
@@ -441,7 +442,8 @@
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
-            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
+            $calendario = devolver_calendario_full();
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user', 'calendario'));
         }
 
     }else if(isset($_SESSION['accionPulsada']) and ($_SESSION['accionPulsada'] == "registrar" or $_SESSION['accionPulsada'] == "confirmar")){

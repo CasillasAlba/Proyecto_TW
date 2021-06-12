@@ -14,13 +14,13 @@ header {
 }
 
 main {
-  flex-basis: 75%;
+  flex-basis: 78%;
   padding: 1em;
 }
 
 aside {
   padding: 1em;
-  flex-basis: 25%;
+  flex-basis: 22%;
 }
 
 .titulo-asides {
@@ -143,4 +143,24 @@ button {
 .card-body {
   margin-left: auto;
   margin-right: auto;
+}
+
+.fecha-vacuna {
+  background-color: mediumseagreen !important;
+  color: white;
+}
+
+.fecha-vacuna-sus {
+  background-color: palegreen !important;
+  color: white;
+}
+
+.calendario td {
+  border: 1px solid black !important;
+}
+
+.calendario th {
+  border: 1px solid black !important;
+  background-color: darkgreen !important;
+  color: white;
 }

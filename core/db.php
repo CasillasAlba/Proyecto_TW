@@ -532,6 +532,31 @@
         return $datos;
     }
 
+    // Función de devuelve el calendario completo
+    function devolver_calendario_full() {
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT vacunas.Acronimo, vacunas.Nombre, calendario.Sexo, calendario.Meses_ini, calendario.Meses_fin, calendario.Tipo, calendario.comentarios FROM vacunas, calendario WHERE calendario.IDVacuna = vacunas.ID");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
     // Función que devuelve la lista de vacunación de un usuario
 
     function devolver_lista_vacunacion($dni){
