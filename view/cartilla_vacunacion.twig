@@ -6,8 +6,12 @@
             {% if n_peticiones > 0 %}
                 <form action="index.php" method="POST">
                     {% for vacuna in lista_vacunacion %}
-                        <p>Nombre: {{vacuna.Acronimo}}</p>
-                        <button class="form-button" name="idProcesarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}">Mostrar información completa</button>
+                        <p>Nombre: {{ vacuna.Nombre }} {{vacuna.Acronimo}}</p>
+                        {% if accion == "ver" %}
+                            <button class="form-button" name="idProcesarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}">Mostrar información completa</button>
+                        {% elseif accion == "editar" %}
+                            <button class="form-button" name="idEditarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}">Editar información</button>
+                        {% endif %}
                     {% endfor %}
                 </form>
             {% else %}

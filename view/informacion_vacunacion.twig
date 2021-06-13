@@ -2,12 +2,28 @@
 
 {% block content %}
     <div class = "informacion_vacunacion">
-        <p>Vacuna: {{vacuna['Nombre']}} , {{vacuna['Acronimo']}}  </p>
+        <p>Vacuna: {{vacuna['Nombre']}} , {{vacuna['Acronimo']}}</p>
         <p>Fecha de vacunación: {{vacuna['Fecha']}}</p>
-        <p>Fabricante: {{vacuna['Fabricante']}}</p>
         <p>Descripcion: {{vacuna['Descripcion']}}</p>
-        {% if vacuna['Comentarios'] != "" %}
-            <p>Comentarios: {{vacuna['Comentarios']}}</p>
+
+        {% if accion == "editar" %}
+            <form action="index.php" method="POST">
+                <label for="fabricante_edit">Fabricante</label>
+                <input type="text" name="fabricante_edit" value="{{vacuna['Fabricante']}}">
+                <label for="coment_edit">Comentarios</label>
+                <textarea name="coment_edit">{{vacuna['Comentarios']}}</textarea>
+
+                <button  class="btn btn-success" name="boton-edit-vacunacion-user" type="submit">Guardar cambios</button>
+                <input type="hidden" value="{{ clave_calendario }}" name="Ccalend">
+                <input type="hidden" value="{{ clave_usuario }}" name="Cuser">
+            </form>
+    
+        {% else %}
+            <p>Fabricante: {{vacuna['Fabricante']}}</p>
+            {% if vacuna['Comentarios'] != "" %}
+                <p>Comentarios: {{vacuna['Comentarios']}}</p>
+            {% endif %}
         {% endif %}
+        
     </div>
 {% endblock %}

@@ -20,15 +20,11 @@
 
     ///////////////////////////////// FUNCIONES DEL PROGRAMA
 
-    /*
-  (C) 2021. Javier Martínez Baena (jbaena@ugr.es)
-  Tecnologías Web. Grado en Ingeniería Informática. Universidad de Granada.
-  Este código tiene un objetivo puramente didáctico por lo que se podría mejorar en múltiples aspectos. Pretende ejemplificar sobre la conexión con BBDD desde el lenguaje PHP para crear páginas web dinámicas usando un modelo básico MVC. Es posible que contenga errores y se distribuye para facilitar el estudio de la asignatura.
-  No se permite el uso de este código sin autorización del autor.
-*/
 
+//////////////////////////////////////////////////////////////////////////////////
 /*
   Funciones para mostrar mensajes de error en la aplicación PHP.
+  Funciones obtenidas de las explicaciones de: Javier Martínez Baena
 */
 
     function _msgErrorR($msg) {
@@ -56,6 +52,9 @@
       else
         return 0;
     }
+
+//////////////////////////////////////////////////////////////////////////////////
+
 
     // Funcion para acceder los assets (css, imagenes...)
     $twig->addFunction(new \Twig\TwigFunction('asset', function ($asset) {
@@ -201,8 +200,7 @@
             $motivo = "DNI O CONTRASEÑA INCORRECTA :(";
             $_SESSION['exito'] = False;
             $exito = $_SESSION['exito'];
-            
-            echo $twig->render('inicio_visitante.twig', compact('exito' ,'n_usuarios', 'n_vacunas'));
+            echo $twig->render('errores.twig', compact('exito' ,'motivo','n_usuarios', 'n_vacunas'));
 
 
         }else if($datos_logueado == "Inactivo"){
@@ -457,8 +455,9 @@
             $lista_vacunacion = devolver_lista_vacunacion($us_user);
             $_SESSION['lista_vacunacion'] = $lista_vacunacion;
             $n_peticiones = count($lista_vacunacion);
+            $accion = "ver";
 
-            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas', 'accion'));
 
         }else if(isset($_POST['vacunas_pendientes'])){
 
@@ -471,12 +470,20 @@
             echo $twig->render('listado_pendientes.twig', compact('us_user', 'lista_pendientes', 'n_pendientes', 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
             
 
-        }else if(isset($_POST['idProcesarInfoCompleta'])){
+        }else if(isset($_POST['idProcesarInfoCompleta']) or isset($_POST['idEditarInfoCompleta'])){
 
-            $claves = explode("-", $_POST['idProcesarInfoCompleta']);
+            if(isset($_POST['idProcesarInfoCompleta'])){
+                $claves = explode("-", $_POST['idProcesarInfoCompleta']);   
+                $accion = "ver";
+            }else{
+                $claves = explode("-", $_POST['idEditarInfoCompleta']);   
+                $accion = "editar";
+            }
+
             $clave_usuario = $claves[0];
             $clave_calendario = $claves[1];
             $vacuna = [];
+            
 
             foreach($_SESSION['lista_vacunacion'] as $datos_vacuna){
                 if($datos_vacuna['IDUsuario'] == $clave_usuario and $datos_vacuna['IDCalendario'] == $clave_calendario){
@@ -486,8 +493,16 @@
 
             unset($_SESSION['lista_vacunacion']);
 
-            echo $twig->render('informacion_vacunacion.twig', compact('vacuna', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+            echo $twig->render('informacion_vacunacion.twig', compact('vacuna', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas', 'accion', 'clave_usuario', 'clave_calendario'));
             
+        }else if(isset($_POST['boton-edit-vacunacion-user'])){
+
+            modificar_vacunacion($_POST['Cuser'], $_POST['Ccalend'], $_POST['fabricante_edit'], $_POST['coment_edit']);
+            $calendario = devolver_calendario_full();
+
+            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user' ,'calendario', 'n_usuarios', 'n_vacunas'));
+
+
         }else if(isset($_SESSION["accionPulsada"]) and $_SESSION["accionPulsada"] == "activar"){
             $peticiones = devolver_lista_peticiones();
             $n_peticiones = count($peticiones);
@@ -532,9 +547,20 @@
             $lista_vacunacion = devolver_lista_vacunacion($_POST['idVerVacunacion']);
             $_SESSION['lista_vacunacion'] = $lista_vacunacion;
             $n_peticiones = count($lista_vacunacion);
+            $accion = "ver";
 
-            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas', 'accion'));
 
+        }else if(isset($_POST['idEditarVacunacion'])){
+            $lista_vacunacion = devolver_lista_vacunacion($_POST['idEditarVacunacion']);
+            $_SESSION['lista_vacunacion'] = $lista_vacunacion;
+            $n_peticiones = count($lista_vacunacion);
+
+            $accion = "editar";
+
+            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas', 'accion'));
+           
+            
         }else if(isset($_SESSION['accionPulsadaVacunacion']) and $_SESSION['accionPulsadaVacunacion'] == "confirmar"){
 
             $vacunacion = $_SESSION['row_datos_temp'];
