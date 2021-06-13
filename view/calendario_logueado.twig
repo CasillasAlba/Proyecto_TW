@@ -39,7 +39,7 @@
                             {% endif %}
                         
                         </th>
-                        {% if entry.Meses_ini <= 0 and entry.Meses_fin >= 0 %}
+                        {% if entry.Meses_ini <= 0 and entry.Meses_fin >= 0 or (entry.Meses_ini == 0 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -56,7 +56,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 2 and entry.Meses_fin >= 2 %}
+                        {% if entry.Meses_ini <= 2 and entry.Meses_fin >= 2 or (entry.Meses_ini == 2 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -73,7 +73,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 4 and entry.Meses_fin >= 4 %}
+                        {% if entry.Meses_ini <= 4 and entry.Meses_fin >= 4 or (entry.Meses_ini == 4 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -90,7 +90,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 11 and entry.Meses_fin >= 11 %}
+                        {% if entry.Meses_ini <= 11 and entry.Meses_fin >= 11 or (entry.Meses_ini == 11 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -107,7 +107,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 12 and entry.Meses_fin >= 12 %}
+                        {% if entry.Meses_ini <= 12 and entry.Meses_fin >= 12 or (entry.Meses_ini == 12 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -124,7 +124,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 15 and entry.Meses_fin >= 15 %}
+                        {% if entry.Meses_ini <= 15 and entry.Meses_fin >= 15 or (entry.Meses_ini == 15 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -141,7 +141,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 36 and entry.Meses_fin >= 36 %}
+                        {% if entry.Meses_ini <= 36 and entry.Meses_fin >= 36 or (entry.Meses_ini == 36 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -158,7 +158,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 72 and entry.Meses_fin >= 72 %}
+                        {% if entry.Meses_ini <= 72 and entry.Meses_fin >= 72 or (entry.Meses_ini == 72 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -175,7 +175,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 144 and entry.Meses_fin >= 144 %}
+                        {% if entry.Meses_ini <= 144 and entry.Meses_fin >= 144  or (entry.Meses_ini == 144 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -192,7 +192,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 168 and entry.Meses_fin >= 168 %}
+                        {% if entry.Meses_ini <= 168 and entry.Meses_fin >= 168 or (entry.Meses_ini == 168 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -209,7 +209,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 216 and entry.Meses_fin >= 216 %}
+                        {% if entry.Meses_ini <= 216 and entry.Meses_fin >= 216 or (entry.Meses_ini == 216 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -226,7 +226,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 600 and entry.Meses_fin >= 600 %}
+                        {% if entry.Meses_ini <= 600 and entry.Meses_fin >= 600 or (entry.Meses_ini == 600 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -243,7 +243,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_ini <= 780 and entry.Meses_fin >= 780 %}
+                        {% if entry.Meses_ini <= 780 and entry.Meses_fin >= 780  or (entry.Meses_ini == 780 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
@@ -260,7 +260,7 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if entry.Meses_fin > 780 %}
+                        {% if entry.Meses_fin > 780 or (entry.Meses_ini == 780 and entry.Meses_fin == 0) %}
                             {% if entry.Tipo == "S" %}
                                 <td class="fecha-vacuna">
                                     {% if entry.Sexo == "Masculino" %}
