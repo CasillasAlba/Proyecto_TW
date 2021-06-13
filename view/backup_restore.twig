@@ -1,0 +1,10 @@
+{% extends 'inicio_logueado.twig' %}
+{% block content %}
+    <form action="index.php" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="fichero_restauracion">Introduce la copia de seguridad:</label>
+            <input type="file" name="restore_file" class="form-control" id="fichero_restauracion"/>
+        </div>
+        <button type="submit" class="btn btn-success" name="restore_from_file">Restaurar</button>
+    </form>
+{% endblock %}
