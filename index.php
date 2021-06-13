@@ -4,6 +4,7 @@
     require_once('./core/db_credenciales.php');
     require_once('./controller/login.php');
     require_once('./core/db.php');
+    require_once('./controller/procesarFiltrado.php');
 
     session_start();
 
@@ -233,7 +234,9 @@
                 $row = $_SESSION['user_a_editar'];
                 $_SESSION['foto_antigua'] = $row['Foto'];
                 $accion = "editar";
+                
                 echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user' , 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+            
             }else if(isset($_POST['editar-me'])){ // TE EDITAS A TI MISMO
                 $accion = "editar";
                 // Cargamos los valores del propio usuario para cargar SUS datos
@@ -454,6 +457,172 @@
             $accion = "confirmar";
             echo $twig->render('formulario_vacunacion.twig', compact('vacunacion', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
+        }else if(isset($_POST['nMeses'])){
+
+            $fecha_nac = $_SESSION['row_datos']['FechaNac'];
+    
+            $meses = $_POST['n_meses_vacunas'];
+    
+            $lista_pendientes = vacunas_pendientes_usuario_n_meses($us_user, $fecha_nac, $sexo_user, $meses);
+    
+            $n_pendientes = count($lista_pendientes);
+            
+            echo $twig->render('listado_pendientes.twig', compact('us_user', 'lista_pendientes', 'n_pendientes', 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
+            
+        }else if(isset($_POST['nVacunas'])){
+            
+            $fecha_nac = $_SESSION['row_datos']['FechaNac'];
+    
+            $n_sig = $_POST['n_vacunas_siguientes'];
+    
+            $lista_pendientes = vacunas_pendientes_usuario_n($us_user, $fecha_nac, $sexo_user, $n_sig);
+    
+            $n_pendientes = count($lista_pendientes);
+            
+            echo $twig->render('listado_pendientes.twig', compact('us_user', 'lista_pendientes', 'n_pendientes', 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
+            
+        }else if(isset($_POST['vacunasFuturas'])){
+         
+            $fecha_nac = $_SESSION['row_datos']['FechaNac'];
+
+            $edad_m = calcular_edad($fecha_nac);
+
+            $lista_pendientes = devolver_vacunacion_futura($sexo_user, $edad_m, $us_user);
+
+            $n_pendientes = count($lista_pendientes);
+            
+            echo $twig->render('listado_pendientes.twig', compact('us_user', 'lista_pendientes', 'n_pendientes', 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
+            
+        }else if(isset($_POST['vacunasPendientes'])){
+
+            $fecha_nac = $_SESSION['row_datos']['FechaNac'];
+
+            $edad_m = calcular_edad($fecha_nac);
+
+            $lista_pendientes = devolver_vacunacion_pendiente($sexo_user, $edad_m, $us_user);
+
+            $n_pendientes = count($lista_pendientes);
+            
+            echo $twig->render('listado_pendientes.twig', compact('us_user', 'lista_pendientes', 'n_pendientes', 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
+
+        }else if(isset($_POST['idFiltrado'])){
+
+            $usuarios = devolver_lista_usuarios();
+
+            if(isset($_POST['search']) and ($_POST['search'] != "")){ // SEARCH
+            
+                $usuarios = filtrar_usuario_by_search($_POST['search'], $usuarios);
+    
+                // Si existe ACTIVO checked pero no INACTIVO
+                if( isset($_POST['activo']) and !(isset($_POST['inactivo'])) ) {
+                        
+                    $usuarios = filtrar_usuario_by_activo($usuarios);
+    
+                }else if( !(isset($_POST['activo'])) and isset($_POST['inactivo']) ) {
+                    
+                    $usuarios = filtrar_usuario_by_inactivo($usuarios);
+                
+                }
+    
+                // QUE HAYA O NO VACUNAS PENDIENTES
+                if(isset($_POST['pendiente'])){
+    
+                    for($i = 0; $i < count($usuarios); $i++){
+
+                        $l = $usuarios[$i];
+    
+                        $mes = $l['FechaNac'];
+    
+                        $edad_m = calcular_edad($mes);
+    
+                        $lista_vacunacion_pendientes = devolver_vacunacion_pendiente($l['Sexo'], $edad_m, $l['DNI']);
+    
+                        if(count($lista_vacunacion_pendientes) == 0){
+                            
+                            unset($usuarios[$i]);
+                        }
+    
+                    }
+                       
+                }             
+            
+            }else if( isset($_POST['activo']) and !(isset($_POST['inactivo'])) ) { // ACTIVO pero NO INACTIVO
+
+                $usuarios = filtrar_usuario_by_activo($usuarios);
+
+                // QUE HAYA O NO VACUNAS PENDIENTES
+                if(isset($_POST['pendiente'])){
+                    
+                    for($i = 0; $i < count($usuarios); $i++){
+
+                        $l = $usuarios[$i];
+    
+                        $mes = $l['FechaNac'];
+    
+                        $edad_m = calcular_edad($mes);
+    
+                        $lista_vacunacion_pendientes = devolver_vacunacion_pendiente($l['Sexo'], $edad_m, $l['DNI']);
+    
+                        if(count($lista_vacunacion_pendientes) == 0){
+                            
+                            unset($usuarios[$i]);
+                        }
+    
+                    }
+                    
+                    
+                }
+
+            }else if( !(isset($_POST['activo'])) and isset($_POST['inactivo']) ) { // NO ACTIVO pero ACTIVO
+
+                $usuarios = filtrar_usuario_by_inactivo($usuarios);
+
+                // QUE HAYA O NO VACUNAS PENDIENTES
+                if(isset($_POST['pendiente'])){
+                    
+                    for($i = 0; $i < count($usuarios); $i++){
+
+                        $l = $usuarios[$i];
+    
+                        $mes = $l['FechaNac'];
+    
+                        $edad_m = calcular_edad($mes);
+    
+                        $lista_vacunacion_pendientes = devolver_vacunacion_pendiente($l['Sexo'], $edad_m, $l['DNI']);
+    
+                        if(count($lista_vacunacion_pendientes) == 0){
+                            
+                            unset($usuarios[$i]);
+                        }
+    
+                    }
+                }
+            
+            // FIN DE LOS CHECKBOX
+            }else if(isset($_POST['pendiente'])){ // QUE HAYA O NO VACUNAS PENDIENTES
+    
+                for($i = 0; $i < count($usuarios); $i++){
+
+                    $l = $usuarios[$i];
+
+                    $mes = $l['FechaNac'];
+
+                    $edad_m = calcular_edad($mes);
+
+                    $lista_vacunacion_pendientes = devolver_vacunacion_pendiente($l['Sexo'], $edad_m, $l['DNI']);
+
+                    if(count($lista_vacunacion_pendientes) == 0){
+                        
+                        unset($usuarios[$i]);
+                    }
+
+                }
+                               
+                    
+            }
+
+            echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+        
         }else{
             $calendario = devolver_calendario_full();
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
@@ -484,7 +653,7 @@
 
         
     }else{
-
+        
         $calendario = devolver_calendario_full();
 
         if(isset($_SESSION['exito'])){

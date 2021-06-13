@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="filtro_usuarios">
-        <form action="prueba.php" method="POST">
+        <form action="index.php" method="POST">
             <input type="text" placeholder="Buscar..." name="search">
             <!-- Falta de ordenacion por rango de edad -->-->
             <input type="checkbox" id="activo" name="activo" value="activo">
@@ -13,7 +13,9 @@
             <label for="Activo">Vacunas Pendientes</label>
             <label for="VacunaXSemanasInput" class="form-label">Vacunarse en:</label>
             <input type="number" id="VacunaXSemanasInput" placeholder="Semanas" name="vacuna_x_semanas">
-            <button name="idFiltrado">Filtrar</button>
+            <div>
+                <button name="idFiltrado">Filtrar</button>
+            </div>
         </form>
         
     </div>

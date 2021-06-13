@@ -277,6 +277,7 @@
             while($elem = $result->fetch_assoc()){
                 array_push($datos, $elem);
             }
+            
         }else{
             $datos = false; // Error en la consulta
         }
@@ -586,17 +587,17 @@
         return $datos;
     }
 
-    function devolver_vacunacion_pendiente_n_meses($sex, $meses, $id_us){
+    function devolver_vacunacion_futura($sex, $meses, $id_us){
         global $db;
         $datos = [];
 
-        $prep = $db->prepare("SELECT vacunas.Acronimo, calendario.Meses_ini FROM vacunas, calendario, vacunacion
+        $prep = $db->prepare("SELECT vacunas.Acronimo, vacunas.Nombre, calendario.Meses_ini FROM vacunas, calendario
                 WHERE calendario.IDVacuna = vacunas.ID 
                 AND (calendario.Sexo = ? OR calendario.Sexo = 'Ambos')
                 AND (calendario.Meses_ini > ?)
-                AND (calendario.ID = vacunacion.IDCalendario)
-                AND (calendario.ID NOT IN (SELECT vacunacion.IDCalendario FROM vacunacion
-                             WHERE vacunacion.IDUsuario = ?))
+                AND (calendario.ID NOT IN (SELECT vacunacion.IDCalendario FROM vacunacion, calendario
+                             WHERE vacunacion.IDUsuario = ? ))
+                             ORDER BY calendario.Meses_ini ASC
                 
                 ");
 
@@ -619,6 +620,7 @@
 
         return $datos;
     }
+    
 
     // Función que devuelve la lista de vacunación de un usuario
 

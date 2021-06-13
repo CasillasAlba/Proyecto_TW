@@ -1,8 +1,6 @@
 <?php
-    require_once('./core/db.php');
-    
-    session_start();
 
+    // FUNCIONES DE FILTRADO
     function filtrar_usuario_by_search($busqueda, $lista_user){
         $user_temp = [];
 
@@ -209,9 +207,9 @@
 
         $edad_m = calcular_edad($nac);
        
-        $vacunas_n_pendientes = devolver_vacunacion_pendiente_n_meses($sex, $edad_m, $dni);
+        $vacunas_pendientes = devolver_vacunacion_futura($sex, $edad_m, $dni);
 
-        foreach($vacunas_n_pendientes as $vac){
+        foreach($vacunas_pendientes as $vac){
 
             $diferencia = $vac['Meses_ini'] - $edad_m;
 
@@ -225,115 +223,28 @@
 
     }
 
+    function vacunas_pendientes_usuario_n($dni, $nac, $sex, $n){
 
-    $users = [];
+        $vacuna_n_siguientes = [];
+        $guardadas = 0;
 
-    if( isset($_SESSION['lista_usa']) ){
+        $edad_m = calcular_edad($nac);
+       
+        $vacunas_pendientes = devolver_vacunacion_futura($sex, $edad_m, $dni);
 
-        if( count($_SESSION['lista_us'] > 0) ){
+        for($v = 0; $v < $n and $v < count($vacunas_pendientes); $v++){
+
+            $vacuna = $vacunas_pendientes[$v];
+
+            array_push($vacuna_n_siguientes, $vacuna);
             
-            $users = $_SESSION['lista_us'];
-      
-            if(isset($_POST['search'])) { // Si existe búsqueda, las demás opciones de filtrado se hacen sobre la lista de usuarios ya obtenida
-                
-                $filtrado_name = filtrar_usuario_by_search($_POST['search'], $users);
 
-                // Si existe ACTIVO checked pero no INACTIVO
-                if( isset($_POST['activo']) and !(isset($_POST['inactivo'])) ) {
-                    
-                    $us_temp_estado = filtrar_usuario_by_activo($filtrado_name);
-
-                }else if( !(isset($_POST['activo'])) and isset($_POST['inactivo']) ) {
-                    
-                    $us_temp_estado = filtrar_usuario_by_inactivo($filtrado_name);
-
-                
-                }// No se hace una búsqueda de ACTIVO e INACTIVO porque no se modificaria la lista, ya que los usuarios solo pueden estar ACTIVOS o INACTIVOS
-                
-
-                // QUE HAYA O NO VACUNAS PENDIENTES
-                if(isset($_POST['pendiente'])){
-                    
-                    
-                }else{
-
-                }
-
-                // VACUNAS EN LAS PROXIMAS SEMANAS
-                if(isset($_POST['vacuna_x_semanas'])){
-                    
-                    
-                }
-
-            // FIN DEL SEARCHBOX
-            }else if( isset($_POST['activo']) and !(isset($_POST['inactivo'])) ) {
-
-                $us_temp_estado = filtrar_usuario_by_activo($users);
-
-                // QUE HAYA O NO VACUNAS PENDIENTES
-                if(isset($_POST['pendiente'])){
-                    
-                    
-                }else{
-                    
-                }
-
-                // VACUNAS EN LAS PROXIMAS SEMANAS
-                if(isset($_POST['vacuna_x_semanas'])){
-                    
-                    
-                }
-
-            }else if( !(isset($_POST['activo'])) and isset($_POST['inactivo']) ) {
-
-                $us_temp_estado = filtrar_usuario_by_inactivo($users);
-
-                // QUE HAYA O NO VACUNAS PENDIENTES
-                if(isset($_POST['pendiente'])){
-                    
-                    
-                }
-                
-
-                // VACUNAS EN LAS PROXIMAS SEMANAS
-                if(isset($_POST['vacuna_x_semanas'])){
-                    
-                    
-                }
-
-            
-            // FIN DE LOS CHECKBOX
-            }else if(isset($_POST['pendiente'])){
-                    
-                    
-                    
-            }else if( isset($_POST['vacuna_x_semanas']) ){ // YA SOLO QUEDARÍA VACUNAS POR SEMANAS
-
-
-            }
-        
-        
-        } // FIN DEL COUNT()
-
-    }else{
-        $users = $_SESSION['lista_us'];
-
-
-        echo "Hay " . count(usuarios_vacunas_pendientes($users)) . " con vacunas pendientes";
-        
-
-    } // FIN DEL ISSET
-    
-
-
-    
-
-    if(isset($_POST['vacuna_x_semanas'])){
-        
-        if($_POST['vacuna_x_semanas'] != ""){
-            echo "VACUNA X SEMANA EXISTE | ";
         }
+
+        return $vacuna_n_siguientes;
+
     }
 
 
 ?>
+

@@ -1,28 +1,49 @@
 {% extends 'inicio_logueado.twig' %}
 
 {% block content %}
-    {% if lista_pendientes != "False" %}
-        {% if n_pendientes > 0 %}
-            <table class="table">
-                <thead class="table-success">
-                    <tr>
-                        <th scope="col">Acrónimo</th>
-                        <th scope="col">Nombre</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <form action="index.php" method="POST">
-                        {% for vacuna in lista_pendientes %}
-                            <tr>
-                                <td>{{vacuna.Acronimo}}</td>
-                                <td>{{vacuna.Nombre}}</td>
-                            </tr>
-                        {% endfor %}
-                    </form>
-                </tbody>
-            </table>
-        {% else %}
-            <h2>No hay vacunas pendientes.</h2>
-        {% endif %}
+    {% if n_pendientes > 0 %}
+
+        <div class="filtro_pendientes">
+            <form action="index.php" method="POST">
+
+                <input type="number" id="nMesesVacunas" placeholder="Vac. Futuras (Meses)" name="n_meses_vacunas">
+                <button name="nMeses">Aceptar</button>
+                
+                <input type="number" id="nVacunasSiguientes" placeholder="Vac. Futuras (Número)" name="n_vacunas_siguientes">
+                <button name="nVacunas">Aceptar</button>
+
+            </form>
+            
+        </div>
+
+        <div class="filtro_pendientes">
+            <form action="index.php" method="POST">
+                
+                <button name="vacunasFuturas">Vacunas Futuras</button>
+
+                <button name="vacunasPendientes">Vacunas Pendientes</button>
+            </form>
+        </div>
+
+        <table class="table">
+            <thead class="table-success">
+                <tr>
+                    <th scope="col">Acrónimo</th>
+                    <th scope="col">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="index.php" method="POST">
+                    {% for vacuna in lista_pendientes %}
+                        <tr>
+                            <td>{{vacuna.Acronimo}}</td>
+                            <td>{{vacuna.Nombre}}</td>
+                        </tr>
+                    {% endfor %}
+                </form>
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No hay vacunas pendientes.</h2>
     {% endif %}
 {% endblock %}
