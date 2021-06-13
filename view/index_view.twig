@@ -15,6 +15,10 @@
         crossorigin="anonymous"></script>
     <!-- Otros estilos y JavaScript -->
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <title>VACUNACIÓN ANDALUCÍA</title>
 </head>
@@ -118,8 +122,30 @@
         <span>© 2021 Copyright: Alba Casillas Rodríguez & Víctor Cabrita Gómez</span>
         <a class="text-reset fw-bold" href="#">Documentación del proyecto</a>
     </footer>
- 
+
+
 
 </body>
+
+<script> 
+    $(function() {
+        $( "#from" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onClose: function( selectedDate ) {
+            $( "#to" ).datepicker( "option", "minDate", selectedDate );
+        }
+        });
+        $( "#to" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onClose: function( selectedDate ) {
+            $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+        }
+        });
+    });
+</script>
 
 </html>

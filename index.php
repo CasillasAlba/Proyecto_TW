@@ -362,7 +362,7 @@
                 $erroresVac = $_SESSION['row_errores_temp'];
                 echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }else{
-                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion', 'n_usuarios', 'n_vacunas'));
+                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
     
         }else if(isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "confirmar"){
@@ -654,7 +654,22 @@
     
                     }
                        
-                }             
+                } 
+                
+                if(isset($_POST['from']) and isset($_POST['to'])){
+                    if($_POST['from'] != "" and $_POST['to'] != ""){
+                        $fecha_ini = new DateTime(date($_POST['from']));
+                        $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+    
+                        $fecha_fin = new DateTime(date($_POST['to']));
+                        $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+    
+                        $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+                    } 
+                }
+
+                
+                
             
             }else if( isset($_POST['activo']) and !(isset($_POST['inactivo'])) ) { // ACTIVO pero NO INACTIVO
 
@@ -680,6 +695,18 @@
     
                     }
                     
+                    if(isset($_POST['from']) and isset($_POST['to'])){
+                        if($_POST['from'] != "" and $_POST['to'] != ""){
+                            $fecha_ini = new DateTime(date($_POST['from']));
+                            $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+        
+                            $fecha_fin = new DateTime(date($_POST['to']));
+                            $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+        
+                            $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+                        }
+                        
+                    }
                     
                 }
 
@@ -706,6 +733,19 @@
                         }
     
                     }
+
+                    if(isset($_POST['from']) and isset($_POST['to'])){
+                        if($_POST['from'] != "" and $_POST['to'] != ""){
+                            $fecha_ini = new DateTime(date($_POST['from']));
+                            $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+        
+                            $fecha_fin = new DateTime(date($_POST['to']));
+                            $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+        
+                            $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+                        }
+                        
+                    }
                 }
             
             // FIN DE LOS CHECKBOX
@@ -727,6 +767,30 @@
                     }
 
                 }  
+
+                if(isset($_POST['from']) and isset($_POST['to'])){
+                    if($_POST['from'] != "" and $_POST['to'] != ""){
+                        $fecha_ini = new DateTime(date($_POST['from']));
+                        $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+    
+                        $fecha_fin = new DateTime(date($_POST['to']));
+                        $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+    
+                        $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+                    }
+                    
+                }
+            }else if(isset($_POST['from']) and isset($_POST['to'])){
+                if($_POST['from'] != "" and $_POST['to'] != ""){
+                    $fecha_ini = new DateTime(date($_POST['from']));
+                    $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+
+                    $fecha_fin = new DateTime(date($_POST['to']));
+                    $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+
+                    $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+                }
+                
             }
 
             echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
