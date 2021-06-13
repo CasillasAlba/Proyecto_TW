@@ -56,7 +56,7 @@
                 $fecha_actual = (new DateTime(date("Y-m-d")))->format("Y-m-d");
 
                 if($_SESSION["accionBD"] == "registrar"){
-                    insertar_vacunacion($_SESSION['row_datos_temp'], $_SESSION['datos_paciente']['DNI'], $id_calendario, $fecha_actual);
+                    $_SESSION['exito'] = insertar_vacunacion($_SESSION['row_datos_temp'], $_SESSION['datos_paciente']['DNI'], $id_calendario, $fecha_actual);
                 }
 
                 $datos_log = array(

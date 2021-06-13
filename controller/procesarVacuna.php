@@ -53,7 +53,7 @@
             if(isset($_SESSION["accionBD"])){
 
                 if($_SESSION["accionBD"] == "registrar"){
-                    insertar_vacuna($_SESSION['row_datos_temp']);
+                    $_SESSION['exito'] = insertar_vacuna($_SESSION['row_datos_temp']);
 
                     $datos_log = array(
                         'Tipo' => "tipo_registar_vac",
@@ -65,7 +65,7 @@
 
                 }else if($_SESSION["accionBD"] == "editar"){
 
-                    modificar_vacuna($_SESSION['row_datos_temp']);
+                    $_SESSION['exito'] = modificar_vacuna($_SESSION['row_datos_temp']);
 
                     $datos_log = array(
                         'Tipo' => "tipo_modif_vac",
@@ -97,7 +97,7 @@
         break;
 
         case "borrar":
-            eliminar_vacuna($_SESSION['id_vac_temp']);
+            $_SESSION['exito'] = eliminar_vacuna($_SESSION['id_vac_temp']);
 
             $datos_log = array(
                 'Tipo' => "tipo_eliminar_vac",

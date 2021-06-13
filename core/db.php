@@ -78,6 +78,7 @@
     // Realizamos una CONSULTA PREPARADA para insertar usuarios
     function insertar_usuario($datos){
         global $db;
+        $exito = false;
 
         $prep = $db->prepare("INSERT INTO usuarios(DNI, Nombre, Apellidos, Telefono, Email, FechaNac, Sexo, Fotografia, Clave, Estado, Rol)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -98,15 +99,21 @@
         $rol = $datos['Rol'];
 
         $prep->send_long_data(7, $datos['Foto']);
-        $prep->execute();
+
+        if($prep->execute()){
+            $exito = true;
+        }
 
         // Cerramos la consulta preparada
         $prep->close();
+
+        return $exito;
     }
 
     // Realizamos una CONSULTA PREPARADA para insertar vacunas
     function insertar_vacuna($datos){
         global $db;
+        $exito = false;
 
         $prep = $db->prepare("INSERT INTO vacunas(Acronimo, Nombre, Descripcion) VALUES (?, ?, ?)");
 
@@ -117,10 +124,14 @@
         $nom = $datos['NombreVac'];
         $desc = $datos['DescripVac'];
 
-        $prep->execute();
+        if($prep->execute()){
+            $exito = true;
+        }
 
         // Cerramos la consulta preparada
         $prep->close();
+
+        return $exito;
 
     }
 
@@ -128,6 +139,7 @@
     // Realizamos una CONSULTA PREPARADA para insertar un calendario de vacunacion
     function insertar_calendario($datos){
         global $db;
+        $exito = false;
 
         // En el sistema trabajamos con el acrónimo por facilidad
         // pero para insertar debemos recoger el ID de la vacuna (PRIMARY KEY)
@@ -147,15 +159,20 @@
         $tipo = $datos['Tipo'];
         $desc = $datos['DescripCalend'];
 
-        $prep->execute();
+        if($prep->execute()){
+            $exito = true;
+        }
         
         // Cerramos la consulta preparada
         $prep->close();
+
+        return $exito;
     }
 
     // Realizamos una CONSULTA PREPARADA para insertar datos de tipo Vacunacion
     function insertar_vacunacion($datos, $dni_user, $id_calend, $fecha_actual){
         global $db;
+        $exito = false;
 
         $prep = $db->prepare("INSERT INTO vacunacion(IDUsuario, IDCalendario, Fecha, Fabricante, Comentarios)
                 VALUES (?, ?, ?, ?, ?)");
@@ -169,10 +186,14 @@
         $fabric = $datos['Fabricante'];
         $desc = $datos['DescripVacunacion'];
 
-        $prep->execute();
+        if($prep->execute()){
+            $exito = true;
+        }
         
         // Cerramos la consulta preparada
         $prep->close();
+
+        return $exito;
     }
 
     // Realizamos una CONSULTA PREPARADA para insertar datos de tipo Log
@@ -321,7 +342,6 @@
         return $existe;
     }
 
-
     function devolver_vacuna($id){
         global $db;
 
@@ -464,7 +484,7 @@
         return $existe;
     }
 
-    function devolver_calendario($sex, $meses, $id_us){
+    function devolver_vacunacion_disponible($sex, $meses, $id_us){
         global $db;
         $datos = [];
 
@@ -522,6 +542,75 @@
                     array_push($datos, $t);
                 }
             }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
+
+    function devolver_vacunacion_pendiente($sex, $meses, $id_us){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT vacunas.Acronimo, vacunas.Nombre FROM vacunas, calendario
+                WHERE calendario.IDVacuna = vacunas.ID 
+                AND (calendario.Sexo = ? OR calendario.Sexo = 'Ambos')
+                AND (calendario.Meses_fin < ?)
+                AND (calendario.ID NOT IN (SELECT vacunacion.IDCalendario FROM vacunacion
+                             WHERE vacunacion.IDUsuario = ?))
+                ");
+
+        $prep->bind_param('sis', $sex, $meses, $id_us);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+            
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
+    function devolver_vacunacion_pendiente_n_meses($sex, $meses, $id_us){
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT vacunas.Acronimo, calendario.Meses_ini FROM vacunas, calendario, vacunacion
+                WHERE calendario.IDVacuna = vacunas.ID 
+                AND (calendario.Sexo = ? OR calendario.Sexo = 'Ambos')
+                AND (calendario.Meses_ini > ?)
+                AND (calendario.ID = vacunacion.IDCalendario)
+                AND (calendario.ID NOT IN (SELECT vacunacion.IDCalendario FROM vacunacion
+                             WHERE vacunacion.IDUsuario = ?))
+                
+                ");
+
+        $prep->bind_param('sis', $sex, $meses, $id_us);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+            
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+
         }else{
             $datos = false; // Error en la consulta
         }
@@ -620,15 +709,15 @@
         $prep->send_long_data(6, $datos['Foto']);
         
         if($prep->execute()){
-            $resultado_ejecucion = true; // El Update se ha reaLizado correctamente
+            $exito = true; // El Update se ha reaLizado correctamente
         }else{
-            $resultado_ejecucion = false;
+            $exito = false;
         }
 
         // Cerramos la consulta preparada
         $prep->close();
 
-        return $resultado_ejecucion;
+        return $exito;
     }
 
     function modificar_vacuna($datos){
@@ -647,9 +736,9 @@
         $prep->bind_param('ssss', $acro, $nom, $desc, $acro_cond);
      
         if($prep->execute()){
-            $resultado_ejecucion = true; // El Update se ha reaLizado correctamente
+            $exito = true; // El Update se ha reaLizado correctamente
         }else{
-            $resultado_ejecucion = false;
+            $exito = false;
         }
 
         // Cerramos la consulta preparada
@@ -703,15 +792,15 @@ function eliminar_usuario($dni){
     $prep->execute();
 
     if($prep->affected_rows == 1){
-        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+        $exito = true; // El Delete se ha reaLizado correctamente
     }else{
-        $resultado_ejecucion = false;
+        $exito = false;
     }
     
     // Cerramos la consulta preparada
     $prep->close();
 
-    return $resultado_ejecucion;
+    return $exito;
 }
 
 
@@ -770,15 +859,15 @@ function eliminar_vacuna($vac){
 
 
     if($prep->affected_rows == 1){
-        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+        $exito = true; // El Delete se ha reaLizado correctamente
     }else{
-        $resultado_ejecucion = false;
+        $exito = false;
     }
     
     // Cerramos la consulta preparada
     $prep->close();
 
-    return $resultado_ejecucion;
+    return $exito;
 }
 
 
@@ -836,25 +925,18 @@ function eliminar_log($id){
     // Calcular la edad a partir de la fecha de nacimiento de un usuario
     function calcular_edad($fecha){
         $nacimiento = new DateTime($fecha);
+
         $ahora = new DateTime(date("Y-m-d"));
 
-        $diferencia = $ahora->diff($nacimiento);
+        $edad = date_diff($ahora, $nacimiento);
 
-        $edad = $diferencia->format("%y");
-
-        $edad_user = array(
-            'mes' => false,
-            'valor' => $edad
-        );
-
-        // Si la persona tiene menos de un año, devolvemos los meses de vida
-        if($edad == 0){
-            $edad = $diferencia->format("%m");
-
-            $edad_user['mes'] = true;
-            $edad_user['valor'] = $edad;
-        }
-
+        $edad_user = ($edad->format('%Y') * 12);
+        
+        $mes_nac = intval($nacimiento->format("m"));
+        $mes_actual = intval($ahora->format("m"));
+                
+        $edad_user = $edad_user + ( (12 - $mes_nac) + ($mes_actual - 1) );
+        
         return $edad_user;
     }
 

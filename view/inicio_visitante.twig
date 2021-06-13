@@ -1,6 +1,11 @@
 {% extends 'index_view.twig' %}
 
 {% block content %}
+    {% if exito is defined %}
+        {% if not exito %}
+            <script type="text/javascript" src="{{asset('js/popup.js')}}"></script>
+        {% endif %}
+    {% endif %}
     <div class="calendario">
         <!-- Aqui dentro va el calendario-->
         <h1>HOLA</h1>

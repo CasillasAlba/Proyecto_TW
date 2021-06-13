@@ -90,7 +90,8 @@
                 if($_SESSION["accionBD"] == "registrar"){
 
                     $_SESSION['row_datos_temp']['Clave'] = cifrar_claves($_SESSION['row_datos_temp']['Clave']);
-                    insertar_usuario($_SESSION['row_datos_temp']);
+
+                    $_SESSION['exito'] = insertar_usuario($_SESSION['row_datos_temp']);
 
                     $datos_log = array(
                         'Tipo' => "tipo_registro_user",
@@ -112,7 +113,7 @@
                     }
                     
 
-                    modificar_usuario($_SESSION['row_datos_temp']);
+                    $_SESSION['exito'] = modificar_usuario($_SESSION['row_datos_temp']);
 
                     $datos_log = array(
                         'Tipo' => "tipo_log_modif_user",
@@ -157,7 +158,7 @@
             if(isset($_POST['boton-activar-user'])){
 
                 $_SESSION['datos_visitante']['Estado'] = "Activo";
-                modificar_usuario($_SESSION['datos_visitante']);
+                $_SESSION['exito'] = modificar_usuario($_SESSION['datos_visitante']);
                 unset($_SESSION['datos_visitante']);
                 unset($_SESSION['rol_user_visitante']);
 
@@ -168,7 +169,7 @@
 
             }else if(isset($_POST['boton-borrar-user'])){
 
-                eliminar_usuario($_SESSION['dni_temp']);
+                $_SESSION['exito'] = eliminar_usuario($_SESSION['dni_temp']);
 
                 $datos_log = array(
                     'Tipo' => "tipo_log_eliminar_user",
@@ -202,7 +203,7 @@
         break;
 
         case "borrar":
-            eliminar_usuario($_SESSION['id_us_temp']);
+            $_SESSION['exito'] = eliminar_usuario($_SESSION['id_us_temp']);
 
             $datos_log = array(
                 'Tipo' => "tipo_log_eliminar_user",

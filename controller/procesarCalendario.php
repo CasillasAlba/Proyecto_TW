@@ -51,7 +51,7 @@
             if(isset($_SESSION["accionBD"])){
 
                 if($_SESSION["accionBD"] == "registrar"){
-                    insertar_calendario($_SESSION['row_datos_temp']);
+                    $_SESSION['exito'] = insertar_calendario($_SESSION['row_datos_temp']);
 
                     $datos_log = array(
                         'Tipo' => "tipo_modif_calend",

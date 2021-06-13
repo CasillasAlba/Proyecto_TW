@@ -99,6 +99,7 @@
         $accion = $_SESSION['accionPulsadaCalend'];
     }
 
+
     if(isset($_POST['boton-login-visitante'])){
         // ENTRAMOS EN ESTE IF CUANDO UN VISITANTE INTENTE LOGUEARSE
         // Obtenemos los valores introducidos por el usuario
@@ -119,7 +120,10 @@
             insertar_log($datos_log);
 
             $motivo = "DNI O CONTRASEÑA INCORRECTA :(";
-            echo $twig->render('errores.twig', compact('motivo'));
+            $_SESSION['exito'] = False;
+            $exito = $_SESSION['exito'];
+            
+            echo $twig->render('inicio_visitante.twig', compact('exito'));
 
         }else if($datos_logueado == "Inactivo"){
 
@@ -127,6 +131,8 @@
             echo $twig->render('errores.twig', compact('motivo'));
 
         }else{
+            $_SESSION['exito'] = true;
+
             // Se ha iniciado sesión correctamente
             $datos_log = array(
                 'Tipo' => "tipo_login",
@@ -244,7 +250,7 @@
 
             // Si al registrar hay errores, se carga formulario sticky con los errores escritos
             if(isset($_SESSION['row_errores_temp'])){
-                
+
                 $row = $_SESSION['row_datos_temp'];
                 $errores = $_SESSION['row_errores_temp'];
 
@@ -314,6 +320,7 @@
         }else if(isset($_POST['listado_user'])){
 
             $usuarios = devolver_lista_usuarios();
+            $_SESSION['lista_us'] = $usuarios;
             echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user'));
             
         }else if(isset($_POST['listado_log'])){
@@ -370,6 +377,17 @@
 
             echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
 
+        }else if(isset($_POST['vacunas_pendientes'])){
+
+            $edad_mes = calcular_edad($_SESSION['row_datos']['FechaNac']);
+
+            $lista_pendientes = devolver_vacunacion_pendiente($sexo_user, $edad_mes, $us_user);
+
+            $n_pendientes = count($lista_pendientes);
+
+            echo $twig->render('listado_pendientes.twig', compact('us_user', 'lista_pendientes', 'n_pendientes', 'rol_user', 'nombre_user', 'image_user', 'sexo_user' ));
+            
+
         }else if(isset($_POST['idProcesarInfoCompleta'])){
 
             $claves = explode("-", $_POST['idProcesarInfoCompleta']);
@@ -404,18 +422,11 @@
             $sexo_paciente = $_SESSION['datos_paciente']['Sexo'];
 
             // Calculamos su edad
-            $edad_paciente = calcular_edad($_SESSION['datos_paciente']['FechaNac']);
-
-            // Si la edad la devolvemos en años, la convertimos en meses
-            if($edad_paciente['mes'] == false){
-                $meses_paciente = $edad_paciente['valor'] * 12;
-            }else{
-                $meses_paciente = $edad_paciente['valor'];
-            }            
+            $edad_paciente = calcular_edad($_SESSION['datos_paciente']['FechaNac']);          
 
             // Devolvemos la el acronimo de las vacunas que disponibles para ponerse para cada usuario en su cartilla 
             // y el ID del calendario
-            $resultado = devolver_calendario($sexo_paciente, $meses_paciente, $_POST['idPonerVacuna']);
+            $resultado = devolver_vacunacion_disponible($sexo_paciente, $edad_paciente, $_POST['idPonerVacuna']);
             
             if($resultado != false){
                 $_SESSION['vacunacion_disponible'] = $resultado;
@@ -441,7 +452,13 @@
         }else{
             
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
-            echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
+            if(isset($_SESSION['exito'])){
+                $exito = $_SESSION['exito']; // Comrpobamos si ha tenido o no exito
+                unset($_SESSION['exito']);
+                echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user', 'exito'));
+            }else{
+                echo $twig->render('calendario_logueado.twig', compact('us_user', 'nombre_user', 'rol_user', 'image_user', 'sexo_user'));
+            }
         }
 
     }else if(isset($_SESSION['accionPulsada']) and ($_SESSION['accionPulsada'] == "registrar" or $_SESSION['accionPulsada'] == "confirmar")){
@@ -460,7 +477,16 @@
 
         
     }else{
-        echo $twig->render('inicio_visitante.twig');
+
+        if(isset($_SESSION['exito'])){
+            $exito = $_SESSION['exito']; // Comrpobamos si ha tenido o no exito
+            unset($_SESSION['exito']);
+            echo $twig->render('inicio_visitante.twig' , compact('exito'));
+        }else{
+            echo $twig->render('inicio_visitante.twig');
+        }
+
+        
     } 
 
 ?>

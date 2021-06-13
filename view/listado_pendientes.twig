@@ -1,0 +1,28 @@
+{% extends 'inicio_logueado.twig' %}
+
+{% block content %}
+    {% if lista_pendientes != "False" %}
+        {% if n_pendientes > 0 %}
+            <table class="table">
+                <thead class="table-success">
+                    <tr>
+                        <th scope="col">Acrónimo</th>
+                        <th scope="col">Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form action="index.php" method="POST">
+                        {% for vacuna in lista_pendientes %}
+                            <tr>
+                                <td>{{vacuna.Acronimo}}</td>
+                                <td>{{vacuna.Nombre}}</td>
+                            </tr>
+                        {% endfor %}
+                    </form>
+                </tbody>
+            </table>
+        {% else %}
+            <h2>No hay vacunas pendientes.</h2>
+        {% endif %}
+    {% endif %}
+{% endblock %}
