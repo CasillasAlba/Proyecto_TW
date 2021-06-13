@@ -67,6 +67,7 @@
         return sprintf('./controller/%s', ltrim($funciones, '/'));
     }));
 
+
     // Función que devuelve la lista de vacunas
     // DEPRECATED no la borro por si hiciese falta, pero ya no se usa
     /*$twig->addFunction(new \Twig\TwigFunction('lista_vacunas', function () {
@@ -128,7 +129,38 @@
         }
         
     }));*/
+/*
+    $twig->addFunction(new \Twig\TwigFunction('barra_paginacion', function ($clase, $usuarios, $activo='') {
+        $menu = [];
 
+        $num_usuarios = count($usuarios);
+        $num_items = 3;
+        $primero = 0;
+
+        $ultima = $num_usuarios - ($num_usuarios%$num_items);
+        $anterior = $num_items>$primero ? 0 : ($primero-$num_items);
+        $siguiente = ($primero+$num_items)>$num_usuarios ? $ultima : ($primero+$num_items);
+
+        $menu[]=['texto'=>'Primera',
+        'url'=>'?primero=0&items='. $num_items];
+
+        $menu[]=['texto'=>'Anterior',
+        'url'=>'?primero=' . $anterior . '&items=' . $num_items];
+
+        $menu[]=['texto'=>'Siguiente',
+        'url'=>'?primero='. $siguiente . '&items=' . $num_items];
+
+        $menu[]=['texto'=>'Última',
+        'url'=>'?primero=' . '&items=' . $num_items]; 
+
+        echo "<nav class='$clase'>";
+
+        foreach ($menu as $elem)
+            echo "<a ".($activo==$elem['texto']?"class='activo' ":'')."href='{$elem['url']}'>{$elem['texto']}</a>";
+        echo '</nav>';
+    }));
+*/
+   
 
     if(isset($_SESSION['accionPulsada'])){
         $accion = $_SESSION['accionPulsada'];
