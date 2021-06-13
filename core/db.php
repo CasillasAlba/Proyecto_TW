@@ -610,7 +610,6 @@
             while($elem = $result->fetch_assoc()){
                 array_push($datos, $elem);
             }
-
         }else{
             $datos = false; // Error en la consulta
         }
@@ -653,6 +652,34 @@
         return $datos;
 
     }
+
+     // Función de devuelve el calendario completo
+     function devolver_calendario_full() {
+        global $db;
+        $datos = [];
+
+        $prep = $db->prepare("SELECT vacunas.Acronimo, vacunas.Nombre, calendario.Sexo, calendario.Meses_ini, 
+                            calendario.Meses_fin, calendario.Tipo, calendario.comentarios 
+                            FROM vacunas, calendario WHERE calendario.IDVacuna = vacunas.ID");
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $result = $prep->get_result();
+
+            // Obtenemos los valores
+            while($elem = $result->fetch_assoc()){
+                array_push($datos, $elem);
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
 
     // Función que devuelve la lista de logs
 
@@ -941,47 +968,48 @@ function eliminar_log($id){
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                           'MAIN' DEL CODIGO                                                //
+//                                           Funciones de estadísticas                                               //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function total_usuarios() {
+        global $db;
 
+        $prep = $db->prepare("SELECT COUNT(DNI) FROM usuarios");
 
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $total = $prep->get_result()->fetch_row()[0];
 
-    //crear_tablas($db);
-    //$tabla_usuarios = mysqli_query($db, "DROP TABLE usuarios");
+        }else{
+            $total = 0; // Error en la consulta
+        }
 
-    //Insertamos usuarios de prueba:
-    // Primero creamos arrays con los datos de los usuarios de prueva que vamos a crear
-    /*
-    $datos_admin = [
-        'DNI' => '76738108B',
-        'Nombre' => 'Alba',
-        'Apellidos' => 'Casillas Rodríguez',
-        'Telefono' => '633776632',
-        'Email' => 'alba@correo.es',
-        'FechaNac' => '1999-12-30',
-        'Sexo' => 'Femenino',
-        'Foto' => 00000,
-        'Clave' => 'D3UX3XMACH1NA',
-        'Estado' => 'Activo',
-        'Rol' => 'Admin',
-    ];
-    
-    $c = $datos_admin['Clave'];
-    // Las claves deben almacenarse cifradas en la base de datos
-    $datos_admin['Clave'] = cifrar_claves($c);
+        // Cerramos la consulta preparada
+        $prep->close();
 
-    insertar_usuario($datos_admin);
-    */
-    //$datos_user = devolver_usuario($db, $datos_admin['DNI'] );
-    //foreach($datos_user as &$valor){
-        //echo $valor;
-    //}
+        return $total;
+    }
 
-    //modificar_usuario($db, $datos_admin);
-    //eliminar_usuario($db, $datos_admin['DNI']);
+    function total_vacunas_30dias() {
+        global $db;
+        $date = date_create(date('Y-m-d'));
+        date_sub($date,date_interval_create_from_date_string("30 days"));
+        $date = date_format($date,"Y/m/d");
 
-    //$result = devolver_acronimos_vacunas();
-    //foreach ($result as $v){
-        //echo $v;
-    //}
+        $prep = $db->prepare("SELECT COUNT(ID) FROM vacunacion WHERE fecha >= ?");
+        $prep->bind_param('s', $date);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $total = $prep->get_result()->fetch_row()[0];
+
+        }else{
+            $total = 0; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $total;
+    }
+
 ?>

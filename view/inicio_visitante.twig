@@ -1,15 +1,272 @@
 {% extends 'index_view.twig' %}
 
 {% block content %}
-    {% if exito is defined %}
-        {% if not exito %}
-            <script type="text/javascript" src="{{asset('js/popup.js')}}"></script>
-        {% endif %}
-    {% endif %}
-    <div class="calendario">
-        <!-- Aqui dentro va el calendario-->
-        <h1>HOLA</h1>
-    </div>
+    <table class="table calendario">
+        <thead>
+            <tr>
+                <th>Vacuna</th>
+                <th>0 meses</th>
+                <th>2 meses</th>
+                <th>4 meses</th>
+                <th>11 meses</th>
+                <th>12 meses</th>
+                <th>15 meses</th>
+                <th>3 años</th>
+                <th>6 años</th>
+                <th>12 años</th>
+                <th>14 años</th>
+                <th>18 años</th>
+                <th>50 años</th>
+                <th>65 años</th>
+                <th>>65 años</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in calendario %}
+                <tr>
+                    <th>{{entry.Nombre}}</th>
+                    {% if entry.Meses_ini <= 0 and entry.Meses_fin >= 0 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 2 and entry.Meses_fin >= 2 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 4 and entry.Meses_fin >= 4 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 11 and entry.Meses_fin >= 11 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 12 and entry.Meses_fin >= 12 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 15 and entry.Meses_fin >= 15 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 36 and entry.Meses_fin >= 36 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 72 and entry.Meses_fin >= 72 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 144 and entry.Meses_fin >= 144 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 168 and entry.Meses_fin >= 168 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 216 and entry.Meses_fin >= 216 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 600 and entry.Meses_fin >= 600 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_ini <= 780 and entry.Meses_fin >= 780 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if entry.Meses_fin > 780 %}
+                        {% if entry.Tipo == "S" %}
+                            <td class="fecha-vacuna">
+                                {% if entry.Sexo == "Masculino" %}
+                                    {{entry.Acronimo}} (H)
+                                {% elseif entry.Sexo == "Femenino" %}
+                                    {{entry.Acronimo}} (M)
+                                {% else %}
+                                    {{entry.Acronimo}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="fecha-vacuna-sus">{{entry.Acronimo}}</td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block login %}
