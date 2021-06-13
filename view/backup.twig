@@ -1,0 +1,7 @@
+{% extends 'inicio_logueado.twig' %}
+{% block content %}
+    <form action="index.php" method="POST">
+        <button type="submit" class="btn btn-success" name="export_db">Crear copia de seguridad</button>
+        <button type="submit" class="btn btn-success" name="restore_db">Restaurar desde copia de seguridad</button>
+    </form>
+{% endblock %}

@@ -4,6 +4,7 @@
     require_once('./core/db_credenciales.php');
     require_once('./controller/login.php');
     require_once('./core/db.php');
+    require_once('./core/db_backup.php');
     require_once('./controller/procesarFiltrado.php');
 
     session_start();
@@ -18,6 +19,43 @@
     $twig = new \Twig\Environment($loader);
 
     ///////////////////////////////// FUNCIONES DEL PROGRAMA
+
+    /*
+  (C) 2021. Javier Martínez Baena (jbaena@ugr.es)
+  Tecnologías Web. Grado en Ingeniería Informática. Universidad de Granada.
+  Este código tiene un objetivo puramente didáctico por lo que se podría mejorar en múltiples aspectos. Pretende ejemplificar sobre la conexión con BBDD desde el lenguaje PHP para crear páginas web dinámicas usando un modelo básico MVC. Es posible que contenga errores y se distribuye para facilitar el estudio de la asignatura.
+  No se permite el uso de este código sin autorización del autor.
+*/
+
+/*
+  Funciones para mostrar mensajes de error en la aplicación PHP.
+*/
+
+    function _msgErrorR($msg) {
+      if (is_array($msg))
+        foreach ($msg as $v)
+          _msgErrorR($v);
+      else
+        echo "<p>$msg</p>";
+    }
+    
+    function msgError($msg, $tipo='msgerror') {
+      echo "<div class='$tipo'>";
+      _msgErrorR($msg);
+      echo '</div>';
+    }
+    
+    function msgCount($msg) {
+      if (is_array($msg))
+        if (count($msg)==0)
+          return 0;
+        else
+          return msgCount($msg[0])+msgCount(array_slice($msg,1));
+      else if (!is_bool($msg))
+        return 1;
+      else
+        return 0;
+    }
 
     // Funcion para acceder los assets (css, imagenes...)
     $twig->addFunction(new \Twig\TwigFunction('asset', function ($asset) {
@@ -648,14 +686,36 @@
                         unset($usuarios[$i]);
                     }
 
-                }
-                               
-                    
+                }  
             }
 
             echo $twig->render('listado_usuarios.twig', compact('rol_user', 'image_user', 'usuarios' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
         
-        }else{
+        } else if (isset($_POST['backup'])) {
+            echo $twig->render('backup.twig', compact('rol_user', 'image_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+
+        } else if (isset($_POST['export_db'])) {
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="db_backup.sql"');
+            echo DB_backup();
+
+        } else if (isset($_POST['restore_db'])){
+            echo $twig->render('backup_restore.twig', compact('rol_user', 'image_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+
+        } else if (isset($_POST['restore_from_file'])){
+            if ((sizeof($_FILES)==0) || !array_key_exists("restore_file",$_FILES))
+                $error = "No se ha podido subir el fichero";
+            else if (!is_uploaded_file($_FILES['restore_file']['tmp_name']))
+                $error = "Fichero no subido. Código de error: ".$_FILES['restore_file']['error'];
+            else {
+                $error = DB_restore($_FILES['restore_file']['tmp_name']);
+            }
+            if (isset($error) && msgCount($error)>0)
+                msgError($error);
+            else
+                msgError("Base de datos restaurada correctamente","msginfo");
+
+        } else{
             $calendario = devolver_calendario_full();
             // Lo introduzco en el else para que no cargue ambas vistas a la vez en el caso de que se quiera
             if(isset($_SESSION['exito'])){
