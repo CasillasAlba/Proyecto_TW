@@ -154,3 +154,12 @@ button {
   background-color: darkgreen !important;
   color: white;
 }
+
+.filtro-usuarios {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  display: flex;
+}

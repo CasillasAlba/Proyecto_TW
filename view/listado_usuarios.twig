@@ -1,24 +1,28 @@
 {% extends 'inicio_logueado.twig' %}
 
 {% block content %}
-    <div class="filtro_usuarios">
-        <form action="index.php" method="POST">
-            <input type="text" placeholder="Buscar..." name="search">
-            <!-- Falta de ordenacion por rango de edad -->-->
-            <input type="checkbox" id="activo" name="activo" value="activo">
-            <label for="activo">Activo</label>
-            <input type="checkbox" id="inactivo" name="inactivo" value="inactivo">
-            <label for="inactivo">Inactivo</label>
-            <input type="checkbox" id="pendiente" name="pendiente" value="vacunas_pendientes">
-            <label for="Activo">Vacunas Pendientes</label>
+    <form action="index.php" method="POST" class="form-inline filtro-usuarios">
+        <div class="form-group mx-sm-3 mb-2">
+            <input class="form-control" type="text" placeholder="Buscar..." name="search">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <input class="form-check-input" type="checkbox" id="activo" name="activo" value="activo">
+            <label class="form-check-label" for="activo">Activo</label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <input class="form-check-input" type="checkbox" id="inactivo" name="inactivo" value="inactivo">
+            <label class="form-check-label" for="inactivo">Inactivo</label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <input class="form-check-input" type="checkbox" id="pendiente" name="pendiente" value="vacunas_pendientes">
+            <label class="form-check-label" for="Activo">Vacunas Pendientes</label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
             <label for="VacunaXSemanasInput" class="form-label">Vacunarse en:</label>
-            <input type="number" id="VacunaXSemanasInput" placeholder="Semanas" name="vacuna_x_semanas">
-            <div>
-                <button name="idFiltrado">Filtrar</button>
-            </div>
-        </form>
-        
-    </div>
+            <input class="form-control" type="number" id="VacunaXSemanasInput" placeholder="Semanas" name="vacuna_x_semanas">
+        </div>
+        <button name="idFiltrado" class="btn btn-success">Filtrar</button>   
+    </form>
 
     <table class="table">
         <thead class="table-success">
@@ -50,9 +54,9 @@
                                 <td><button class="btn btn-success" name="idEditarUser" value="{{usuario.DNI}}"><i class="bi-brush"></i></button></td>
                                 <td><button class="btn btn-danger" name="idBorrarUser" value="{{usuario.DNI}}"><i class="bi-trash"></button></td>
                             {% elseif rol_user == "Sanitario" %}
-                                <td><button class="form-button" name="idVerVacunacion" value="{{usuario.DNI}}">Ver Cartilla</button></td>
-                                <td><button class="form-button" name="idEditarVacunacion" value="{{usuario.DNI}}">Modificar Cartilla</button></td>
-                                <td><button class="form-button" name="idPonerVacuna" value="{{usuario.DNI}}">Añadir Vacuna</button></td>
+                                <td><button class="btn btn-success" name="idVerVacunacion" value="{{usuario.DNI}}">Ver Cartilla</button></td>
+                                <td><button class="btn btn-success" name="idEditarVacunacion" value="{{usuario.DNI}}">Modificar Cartilla</button></td>
+                                <td><button class="btn btn-success" name="idPonerVacuna" value="{{usuario.DNI}}">Añadir Vacuna</button></td>
                             {% endif %}
                         </tr>
                     {% endif %}
