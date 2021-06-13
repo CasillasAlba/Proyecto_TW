@@ -67,100 +67,8 @@
     }));
 
 
-    // Función que devuelve la lista de vacunas
-    // DEPRECATED no la borro por si hiciese falta, pero ya no se usa
-    /*$twig->addFunction(new \Twig\TwigFunction('lista_vacunas', function () {
-        $lista = devolver_lista_vacunas();
-
-        foreach($lista as $vacuna){
-            echo sprintf('<p>Acrónimo: %s Nombre: %s</p>', $vacuna['Acronimo'], $vacuna['Nombre']);
-            echo sprintf('<button class="form-button" name="idEditarVac" value="%s">Editar</button>', $vacuna['Acronimo']);
-            echo sprintf('<button class="form-button" name="idBorrarVac" value="%s">Borrar</button>', $vacuna['ID']);
-        }
-    }));*/
-
-    // Función que devuelve la lista de usuarios
-    //DEPRECATED no la borro por si hiciese falta, pero ya no se usa
-    /*
-    $twig->addFunction(new \Twig\TwigFunction('lista_usuarios', function () {
-        global $rol_user;
-        $lista = devolver_lista_usuarios();
-
-        echo sprintf('<form action="index.php" method="POST">');
-        foreach($lista as $usuario){
-            if($usuario["Rol"] != "Admin"){
-                echo sprintf('<img height="130px" width="150px" src="data:image;base64,%s" />', $usuario["Fotografia"]);
-                echo sprintf('<p>Nombre: %s %s</p>', $usuario["Nombre"], $usuario['Apellidos']);
-                if($rol_user == "Admin"){
-                    echo sprintf('<button class="form-button" name="idEditarUser" value="%s">Editar</button>', $usuario["DNI"]);
-                    echo sprintf('<button class="form-button" name="idBorrarUser" value="%s">Borrar</button>', $usuario["DNI"]);
-                }else if($rol_user == "Sanitario"){
-                    echo sprintf('<button class="form-button" name="idVerVacunacion" value="%s">Ver Cartilla</button>', $usuario["DNI"]);
-                    echo sprintf('<button class="form-button" name="idEditarVacunacion" value="%s">Modificar Cartilla</button>', $usuario["DNI"]);
-                    echo sprintf('<button class="form-button" name="idPonerVacuna" value="%s">Añadir Vacuna</button>', $usuario["DNI"]);
-                }
-                
-            }
-        }
-        echo sprintf('</form>');
-    }));
-    */
-
-    // Función que devuelve la lista de usuarios
-    // LO MISMO QUE ARRIBA
-    /*$twig->addFunction(new \Twig\TwigFunction('lista_peticiones', function () {
-        global $rol_user;
-        $lista = devolver_lista_peticiones();
-
-        if($lista != "False"){
-            if(count($lista) > 0){
-                echo sprintf('<form action="index.php" method="POST">');
-                foreach($lista as $usuario){
-                    echo sprintf('<img height="130px" width="150px" src="data:image;base64,%s" />', $usuario["Fotografia"]);
-                    echo sprintf('<p>Nombre: %s %s</p>', $usuario["Nombre"], $usuario['Apellidos']);
-                    echo sprintf('<button class="form-button" name="idProcesarPeticion" value="%s">Procesar</button>', $usuario["DNI"]);        
-                }
-                echo sprintf('</form>');
-            }else{
-                echo sprintf('<h2>No hay peticiones pendientes.</h2>');
-            }
-
-        }
-        
-    }));*/
-/*
-    $twig->addFunction(new \Twig\TwigFunction('barra_paginacion', function ($clase, $usuarios, $activo='') {
-        $menu = [];
-
-        $num_usuarios = count($usuarios);
-        $num_items = 3;
-        $primero = 0;
-
-        $ultima = $num_usuarios - ($num_usuarios%$num_items);
-        $anterior = $num_items>$primero ? 0 : ($primero-$num_items);
-        $siguiente = ($primero+$num_items)>$num_usuarios ? $ultima : ($primero+$num_items);
-
-        $menu[]=['texto'=>'Primera',
-        'url'=>'?primero=0&items='. $num_items];
-
-        $menu[]=['texto'=>'Anterior',
-        'url'=>'?primero=' . $anterior . '&items=' . $num_items];
-
-        $menu[]=['texto'=>'Siguiente',
-        'url'=>'?primero='. $siguiente . '&items=' . $num_items];
-
-        $menu[]=['texto'=>'Última',
-        'url'=>'?primero=' . '&items=' . $num_items]; 
-
-        echo "<nav class='$clase'>";
-
-        foreach ($menu as $elem)
-            echo "<a ".($activo==$elem['texto']?"class='activo' ":'')."href='{$elem['url']}'>{$elem['texto']}</a>";
-        echo '</nav>';
-    }));
-*/
    
-
+    // IF ppara cambiar la acción de los procesar.php
     if(isset($_SESSION['accionPulsada'])){
 
         $accion = $_SESSION['accionPulsada'];
@@ -388,6 +296,16 @@
                 echo $twig->render('formulario_calendario.twig', compact('us_user', 'accion', 'vacunaPorDefecto', 'vacunas' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
             
+        }else if(isset($_POST['eliminar-vacuna-recomendada'])){
+
+            $accion = "borrar";
+
+            $calend = devolver_calendario_by_id($_POST['eliminar-vacuna-recomendada-id'], $_POST['eliminar-vacuna-recomendada-acronimo']);
+            
+            $_SESSION['calend_temp_borrar'] = $calend;
+
+            echo $twig->render('formulario_calendario.twig', compact('calend', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+            
         }else if(isset($_SESSION['accionPulsadaCalend']) and $_SESSION['accionPulsadaCalend'] == "confirmar"){
 
             // Cargamos el formulario de confirmación
@@ -449,6 +367,33 @@
 
             echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion' , 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
+        }else if(isset($_SESSION['informe']) and $_SESSION['informe'] == "activar-informar"){
+
+            unset($_SESSION['informe']);
+            
+            $motivo = "Se ha dado de alta correctamente al usuario.";
+            echo $twig->render('errores.twig', compact('motivo', 'n_usuarios', 'n_vacunas', 'us_user', 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+
+
+        }else if(isset($_SESSION['informe']) and $_SESSION['informe'] == "error-informar"){
+        
+        
+            $informar = $_SESSION['informe'];
+            unset($_SESSION['informe']);
+
+            echo $twig->render('errores.twig', compact('informar', 'n_usuarios', 'n_vacunas', 'us_user', 'rol_user', 'nombre_user', 'image_user', 'sexo_user'));
+        
+        
+        }else if(isset($_SESSION['informe']) and $_SESSION['informe'] == "borrar-informar"){
+
+            $row = $_SESSION['user_informe'];
+            unset($_SESSION['informe']);
+
+            $accion = "borrar";
+
+            echo $twig->render('formulario_usuario.twig', compact('row', 'us_user', 'rol_user', 'accion', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
+        
+        
         }else if(isset($_POST['cartilla'])){
 
             // Para que un usuario pueda ver su cartilla de vacunacion
@@ -658,11 +603,26 @@
                 
                 if(isset($_POST['from']) and isset($_POST['to'])){
                     if($_POST['from'] != "" and $_POST['to'] != ""){
-                        $fecha_ini = new DateTime(date($_POST['from']));
-                        $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+                        $fecha_ini = $_POST['from'];
+                       
+                        $fecha_dividida = explode("/", $fecha_ini);
     
-                        $fecha_fin = new DateTime(date($_POST['to']));
-                        $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+                        if($fecha_dividida[0] > 12){
+                            $fecha_ini = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                        }
+    
+    
+                        $fecha_ini = (new DateTime($fecha_ini))->format("Y-m-d");
+    
+                        $fecha_fin = $_POST['to'];
+    
+                        $fecha_dividida = explode("/", $fecha_fin);
+    
+                        if($fecha_dividida[0] > 12){
+                            $fecha_fin = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                        }
+    
+                        $fecha_fin = (new DateTime($fecha_fin))->format("Y-m-d");
     
                         $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
                     } 
@@ -697,13 +657,29 @@
                     
                     if(isset($_POST['from']) and isset($_POST['to'])){
                         if($_POST['from'] != "" and $_POST['to'] != ""){
-                            $fecha_ini = new DateTime(date($_POST['from']));
-                            $fecha_ini = date_format($fecha_ini, 'Y-m-d');
-        
-                            $fecha_fin = new DateTime(date($_POST['to']));
-                            $fecha_fin = date_format($fecha_fin, 'Y-m-d');
-        
-                            $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+                            $fecha_ini = $_POST['from'];
+                       
+                        $fecha_dividida = explode("/", $fecha_ini);
+    
+                        if($fecha_dividida[0] > 12){
+                            $fecha_ini = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                        }
+    
+    
+                        $fecha_ini = (new DateTime($fecha_ini))->format("Y-m-d");
+    
+                        $fecha_fin = $_POST['to'];
+    
+                        $fecha_dividida = explode("/", $fecha_fin);
+    
+                        if($fecha_dividida[0] > 12){
+                            $fecha_fin = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                        }
+    
+                        $fecha_fin = (new DateTime($fecha_fin))->format("Y-m-d");
+    
+                        $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
+
                         }
                         
                     }
@@ -736,11 +712,26 @@
 
                     if(isset($_POST['from']) and isset($_POST['to'])){
                         if($_POST['from'] != "" and $_POST['to'] != ""){
-                            $fecha_ini = new DateTime(date($_POST['from']));
-                            $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+                            $fecha_ini = $_POST['from'];
+                           
+                            $fecha_dividida = explode("/", $fecha_ini);
         
-                            $fecha_fin = new DateTime(date($_POST['to']));
-                            $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+                            if($fecha_dividida[0] > 12){
+                                $fecha_ini = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                            }
+        
+        
+                            $fecha_ini = (new DateTime($fecha_ini))->format("Y-m-d");
+        
+                            $fecha_fin = $_POST['to'];
+        
+                            $fecha_dividida = explode("/", $fecha_fin);
+        
+                            if($fecha_dividida[0] > 12){
+                                $fecha_fin = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                            }
+        
+                            $fecha_fin = (new DateTime($fecha_fin))->format("Y-m-d");
         
                             $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
                         }
@@ -770,11 +761,26 @@
 
                 if(isset($_POST['from']) and isset($_POST['to'])){
                     if($_POST['from'] != "" and $_POST['to'] != ""){
-                        $fecha_ini = new DateTime(date($_POST['from']));
-                        $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+                        $fecha_ini = $_POST['from'];
+                       
+                        $fecha_dividida = explode("/", $fecha_ini);
     
-                        $fecha_fin = new DateTime(date($_POST['to']));
-                        $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+                        if($fecha_dividida[0] > 12){
+                            $fecha_ini = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                        }
+    
+    
+                        $fecha_ini = (new DateTime($fecha_ini))->format("Y-m-d");
+    
+                        $fecha_fin = $_POST['to'];
+    
+                        $fecha_dividida = explode("/", $fecha_fin);
+    
+                        if($fecha_dividida[0] > 12){
+                            $fecha_fin = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                        }
+    
+                        $fecha_fin = (new DateTime($fecha_fin))->format("Y-m-d");
     
                         $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
                     }
@@ -782,11 +788,26 @@
                 }
             }else if(isset($_POST['from']) and isset($_POST['to'])){
                 if($_POST['from'] != "" and $_POST['to'] != ""){
-                    $fecha_ini = new DateTime(date($_POST['from']));
-                    $fecha_ini = date_format($fecha_ini, 'Y-m-d');
+                    $fecha_ini = $_POST['from'];
+                   
+                    $fecha_dividida = explode("/", $fecha_ini);
 
-                    $fecha_fin = new DateTime(date($_POST['to']));
-                    $fecha_fin = date_format($fecha_fin, 'Y-m-d');
+                    if($fecha_dividida[0] > 12){
+                        $fecha_ini = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                    }
+
+
+                    $fecha_ini = (new DateTime($fecha_ini))->format("Y-m-d");
+
+                    $fecha_fin = $_POST['to'];
+
+                    $fecha_dividida = explode("/", $fecha_fin);
+
+                    if($fecha_dividida[0] > 12){
+                        $fecha_fin = $fecha_dividida[1] . "/" . $fecha_dividida[0] . "/" . $fecha_dividida[2];
+                    }
+
+                    $fecha_fin = (new DateTime($fecha_fin))->format("Y-m-d");
 
                     $usuarios = filtrar_usuario_by_fechas($usuarios, $fecha_ini, $fecha_fin);
                 }
@@ -803,7 +824,15 @@
             header('Content-Disposition: attachment; filename="db_backup.sql"');
             echo DB_backup();
 
-        } else if (isset($_POST['restore_db'])){
+        } else if (isset($_POST['delete_db'])) {
+            DB_delete();
+            
+            session_unset();
+            session_destroy();
+
+            echo $twig->render('inicio_visitante.twig', compact('n_usuarios', 'n_vacunas'));
+
+        }else if (isset($_POST['restore_db'])){
             echo $twig->render('backup_restore.twig', compact('rol_user', 'image_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         } else if (isset($_POST['restore_from_file'])){

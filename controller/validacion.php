@@ -70,6 +70,11 @@ require_once('../core/db.php');
             }
         }
 
+        ////////////////////////////  Validaciones de la Foto ////////////////////////////////////////////
+        if($_SESSION['foto_temp']){
+            
+        }
+
         ////////////////////////////  Validaciones del Nombre ////////////////////////////////////////////
 
         if (!preg_match('/^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/',$_SESSION['nombre_temp'])){

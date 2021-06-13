@@ -57,10 +57,28 @@
     }
 
     /* Borrar el contenido de las tablas de la base de datos */
-    function DB_delete($db) {
+    /*function DB_delete($db) {
         $result = mysqli_query($db,'SHOW TABLES');
         while ($row = mysqli_fetch_row($result))
             mysqli_query($db,'DELETE FROM '.$row[0]);
         mysqli_commit($db);
+    }*/
+
+    function DB_delete(){
+        global $db;
+
+        // Las tablas hay que borrarlas en el orden correcto
+        // Ya que existen dependencias de FOREIGN KEY
+        // ANTES de borrar Usuarios o Calendario, hay que borrar vacunacion
+        // Y ANTES de borrar vacunas hay que borrar calendario
+        // Para dejar el admin, se eliminan todos los usuarios menos aquel que en su rol tenga ADMIN
+        mysqli_query($db,'DELETE FROM vacunacion');
+        mysqli_query($db,'DELETE FROM calendario');
+        mysqli_query($db,'DELETE FROM vacunas');
+        mysqli_query($db,'DELETE FROM log');
+        mysqli_query($db, "DELETE FROM usuarios WHERE Rol != 'Admin'");
+
+
+        mysqli_commit($db);         
     }
 ?>

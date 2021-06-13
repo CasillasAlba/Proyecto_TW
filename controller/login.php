@@ -38,11 +38,11 @@
         session_unset();
 
         // Obtener parámetros de cookie de sesión
-        //$param = session_get_cookie_params();
+        $param = session_get_cookie_params();
 
         // Borrar cookie de sesión
-        //setcookie(session_name(), $_COOKIE[session_name()], time()-2592000,
-            //$param['path'], $param['domain'], $param['secure'], $param['httponly']);
+        setcookie(session_name(), $_COOKIE[session_name()], time()-2592000,
+            $param['path'], $param['domain'], $param['secure'], $param['httponly']);
 
         // Destruir la sesión
         session_destroy();

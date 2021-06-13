@@ -655,13 +655,52 @@
 
     }
 
+    // Función de devuelve el calendario completo
+    function devolver_calendario_by_id($idc, $idAcro) {
+        global $db;
+
+        $prep = $db->prepare("SELECT calendario.ID, vacunas.Acronimo, calendario.Sexo, calendario.Meses_ini, calendario.Meses_fin, calendario.Tipo, calendario.Comentarios
+            FROM calendario, vacunas 
+            WHERE calendario.ID = ? 
+            AND vacunas.ID = calendario.IDVacuna
+            AND vacunas.Acronimo = ?
+            ");
+
+        $prep->bind_param('is', $idc, $idAcro);
+
+        if($prep->execute()){
+            //Vinculamos variables a consultas
+            $prep->bind_result($id, $acro, $sex, $mes_ini, $mes_fin, $tipo, $comentarios);
+
+            // Obtenemos los valores
+            if($prep->fetch()){
+                $datos['IDCalendar'] = $id;
+                $datos['VacunaRef'] = $acro;
+                $datos['Sexo'] = $sex;
+                $datos['MesIni'] = $mes_ini;
+                $datos['MesFin'] = $mes_fin;
+                $datos['Tipo'] = $tipo;
+                $datos['DescripCalend'] = $comentarios;
+            }else{
+                $datos = false; // No hay resultados
+            }
+        }else{
+            $datos = false; // Error en la consulta
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $datos;
+    }
+
      // Función de devuelve el calendario completo
      function devolver_calendario_full() {
         global $db;
         $datos = [];
 
         $prep = $db->prepare("SELECT vacunas.Acronimo, vacunas.Nombre, calendario.Sexo, calendario.Meses_ini, 
-                            calendario.Meses_fin, calendario.Tipo, calendario.comentarios 
+                            calendario.Meses_fin, calendario.Tipo, calendario.comentarios, calendario.ID
                             FROM vacunas, calendario WHERE calendario.IDVacuna = vacunas.ID");
 
         if($prep->execute()){
@@ -862,7 +901,7 @@ function eliminar_calendario($calend){
     $prep_vacunacion->execute();
 
     
-    $prep = $db->prepare("DELETE FROM calendario WHERE ID=?");
+    $prep = $db->prepare("DELETE FROM calendario WHERE ID = ?");
     $prep->bind_param('i', $calend);
     $prep->execute();
 
@@ -926,6 +965,42 @@ function eliminar_log($id){
     $prep = $db->prepare("DELETE FROM log WHERE ID=?");
     $prep->bind_param('s', $id);
     $prep->execute();
+
+    if($prep->affected_rows == 1){
+        $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
+    }else{
+        $resultado_ejecucion = false;
+    }
+    
+    // Cerramos la consulta preparada
+    $prep->close();
+
+    return $resultado_ejecucion;
+
+}
+
+function eliminar_vacuna_recomendada($idcalend){
+
+    global $db;
+
+    // Primero hay que eliminar la vacunacion
+
+    $prep_vacunacion = $db->prepare("DELETE FROM vacunacion WHERE IDCalendario = ?");
+
+    $prep_vacunacion->bind_param('i', $idcalend);
+
+    $prep_vacunacion->execute();
+
+    $prep_vacunacion->close();
+
+    // Una vez se han eliminado las vacunaciones que tenían asociadas dicha ID, se puede borrar la vacunacion recomendada
+    // (Una entrada de la tabla calendario)
+    $prep = $db->prepare("DELETE FROM calendario WHERE ID = ?");
+
+    $prep->bind_param('i', $idcalend);
+
+    $prep->execute();
+
 
     if($prep->affected_rows == 1){
         $resultado_ejecucion = true; // El Delete se ha reaLizado correctamente
