@@ -69,7 +69,7 @@
                     </div>
                 {% endif %} 
             {% else %}
-                <label><input readonly type="text" id="genCalend" name="generoCalend" value="{{calend['Sexo']}}"></label>
+                <label><input readonly class="form-control" type="text" id="genCalend" name="generoCalend" value="{{calend['Sexo']}}"></label>
             {% endif %}
             <span>{{erroresCalend['sexoCalendError']}}</span>
         </div>
@@ -78,9 +78,31 @@
         <div class="mb-3">
             <label for="registerMesIniCalendInput" class="form-label">Mes inicio</label>
             {% if accion == "registrar" or accion == "editar" %}
-                <input class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ calend['MesIni'] }}" required>
+            <select class="form-select" id="registerMesIniCalendInput" name="mesIni" value="{{ calend['MesIni'] }}" required>
+                <option value="0">0 meses</option>
+                <option value="2">2 meses</option>
+                <option value="4">4 meses</option>
+                <option value="11">11 meses</option>
+                <option value="12">12 meses</option>
+                <option value="15">15 meses</option>
+                <option value="36">3 años</option>
+                <option value="72">6 años</option>
+                <option value="144">12 años</option>
+                <option value="168">14 años</option>
+                <option value="216">18 años</option>
+                <option value="600">50 años</option>
+                <option value="780">65 años</option>
+                <option value="800">>65 años</option>
+            </select>
             {% else %}
-                <input readonly class="form-control" id="registerMesIniCalendInput" type="number" name="mesIni" value="{{ calend['MesIni'] }}">
+                {% if calend['MesIni'] < 16 %}
+                    <input readonly class="form-control" id="registerMesIniCalendInput" value="{{ calend['MesIni'] }} meses">
+                {% elseif calend['MesIni'] < 800 %}
+                    <input readonly class="form-control" id="registerMesIniCalendInput" value="{{ calend['MesIni']/12 }} años">
+                {% else %}
+                    <input readonly class="form-control" id="registerMesIniCalendInput" value=">65 años">
+                {% endif %}
+                <input hidden type="number" name="mesIni" value="{{ calend['MesIni'] }}">
             {% endif %}
             <span>{{erroresCalend['mesIniError']}}</span>
         </div>
@@ -89,9 +111,31 @@
         <div class="mb-3">
             <label for="registerMesFinCalendInput" class="form-label">Mes Fin</label>
             {% if accion == "registrar" or accion == "editar" %}
-                <input class="form-control" id="registerMesFinCalendInput" type="number" name="mesFin" value="{{ calend['MesFin'] }}" required>
+                <select class="form-select" id="registerMesFinCalendInput" name="mesFin" value="{{ calend['MesFin'] }}" required>
+                    <option value="0">0 meses</option>
+                    <option value="2">2 meses</option>
+                    <option value="4">4 meses</option>
+                    <option value="11">11 meses</option>
+                    <option value="12">12 meses</option>
+                    <option value="15">15 meses</option>
+                    <option value="36">3 años</option>
+                    <option value="72">6 años</option>
+                    <option value="144">12 años</option>
+                    <option value="168">14 años</option>
+                    <option value="216">18 años</option>
+                    <option value="600">50 años</option>
+                    <option value="780">65 años</option>
+                    <option value="800">>65 años</option>
+                </select>
             {% else %}
-                <input readonly class="form-control" id="registerMesFinCalendInput" type="number" name="mesFin" value="{{ calend['MesFin'] }}">
+                {% if calend['MesFin'] < 16 %}
+                    <input readonly class="form-control" id="registerMesFinCalendInput" value="{{ calend['MesFin'] }} meses">
+                {% elseif calend['MesFin'] < 800 %}
+                    <input readonly class="form-control" id="registerMesFinCalendInput" value="{{ calend['MesFin']/12 }} años">
+                {% else %}
+                    <input readonly class="form-control" id="registerMesFinCalendInput" value=">65 años">
+                {% endif %}
+                <input hidden type="number" name="mesFin" value="{{ calend['MesFin'] }}">
             {% endif %}
             <span>{{erroresCalend['mesFinError']}}</span>
         </div>
@@ -120,7 +164,7 @@
                     </div>
                 {% endif %} 
             {% else %}
-                <label><input readonly type="text" id="tipCalend" name="tipoCalend" value="{{ calend['Tipo']}}"></label>
+                <label><input readonly class="form-control" type="text" id="tipCalend" name="tipoCalend" value="{{ calend['Tipo']}}"></label>
             {% endif %}
             <span>{{erroresCalend['tipoCalendError']}}</span>
         </div>
