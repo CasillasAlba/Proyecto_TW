@@ -244,30 +244,6 @@
 
     }
 
-/*
-    function build_pagLinks($numciudades, $numitems, $primero) {
-        $links = [];
-
-        $ultima = $numciudades - ($numciudades%$numitems);
-        $anterior = $numitems>$primero ? 0 : ($primero-$numitems);
-        $siguiente = ($primero+$numitems)>$numciudades ? $ultima : ($primero+$numitems);
-
-        $links[]=['texto'=>'Primera',
-        'url'=>'?primero=0&items='. $numitems];
-
-        $links[]=['texto'=>'Anterior',
-        'url'=>'?primero=' . $anterior . '&items=' . $numitems];
-
-        $links[]=['texto'=>'Siguiente',
-        'url'=>'?primero='. $siguiente . '&items=' . $numitems];
-
-        $links[]=['texto'=>'Última',
-        'url'=>'?primero=' . '&items=' . $numitems]; 
-
-        return $links;
-
-    }
-*/      
-
+    
 ?>
 

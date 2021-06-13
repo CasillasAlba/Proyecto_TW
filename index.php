@@ -163,10 +163,15 @@
    
 
     if(isset($_SESSION['accionPulsada'])){
+
         $accion = $_SESSION['accionPulsada'];
+
     }else if(isset($_SESSION['accionPulsadaVac'])){
+
         $accion = $_SESSION['accionPulsadaVac'];
+
     }else if(isset($_SESSION['accionPulsadaCalend'])){
+
         $accion = $_SESSION['accionPulsadaCalend'];
     }
 
@@ -520,6 +525,15 @@
                 $motivo = "ESTE USUARIO NO TIENE NINGUNA VACUNA PENDIENTE.";
                 echo $twig->render('errores.twig', compact('motivo', 'n_usuarios', 'n_vacunas'));
             }
+
+        }else if(isset($_POST['idVerVacunacion'])){
+            // Para poder ver la cartilla de vacunación de un usuario
+
+            $lista_vacunacion = devolver_lista_vacunacion($_POST['idVerVacunacion']);
+            $_SESSION['lista_vacunacion'] = $lista_vacunacion;
+            $n_peticiones = count($lista_vacunacion);
+
+            echo $twig->render('cartilla_vacunacion.twig', compact('us_user', 'lista_vacunacion', 'n_peticiones' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
 
         }else if(isset($_SESSION['accionPulsadaVacunacion']) and $_SESSION['accionPulsadaVacunacion'] == "confirmar"){
 
