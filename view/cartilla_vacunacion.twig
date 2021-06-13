@@ -8,15 +8,25 @@
                     <thead class="table-success">
                         <tr>
                             <th>Vacuna</th>
-                            <th>Mostrar información</th>
+                            <th>Acrónimo</th>
+                            {% if accion == "ver" %}
+                                <th>Mostrar información</th>
+                            {% elseif accion == "editar" %}
+                                <th>Editar información</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
                         <form action="index.php" method="POST">
                             {% for vacuna in lista_vacunacion %}
                                 <tr>
+                                    <td>{{vacuna.Nombre}}</td>
                                     <td>{{vacuna.Acronimo}}</td>
-                                    <td><button class="btn btn-success" name="idProcesarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}"><i class="bi bi-search"></i></button></td>
+                                    {% if accion == "ver" %}
+                                        <td><button class="btn btn-success" name="idProcesarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}"><i class="bi bi-search"></i></button></td>
+                                    {% elseif accion == "editar" %}
+                                        <td><button class="btn btn-success" name="idEditarInfoCompleta" value="{{vacuna.IDUsuario}}-{{vacuna.IDCalendario}}"><i class="bi bi-brush"></i></button></td>
+                                    {% endif %}
                                 </tr>                            
                             {% endfor %}
                         </form>

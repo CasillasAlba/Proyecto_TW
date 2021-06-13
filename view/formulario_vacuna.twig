@@ -9,7 +9,7 @@
         <!-- Acronimo -->
         <div class="mb-3">
             <label for="registerAcronimoInput" class="form-label">Acrónimo</label>
-            {% if accion == "registrar" or accion == "editar" %}
+            {% if accion == "registrar" %}
                 <input class="form-control" id="registerAcronimoInput" type="text" name="acro" value="{{ vac['Acronimo'] }}" required>
             {% else %}
                 <input readonly class="form-control" id="registerAcronimoInput" type="text" name="acro" value="{{ vac['Acronimo'] }}">

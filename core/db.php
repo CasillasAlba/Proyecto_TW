@@ -773,7 +773,27 @@
         // Cerramos la consulta preparada
         $prep->close();
 
-        return $resultado_ejecucion;
+        return $exito;
+    }
+
+    function modificar_vacunacion($dni, $idc, $fabric, $coment){
+        global $db;
+
+        $prep = $db->prepare("UPDATE vacunacion SET Fabricante=?, Comentarios=? WHERE IDUsuario=? AND IDCalendario=?");
+    
+        // El primer parametro es el tipo de datos que vamos a insertar, un caracter por cada tipo de dato.
+        $prep->bind_param('ssss', $fabric, $coment, $dni, $idc);
+     
+        if($prep->execute()){
+            $exito = true; // El Update se ha reaLizado correctamente
+        }else{
+            $exito = false;
+        }
+
+        // Cerramos la consulta preparada
+        $prep->close();
+
+        return $exito;
     }
 
 
