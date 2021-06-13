@@ -155,7 +155,6 @@
         return strcasecmp($b['Apellidos'], $a['Apellidos']);
     }
 
-
     // Se le pasa la lista por referencia, para que usort modifique la original
     function ordernar_by_edad(&$lista, $orden){
         
@@ -245,6 +244,30 @@
 
     }
 
+/*
+    function build_pagLinks($numciudades, $numitems, $primero) {
+        $links = [];
+
+        $ultima = $numciudades - ($numciudades%$numitems);
+        $anterior = $numitems>$primero ? 0 : ($primero-$numitems);
+        $siguiente = ($primero+$numitems)>$numciudades ? $ultima : ($primero+$numitems);
+
+        $links[]=['texto'=>'Primera',
+        'url'=>'?primero=0&items='. $numitems];
+
+        $links[]=['texto'=>'Anterior',
+        'url'=>'?primero=' . $anterior . '&items=' . $numitems];
+
+        $links[]=['texto'=>'Siguiente',
+        'url'=>'?primero='. $siguiente . '&items=' . $numitems];
+
+        $links[]=['texto'=>'Última',
+        'url'=>'?primero=' . '&items=' . $numitems]; 
+
+        return $links;
+
+    }
+*/      
 
 ?>
 
