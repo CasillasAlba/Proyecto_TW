@@ -362,7 +362,7 @@
                 $erroresVac = $_SESSION['row_errores_temp'];
                 echo $twig->render('formulario_vacuna.twig', compact('vac', 'erroresVac', 'us_user', 'accion' , 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }else{
-                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion', 'n_usuarios', 'n_vacunas'));
+                echo $twig->render('formulario_vacuna.twig', compact('us_user', 'accion', 'rol_user', 'nombre_user', 'image_user', 'sexo_user', 'n_usuarios', 'n_vacunas'));
             }
     
         }else if(isset($_SESSION['accionPulsadaVac']) and $_SESSION['accionPulsadaVac'] == "confirmar"){
