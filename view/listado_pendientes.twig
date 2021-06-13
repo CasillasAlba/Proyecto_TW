@@ -2,28 +2,26 @@
 
 {% block content %}
     {% if n_pendientes > 0 %}
-
-        <div class="filtro_pendientes">
-            <form action="index.php" method="POST">
-
-                <input type="number" id="nMesesVacunas" placeholder="Vac. Futuras (Meses)" name="n_meses_vacunas">
-                <button name="nMeses">Aceptar</button>
-                
-                <input type="number" id="nVacunasSiguientes" placeholder="Vac. Futuras (Número)" name="n_vacunas_siguientes">
-                <button name="nVacunas">Aceptar</button>
-
-            </form>
-            
-        </div>
-
-        <div class="filtro_pendientes">
-            <form action="index.php" method="POST">
-                
-                <button name="vacunasFuturas">Vacunas Futuras</button>
-
-                <button name="vacunasPendientes">Vacunas Pendientes</button>
-            </form>
-        </div>
+        <form action="index.php" method="POST" class="form-inline filtro-usuarios">
+            <div class="form-group mx-sm-3 mb-2">
+                <input class="form-control" type="number" id="nMesesVacunas" placeholder="Vac. Futuras (Meses)" name="n_meses_vacunas">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <button class="btn btn-success" name="nMeses">Aceptar</button>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input class="form-control" type="number" id="nVacunasSiguientes" placeholder="Vac. Futuras (Número)" name="n_vacunas_siguientes">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <button class="btn btn-success" name="nVacunas">Aceptar</button>
+            </div> 
+            <div class="form-group mx-sm-3 mb-2">
+                <button class="btn btn-success" name="vacunasFuturas">Vacunas Futuras</button>
+            </div> 
+            <div class="form-group mx-sm-3 mb-2">
+                <button class="btn btn-success" name="vacunasPendientes">Vacunas Pendientes</button>
+            </div> 
+        </form>
 
         <table class="table">
             <thead class="table-success">
