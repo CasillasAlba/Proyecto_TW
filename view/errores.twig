@@ -1,9 +1,16 @@
-{% extends 'index_view.twig' %}
+{% extends 'inicio_logueado.twig' %}
 
 {% block content %}
-<h1>{{ motivo }}</h1>
-{% endblock %}
+    
+    {% if informar is defined %}
+        <h1>Escribe un informe para enviarlo al usuario</h1>
+        <form action="index.php" method="POST">
+            <textarea class="form-control" placeholder="Escriba su informe..."> </textarea>
+            <button class="btn btn-success" type="submit">Informar</button>
+        </form>
 
-{% block login %}
-  
+    {% else %}
+        <h1>{{ motivo }}</h1>
+    {% endif %}
+
 {% endblock %}

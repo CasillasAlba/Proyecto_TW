@@ -175,3 +175,13 @@ button {
   border:0;
 }
 
+.button-calendario-delete {
+  background-color: Transparent;
+  color: white;
+  text-align: start;
+  font-weight: bold;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+}

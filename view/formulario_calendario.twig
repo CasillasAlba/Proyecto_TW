@@ -1,6 +1,10 @@
-{% extends 'index_view.twig' %}
+{% extends 'inicio_logueado.twig' %}
 
 {% block content %}
+    {% if accion == "borrar" %}
+        <h2>¿Está seguro que quiere eliminar esta vacuna recomendada? </h2>
+    {% endif %}
+
     <form action="{{funciones('procesarCalendario.php')}}" method="POST" enctype="multipart/form-data">
         <!-- Referencia a un listado de vacunas -->
         <div class="mb-3">
@@ -185,6 +189,8 @@
                 <button class="btn btn-success" name="boton-editar-calend" type="submit">Guardar cambios</button>
         {% elseif accion == "confirmar" %}
             <button class="btn btn-success" name="boton-confirmar-calend" type="submit">Confirmar datos</button>
+        {% elseif accion == "borrar" %}
+            <button class="btn btn-success" name="boton-eliminar-calend" type="submit">Eliminar Vacuna Recomendada</button>
         {% endif %}
         <input hidden name="accion" value="{{ accion }}">
     </form>

@@ -6,7 +6,18 @@
     // realizar la acción indicada por el usuario (pulsando el botón en el formualrio)
     $_SESSION["accionPulsadaCalend"] = $_POST['accion'];
 
-    if($_SESSION["accionPulsadaCalend"] != "confirmar"){
+    if($_SESSION["accionPulsadaCalend"] == "borrar"){
+
+        $id_calend = $_SESSION['calend_temp_borrar']['IDCalendar'];
+
+        unset($_SESSION['calend_temp_borrar']);
+        unset($_SESSION['accionPulsada']);
+
+        eliminar_calendario($id_calend);
+
+        header("Location: ../index.php");
+
+    }else if($_SESSION["accionPulsadaCalend"] != "confirmar"){
 
         $_SESSION['acro_ref_calend_temp'] = $_POST["vacunaRef"];
         $_SESSION['sexo_calend_temp'] = $_POST["generoCalend"];

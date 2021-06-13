@@ -127,25 +127,10 @@
 
 </body>
 
-<script> 
-    $(function() {
-        $( "#from" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        onClose: function( selectedDate ) {
-            $( "#to" ).datepicker( "option", "minDate", selectedDate );
-        }
-        });
-        $( "#to" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        onClose: function( selectedDate ) {
-            $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-        }
-        });
-    });
-</script>
+<script type="text/javascript" src="{{asset('js/calendar.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/setCookies.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/getCookies.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/loadCookies.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/storeCookies.js')}}"></script>
 
 </html>

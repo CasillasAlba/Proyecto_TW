@@ -8,7 +8,9 @@
 
     
     if($_SESSION["accionPulsada"] == "borrar"){
+
         $_SESSION['id_us_temp'] = $_POST['dn'];
+
     }else if($_SESSION["accionPulsada"] != "confirmar"){
 
         // '_temp' hara referencia a los datos que introduce el usuario que 
@@ -43,9 +45,11 @@
             if($_SESSION['file_name_temp'] != ''){
                 $_SESSION['tmp_name_temp']  = $_FILES['file']['tmp_name'];
                 $_SESSION['file_size_temp'] = getimagesize($_FILES['file']['tmp_name']);
+
                 // Esto es lo que se guarda en la base de datos   
                 //Coge el contenido del fichero temporal (bits) y los encodifica 
                 $_SESSION['foto_temp'] = base64_encode(file_get_contents(addslashes($_SESSION['tmp_name_temp'])));
+
             }
         }
         
@@ -155,6 +159,7 @@
         break;
     
         case "activar":
+
             if(isset($_POST['boton-activar-user'])){
 
                 $_SESSION['datos_visitante']['Estado'] = "Activo";
@@ -162,22 +167,21 @@
                 unset($_SESSION['datos_visitante']);
                 unset($_SESSION['rol_user_visitante']);
 
+                $_SESSION['informe'] = "activar-informar";
                 
             }else if(isset($_POST['boton-informar-error-user'])){
 
-                echo "ay mecachis";
+                eliminar_usuario($_SESSION['datos_visitante']['DNI']);
+
+                unset($_SESSION['datos_visitante']);
+                unset($_SESSION['rol_user_visitante']);
+
+                $_SESSION['informe'] = "error-informar";
 
             }else if(isset($_POST['boton-borrar-user'])){
 
-                $_SESSION['exito'] = eliminar_usuario($_SESSION['dni_temp']);
-
-                $datos_log = array(
-                    'Tipo' => "tipo_log_eliminar_user",
-                    'Fecha' => date("Y-m-d H:i:s"),
-                    'Descripcion' => "USUARIO ELIMINADO"
-                ); 
-    
-                insertar_log($datos_log);
+                $_SESSION['informe'] = "borrar-informar";
+                $_SESSION['user_informe'] = $_SESSION['datos_visitante'];
 
             }
 
@@ -199,6 +203,9 @@
             unset($_SESSION['accionPulsada']);
 
             header("Location: ../index.php");
+
+            unset($_SESSION['datos_visitante']);
+            unset($_SESSION['rol_user_visitante']);
 
         break;
 
